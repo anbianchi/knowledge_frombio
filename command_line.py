@@ -31,7 +31,9 @@ from transformers import AutoTokenizer, AutoModel
 from zero_shot_re import RelTaggerModel, RelationExtractor
 
 import torch
+from collections import Counter
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # %%
 
@@ -39,13 +41,10 @@ import torch
 knowledge_graphs = {}
 
 # Define a function to construct an interactive knowledge graph
-def construct_knowledge_graph(report, relations):
-    # Choose a random color for the knowledge graph
-    colors = ['blue', 'green', 'yellow', 'orange', 'purple', 'pink']
-    color = random.choice([c for c in colors if c not in knowledge_graphs.values()])
+def construct_knowledge_graph(report, relations, color):
     
     # Create a new knowledge graph
-    G = nx.DiGraph()
+    G = nx.Graph()
     
     # Add nodes
     for entity in report[0]["entities"]:
@@ -53,45 +52,12 @@ def construct_knowledge_graph(report, relations):
     
     # Add edges
     for relation in relations:
-        print(relation)
-        print(relation.keys())
-        G.add_edge(relation["entity1_id"], relation["entity2_id"], label=relation["relation_type"], color=color)
-        
+        if relation["entity1_id"] != relation["entity2_id"]:
+            G.add_edge(relation["entity1_id"], relation["entity2_id"], label=relation["relation_type"], color=color)
+        else:
+            print(f"Skipped adding self-relationship for entity: {relation['entity1_id']}")
     return G
     
-# Define a function to merge and solve conflicts in knowledge graphs
-def merging_and_solving_conflicts():
-    # Merge all the knowledge graphs
-    merged_graph = nx.DiGraph()
-    for graph in knowledge_graphs.values():
-        merged_graph = nx.compose(merged_graph, graph)
-    
-    # Find all the common entities
-    entity_counts = defaultdict(int)
-    for node in merged_graph.nodes:
-        entity_counts[node] += 1
-    common_entities = [entity for entity, count in entity_counts.items() if count > 1]
-    
-    # Resolve conflicts in common entities
-    for entity in common_entities:
-        # Find all the nodes with the same entity
-        nodes = [node for node in merged_graph.nodes if node == entity]
-        
-        # Find the color of the first node
-        color = None
-        for node in nodes:
-            if node in knowledge_graphs:
-                color = knowledge_graphs[node]
-                break
-        
-        # Change the color of all the nodes to the first color
-        for node in nodes:
-            if node in knowledge_graphs:
-                knowledge_graphs[node] = color
-            merged_graph.nodes[node]['color'] = color
- 
-    return merged_graph
-
 # %%
 def load_scispacy_model():
     nlp = spacy.load("en_core_sci_scibert")
@@ -151,7 +117,7 @@ def extract_entities_scispacy(preprocessed_reports):
 def extract_entities_bern2(preprocessed_reports):
     entity_list = load_bern2_model(preprocessed_reports)
     parsed_entities = []
-    print(preprocessed_reports)
+    #print(preprocessed_reports)
     for entities in entity_list:
         e = []
         if not entities.get('annotations'):
@@ -212,6 +178,15 @@ def extract_relations(report, model, tokenizer):
     return relations
 
 def visualize_knowledge_graph(G, filename):
+    
+    if filename is None:
+        new_filename = 'merged_kg'
+    else:
+        # Extract the patient number from the filename
+        patient_number = filename.split('_')[0].replace('#', '')
+        # Construct the new filename
+        new_filename = f"#{patient_number}_kg"
+        
     # Visualize the knowledge graph
     nt = Network(height='800px', width='100%', font_color='black')
     for node, data in G.nodes(data=True):
@@ -222,47 +197,41 @@ def visualize_knowledge_graph(G, filename):
     #display(HTML(html)) 
     
     # Save the graph to an HTML file
-    nt.save_graph(f'{filename}.html')
- 
-""" def visualize_knowledge_graph(G):
-    pos = nx.spring_layout(G)
-    labels = {node: G.nodes[node]['label'] for node in G.nodes()}
-    node_colors = [G.nodes[node]['color'] for node in G.nodes()]
-    edge_labels = {(u, v): G[u][v]['label'] for u, v in G.edges()}
+    nt.save_graph(f'{new_filename}.html')
     
-    plt.figure(figsize=(10, 10))
-    nx.draw(G, pos, labels=labels, with_labels=True, node_size=3000, node_color=node_colors)
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-    plt.show() """   
-        
+    return nt
 
 # %%
 def preprocess_medical_knowledge():
     # Load the medical knowledge as a list of strings
     medical_knowledge = []
     preprocessed_reports = []
-    for filename in os.listdir("diagnostic_reports"):
+    files = os.listdir("diagnostic_reports")
+    if not files:
+        return [], None
+    for filename in files:
         with open(os.path.join("diagnostic_reports", filename), "r") as f:
             text = f.read()
             # Pre-process the medical knowledge by lowercasing and removing special characters
             text = re.sub(r'[^a-zA-Z0-9.\s]', '', text).lower()
             medical_knowledge.append(text)
-            
             preprocessed_reports.append(text)
     
+    #print("preprocessed reports: ", preprocessed_reports, "\n\n")
     filename = os.path.basename(filename)
     return preprocessed_reports, filename
 
-def process_reports(preprocessed_reports):
+def process_reports(preprocessed_reports, filename):
     re_model, re_tokenizer = load_Bio_ClinicalBERT_model()
 
-    preprocessed_reports, filename = preprocess_medical_knowledge()
+    #preprocessed_reports, filename = preprocess_medical_knowledge()
     # Extracting entities using biobern2
     entity_lists_bern2 = []
 
+    #print("Length of preprocessed reports: ", len(preprocessed_reports))
     for report in preprocessed_reports:
         entity_lists_bern2.append(extract_entities_bern2(report))
-    #print(entity_lists_bern2)   
+    #print("Length of entity_lists_bern2: ", len(entity_lists_bern2))   
 
     # Extract relations between entities in each report in entity_lists_bern2
     predicted_rels = []
@@ -270,20 +239,52 @@ def process_reports(preprocessed_reports):
         for report in entity_list:
             relations = extract_relations(report, re_model, re_tokenizer)
             predicted_rels.append(relations)
+    #print("Length of predicted_rels: ", len(predicted_rels))
             
-    #print(predicted_rels)
+    
+    all_graphs = []
+    i = 0 
+    colors = ['#ADD8E6', '#90EE90', '#FFDAB9', '#E6E6FA', '#FFC0CB', '#F4A460', '#D3D3D3', '#AFEEEE']
 
-    # Generate and merge knowledge graphs for all reports
-    G_all = nx.Graph()
+
     for entity_list, rel_list in zip(entity_lists_bern2, predicted_rels):
-        #for report, relations in zip(entity_list, rel_list):
-            print(entity_list)
-            print("\n")
-            print(rel_list)
-            G = construct_knowledge_graph(entity_list, rel_list)
-            G_all = nx.disjoint_union(G_all, G)
+            i = i + 1
+            G = construct_knowledge_graph(entity_list, rel_list, colors[i % len(colors)])
+            filename_i = f"report{i}.{filename}"
+            kg = visualize_knowledge_graph(G, filename_i)
+            all_graphs.append(G)
+            # Add common nodes to set
+            
+     
+    # Merge all the knowledge graphs into a single graph, preserving the colors in the original graphs
+    G_all = nx.compose_all(all_graphs)
+    
+    # Count occurrences of each label across all graphs
+    label_counter = Counter()
+    for G in all_graphs:
+        for _, data in G.nodes(data=True):
+            if 'label' in data:
+                label_counter[data['label']] += 1
 
-    visualize_knowledge_graph(G_all, filename)
+    # Identify labels that are common to all graphs
+    common_labels = {label for label, count in label_counter.items() if count > 1}
+    print("Common labels: ", common_labels)
+
+    # Highlight nodes with common labels in the merged graph
+    for node, data in G_all.nodes(data=True):
+        if 'label' in data and data['label'] in common_labels:
+            # Check if the node is present in more than one graph
+            node_count = sum(node in G.nodes() for G in all_graphs)
+            if node_count > 1:
+                data['color'] = 'red'
+            else:
+                data['color'] = colors[i % len(colors)]
+            
+    # update the knowledge graph color to red
+
+    print("\n\n")
+    visualize_knowledge_graph(G_all, filename) 
+    return 1
 
 # %%
 def clear_reports_folder():
@@ -307,18 +308,22 @@ def generate_reports(input_file, num_patients=None):
     for idx, row in df.iterrows():
         # Use the new headers based on your dataset
         patient_id = row['subject_id']
+        print("Patient:",patient_id)
         
         # For each illness_history column, create a separate file if the value is not NaN
         for col in df.columns:
             if "illness_history_" in col and pd.notna(row[col]):
                 with open(f'diagnostic_reports/#{patient_id}_{col}.txt', 'w', encoding='utf-8') as f:
                     f.write(str(row[col]))
-
-        preprocessed_reports = preprocess_medical_knowledge()
-        process_reports(preprocessed_reports)
+        #print the number of files in the diagnostic_reports folder
+        print("Number of files in the diagnostic_reports folder: ", len(os.listdir('diagnostic_reports')))
+        
+        preprocessed_reports, filename = preprocess_medical_knowledge()
+        process_reports(preprocessed_reports, filename=filename)
 
         # Clear the reports folder for the next patient
         clear_reports_folder()
+        
 
     print(f"Reports processing completed.")
 
@@ -329,8 +334,8 @@ def process_reports_from_dataset(dataset_file):
     Process reports from the specified dataset file.
     """
     generate_reports(input_file=dataset_file, num_patients=None)
-    preprocessed_reports = preprocess_medical_knowledge()
-    process_reports(preprocessed_reports)
+    #preprocessed_reports, filename = preprocess_medical_knowledge()
+    #process_reports(preprocessed_reports, filename)
     
 def process_reports_from_folder():
     """
@@ -355,21 +360,5 @@ if __name__ == "__main__":
         print("Please specify a mode: --manual for manually inserted reports or --dataset <path_to_dataset> for processing from a dataset.")
 
 
-# %%
-""" candidates = [s for s in parsed_entities if (s.get('entities')) and (len(s['entities']) > 1)]
-predicted_rels = []
-print(candidates)
-print("\n\n")
-for c in candidates:
-  combinations = itertools.combinations([{'name':x['entity'], 'id':x['entity_id']} for x in c['entities']], 2)
-  for combination in list(combinations):
-    try:
-      ranked_rels = extractor.rank(text=c['text'].replace(",", " "), head=combination[0]['name'], tail=combination[1]['name'])
-      if ranked_rels[0][1] > 0.85:
-        predicted_rels.append({'head': combination[0]['id'], 'tail': combination[1]['id'], 'type':ranked_rels[0][0], 'source': c['text_sha256']})
-    except:
-      pass
-
-print(predicted_rels) """
 
 
