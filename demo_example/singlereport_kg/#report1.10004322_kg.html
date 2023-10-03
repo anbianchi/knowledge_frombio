@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "psychosis", "label": "psychosis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "syncope", "label": "syncope", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "t2dm", "label": "t2dm", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hba1c", "label": "hba1c", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "metformin", "label": "metformin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "insulin", "label": "insulin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "copd", "label": "copd", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "weakness", "label": "weakness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "cough", "label": "cough", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "short of breath", "label": "short of breath", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "pneumonia", "label": "pneumonia", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "anorexia", "label": "anorexia", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hemoptysis", "label": "hemoptysis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "orthopnea", "label": "orthopnea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "pnd", "label": "pnd", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "vomiting diarrhea", "label": "vomiting diarrhea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hematochezia", "label": "hematochezia", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "melena", "label": "melena", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hematuria", "label": "hematuria", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lightheadedness", "label": "lightheadedness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "tonsillar fullness", "label": "tonsillar fullness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "plt", "label": "plt", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "azithromycin", "label": "azithromycin", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "psychosis", "title": "associated", "to": "syncope"}, {"from": "psychosis", "title": "associated", "to": "hba1c"}, {"from": "psychosis", "title": "associated", "to": "copd"}, {"from": "psychosis", "title": "associated", "to": "weakness"}, {"from": "psychosis", "title": "associated", "to": "pneumonia"}, {"from": "psychosis", "title": "associated", "to": "anorexia"}, {"from": "psychosis", "title": "associated", "to": "hemoptysis"}, {"from": "psychosis", "title": "associated", "to": "orthopnea"}, {"from": "psychosis", "title": "associated", "to": "vomiting diarrhea"}, {"from": "psychosis", "title": "associated", "to": "constipation"}, {"from": "psychosis", "title": "associated", "to": "hematochezia"}, {"from": "psychosis", "title": "associated", "to": "melena"}, {"from": "psychosis", "title": "associated", "to": "dysuria"}, {"from": "psychosis", "title": "associated", "to": "hematuria"}, {"from": "syncope", "title": "associated", "to": "hba1c"}, {"from": "syncope", "title": "associated", "to": "metformin"}, {"from": "syncope", "title": "associated", "to": "copd"}, {"from": "syncope", "title": "associated", "to": "weakness"}, {"from": "syncope", "title": "associated", "to": "cough"}, {"from": "syncope", "title": "associated", "to": "pneumonia"}, {"from": "syncope", "title": "associated", "to": "anorexia"}, {"from": "syncope", "title": "associated", "to": "hemoptysis"}, {"from": "syncope", "title": "associated", "to": "orthopnea"}, {"from": "syncope", "title": "associated", "to": "vomiting diarrhea"}, {"from": "syncope", "title": "associated", "to": "constipation"}, {"from": "syncope", "title": "associated", "to": "hematochezia"}, {"from": "syncope", "title": "associated", "to": "melena"}, {"from": "syncope", "title": "associated", "to": "dysuria"}, {"from": "syncope", "title": "associated", "to": "hematuria"}, {"from": "syncope", "title": "associated", "to": "chest pain"}, {"from": "t2dm", "title": "associated", "to": "hba1c"}, {"from": "t2dm", "title": "associated", "to": "insulin"}, {"from": "t2dm", "title": "associated", "to": "copd"}, {"from": "t2dm", "title": "associated", "to": "pnd"}, {"from": "t2dm", "title": "associated", "to": "melena"}, {"from": "hba1c", "title": "associated", "to": "metformin"}, {"from": "hba1c", "title": "associated", "to": "copd"}, {"from": "hba1c", "title": "associated", "to": "anorexia"}, {"from": "hba1c", "title": "associated", "to": "hemoptysis"}, {"from": "hba1c", "title": "associated", "to": "pnd"}, {"from": "hba1c", "title": "associated", "to": "hematochezia"}, {"from": "hba1c", "title": "associated", "to": "dysuria"}, {"from": "hba1c", "title": "associated", "to": "hematuria"}, {"from": "metformin", "title": "associated", "to": "insulin"}, {"from": "metformin", "title": "associated", "to": "vomiting diarrhea"}, {"from": "metformin", "title": "associated", "to": "constipation"}, {"from": "metformin", "title": "associated", "to": "hematuria"}, {"from": "metformin", "title": "associated", "to": "azithromycin"}, {"from": "copd", "title": "associated", "to": "pneumonia"}, {"from": "copd", "title": "associated", "to": "anorexia"}, {"from": "copd", "title": "associated", "to": "hemoptysis"}, {"from": "copd", "title": "associated", "to": "orthopnea"}, {"from": "copd", "title": "associated", "to": "pnd"}, {"from": "copd", "title": "associated", "to": "vomiting diarrhea"}, {"from": "copd", "title": "associated", "to": "constipation"}, {"from": "copd", "title": "associated", "to": "hematochezia"}, {"from": "copd", "title": "associated", "to": "melena"}, {"from": "copd", "title": "associated", "to": "dysuria"}, {"from": "copd", "title": "associated", "to": "hematuria"}, {"from": "weakness", "title": "associated", "to": "cough"}, {"from": "weakness", "title": "associated", "to": "pneumonia"}, {"from": "weakness", "title": "associated", "to": "anorexia"}, {"from": "weakness", "title": "associated", "to": "orthopnea"}, {"from": "weakness", "title": "associated", "to": "nausea"}, {"from": "weakness", "title": "associated", "to": "vomiting diarrhea"}, {"from": "weakness", "title": "associated", "to": "constipation"}, {"from": "weakness", "title": "associated", "to": "hematochezia"}, {"from": "weakness", "title": "associated", "to": "melena"}, {"from": "weakness", "title": "associated", "to": "dysuria"}, {"from": "weakness", "title": "associated", "to": "hematuria"}, {"from": "weakness", "title": "associated", "to": "lightheadedness"}, {"from": "weakness", "title": "associated", "to": "chest pain"}, {"from": "cough", "title": "associated", "to": "pneumonia"}, {"from": "cough", "title": "associated", "to": "anorexia"}, {"from": "cough", "title": "associated", "to": "hemoptysis"}, {"from": "cough", "title": "associated", "to": "orthopnea"}, {"from": "cough", "title": "associated", "to": "nausea"}, {"from": "cough", "title": "associated", "to": "vomiting diarrhea"}, {"from": "cough", "title": "associated", "to": "constipation"}, {"from": "cough", "title": "associated", "to": "melena"}, {"from": "cough", "title": "associated", "to": "dysuria"}, {"from": "cough", "title": "associated", "to": "hematuria"}, {"from": "cough", "title": "associated", "to": "lightheadedness"}, {"from": "cough", "title": "associated", "to": "chest pain"}, {"from": "short of breath", "title": "associated", "to": "vomiting diarrhea"}, {"from": "short of breath", "title": "associated", "to": "lightheadedness"}, {"from": "short of breath", "title": "associated", "to": "chest pain"}, {"from": "pneumonia", "title": "associated", "to": "anorexia"}, {"from": "pneumonia", "title": "associated", "to": "hemoptysis"}, {"from": "pneumonia", "title": "associated", "to": "orthopnea"}, {"from": "pneumonia", "title": "associated", "to": "hematochezia"}, {"from": "pneumonia", "title": "associated", "to": "melena"}, {"from": "pneumonia", "title": "associated", "to": "hematuria"}, {"from": "anorexia", "title": "associated", "to": "hemoptysis"}, {"from": "anorexia", "title": "associated", "to": "orthopnea"}, {"from": "anorexia", "title": "associated", "to": "nausea"}, {"from": "anorexia", "title": "associated", "to": "vomiting diarrhea"}, {"from": "anorexia", "title": "associated", "to": "constipation"}, {"from": "anorexia", "title": "associated", "to": "hematochezia"}, {"from": "anorexia", "title": "associated", "to": "melena"}, {"from": "anorexia", "title": "associated", "to": "dysuria"}, {"from": "anorexia", "title": "associated", "to": "hematuria"}, {"from": "anorexia", "title": "associated", "to": "lightheadedness"}, {"from": "anorexia", "title": "associated", "to": "chest pain"}, {"from": "anorexia", "title": "associated", "to": "tonsillar fullness"}, {"from": "hemoptysis", "title": "associated", "to": "orthopnea"}, {"from": "hemoptysis", "title": "associated", "to": "vomiting diarrhea"}, {"from": "hemoptysis", "title": "associated", "to": "constipation"}, {"from": "hemoptysis", "title": "associated", "to": "hematochezia"}, {"from": "hemoptysis", "title": "associated", "to": "melena"}, {"from": "hemoptysis", "title": "associated", "to": "dysuria"}, {"from": "hemoptysis", "title": "associated", "to": "hematuria"}, {"from": "hemoptysis", "title": "associated", "to": "lightheadedness"}, {"from": "hemoptysis", "title": "associated", "to": "chest pain"}, {"from": "hemoptysis", "title": "associated", "to": "tonsillar fullness"}, {"from": "orthopnea", "title": "associated", "to": "vomiting diarrhea"}, {"from": "orthopnea", "title": "associated", "to": "constipation"}, {"from": "orthopnea", "title": "associated", "to": "hematochezia"}, {"from": "orthopnea", "title": "associated", "to": "melena"}, {"from": "orthopnea", "title": "associated", "to": "dysuria"}, {"from": "orthopnea", "title": "associated", "to": "hematuria"}, {"from": "orthopnea", "title": "associated", "to": "chest pain"}, {"from": "orthopnea", "title": "associated", "to": "tonsillar fullness"}, {"from": "pnd", "title": "associated", "to": "melena"}, {"from": "nausea", "title": "associated", "to": "vomiting diarrhea"}, {"from": "nausea", "title": "associated", "to": "constipation"}, {"from": "nausea", "title": "associated", "to": "melena"}, {"from": "nausea", "title": "associated", "to": "dysuria"}, {"from": "nausea", "title": "associated", "to": "hematuria"}, {"from": "nausea", "title": "associated", "to": "lightheadedness"}, {"from": "nausea", "title": "associated", "to": "chest pain"}, {"from": "vomiting diarrhea", "title": "associated", "to": "constipation"}, {"from": "vomiting diarrhea", "title": "associated", "to": "hematochezia"}, {"from": "vomiting diarrhea", "title": "associated", "to": "melena"}, {"from": "vomiting diarrhea", "title": "associated", "to": "dysuria"}, {"from": "vomiting diarrhea", "title": "associated", "to": "hematuria"}, {"from": "vomiting diarrhea", "title": "associated", "to": "lightheadedness"}, {"from": "vomiting diarrhea", "title": "associated", "to": "chest pain"}, {"from": "vomiting diarrhea", "title": "associated", "to": "tonsillar fullness"}, {"from": "constipation", "title": "associated", "to": "hematochezia"}, {"from": "constipation", "title": "associated", "to": "melena"}, {"from": "constipation", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "hematuria"}, {"from": "constipation", "title": "associated", "to": "lightheadedness"}, {"from": "constipation", "title": "associated", "to": "chest pain"}, {"from": "constipation", "title": "associated", "to": "tonsillar fullness"}, {"from": "hematochezia", "title": "associated", "to": "melena"}, {"from": "hematochezia", "title": "associated", "to": "dysuria"}, {"from": "hematochezia", "title": "associated", "to": "hematuria"}, {"from": "hematochezia", "title": "associated", "to": "chest pain"}, {"from": "hematochezia", "title": "associated", "to": "tonsillar fullness"}, {"from": "melena", "title": "associated", "to": "dysuria"}, {"from": "melena", "title": "associated", "to": "hematuria"}, {"from": "melena", "title": "associated", "to": "lightheadedness"}, {"from": "melena", "title": "associated", "to": "chest pain"}, {"from": "dysuria", "title": "associated", "to": "hematuria"}, {"from": "dysuria", "title": "associated", "to": "chest pain"}, {"from": "dysuria", "title": "associated", "to": "tonsillar fullness"}, {"from": "hematuria", "title": "associated", "to": "lightheadedness"}, {"from": "hematuria", "title": "associated", "to": "chest pain"}, {"from": "hematuria", "title": "associated", "to": "tonsillar fullness"}, {"from": "lightheadedness", "title": "associated", "to": "chest pain"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

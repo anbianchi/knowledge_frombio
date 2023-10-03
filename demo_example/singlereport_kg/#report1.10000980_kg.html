@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "cad", "label": "cad", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "htn", "label": "htn", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hld  t2dm", "label": "hld  t2dm", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "ckd", "label": "ckd", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "pvd sp", "label": "pvd sp", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "numbness", "label": "numbness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "leg weakness", "label": "leg weakness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "numbness in", "label": "numbness in", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dvt", "label": "dvt", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "back pain", "label": "back pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "incontinence", "label": "incontinence", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chest pressure", "label": "chest pressure", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chest  palpitations", "label": "chest  palpitations", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "shortness of breath abdominal pain", "label": "shortness of breath abdominal pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "cad", "title": "associated", "to": "htn"}, {"from": "cad", "title": "associated", "to": "hld  t2dm"}, {"from": "cad", "title": "associated", "to": "ckd"}, {"from": "cad", "title": "associated", "to": "pvd sp"}, {"from": "cad", "title": "associated", "to": "dvt"}, {"from": "cad", "title": "associated", "to": "chest pressure"}, {"from": "cad", "title": "associated", "to": "dysuria"}, {"from": "cad", "title": "associated", "to": "diarrhea"}, {"from": "htn", "title": "associated", "to": "hld  t2dm"}, {"from": "htn", "title": "associated", "to": "ckd"}, {"from": "htn", "title": "associated", "to": "pvd sp"}, {"from": "htn", "title": "associated", "to": "leg weakness"}, {"from": "htn", "title": "associated", "to": "dvt"}, {"from": "htn", "title": "associated", "to": "back pain"}, {"from": "htn", "title": "associated", "to": "incontinence"}, {"from": "htn", "title": "associated", "to": "chest pain"}, {"from": "htn", "title": "associated", "to": "chest pressure"}, {"from": "htn", "title": "associated", "to": "dysuria"}, {"from": "htn", "title": "associated", "to": "diarrhea"}, {"from": "hld  t2dm", "title": "associated", "to": "ckd"}, {"from": "hld  t2dm", "title": "associated", "to": "pvd sp"}, {"from": "hld  t2dm", "title": "associated", "to": "dvt"}, {"from": "ckd", "title": "associated", "to": "pvd sp"}, {"from": "ckd", "title": "associated", "to": "dvt"}, {"from": "pvd sp", "title": "associated", "to": "dvt"}, {"from": "numbness", "title": "associated", "to": "leg weakness"}, {"from": "numbness", "title": "associated", "to": "back pain"}, {"from": "numbness", "title": "associated", "to": "incontinence"}, {"from": "numbness", "title": "associated", "to": "headache"}, {"from": "numbness", "title": "associated", "to": "chest pain"}, {"from": "numbness", "title": "associated", "to": "chest pressure"}, {"from": "numbness", "title": "associated", "to": "chest  palpitations"}, {"from": "numbness", "title": "associated", "to": "shortness of breath abdominal pain"}, {"from": "numbness", "title": "associated", "to": "dysuria"}, {"from": "numbness", "title": "associated", "to": "diarrhea"}, {"from": "leg weakness", "title": "associated", "to": "back pain"}, {"from": "leg weakness", "title": "associated", "to": "incontinence"}, {"from": "leg weakness", "title": "associated", "to": "headache"}, {"from": "leg weakness", "title": "associated", "to": "chest pain"}, {"from": "leg weakness", "title": "associated", "to": "chest pressure"}, {"from": "leg weakness", "title": "associated", "to": "shortness of breath abdominal pain"}, {"from": "leg weakness", "title": "associated", "to": "dysuria"}, {"from": "leg weakness", "title": "associated", "to": "diarrhea"}, {"from": "dvt", "title": "associated", "to": "chest pressure"}, {"from": "dvt", "title": "associated", "to": "diarrhea"}, {"from": "back pain", "title": "associated", "to": "incontinence"}, {"from": "back pain", "title": "associated", "to": "headache"}, {"from": "back pain", "title": "associated", "to": "chest pain"}, {"from": "back pain", "title": "associated", "to": "chest pressure"}, {"from": "back pain", "title": "associated", "to": "chest  palpitations"}, {"from": "back pain", "title": "associated", "to": "shortness of breath abdominal pain"}, {"from": "back pain", "title": "associated", "to": "dysuria"}, {"from": "back pain", "title": "associated", "to": "diarrhea"}, {"from": "incontinence", "title": "associated", "to": "chest pain"}, {"from": "incontinence", "title": "associated", "to": "chest pressure"}, {"from": "incontinence", "title": "associated", "to": "shortness of breath abdominal pain"}, {"from": "incontinence", "title": "associated", "to": "dysuria"}, {"from": "incontinence", "title": "associated", "to": "diarrhea"}, {"from": "headache", "title": "associated", "to": "chest pain"}, {"from": "headache", "title": "associated", "to": "chest  palpitations"}, {"from": "headache", "title": "associated", "to": "shortness of breath abdominal pain"}, {"from": "headache", "title": "associated", "to": "dysuria"}, {"from": "headache", "title": "associated", "to": "diarrhea"}, {"from": "chest pain", "title": "associated", "to": "chest pressure"}, {"from": "chest pain", "title": "associated", "to": "chest  palpitations"}, {"from": "chest pain", "title": "associated", "to": "shortness of breath abdominal pain"}, {"from": "chest pain", "title": "associated", "to": "dysuria"}, {"from": "chest pain", "title": "associated", "to": "diarrhea"}, {"from": "chest pressure", "title": "associated", "to": "shortness of breath abdominal pain"}, {"from": "chest pressure", "title": "associated", "to": "dysuria"}, {"from": "chest pressure", "title": "associated", "to": "diarrhea"}, {"from": "chest  palpitations", "title": "associated", "to": "shortness of breath abdominal pain"}, {"from": "chest  palpitations", "title": "associated", "to": "diarrhea"}, {"from": "shortness of breath abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "shortness of breath abdominal pain", "title": "associated", "to": "diarrhea"}, {"from": "dysuria", "title": "associated", "to": "diarrhea"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

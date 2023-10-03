@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "htn", "label": "htn", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "congenital deafness", "label": "congenital deafness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "jaundicebiliary obstruction", "label": "jaundicebiliary obstruction", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "malignant pancreatic lesion", "label": "malignant pancreatic lesion", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "atypical", "label": "atypical", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "atypical  cells", "label": "atypical  cells", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "nv", "label": "nv", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "alt", "label": "alt", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "wbc", "label": "wbc", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "malignancy", "label": "malignancy", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "epigastric and ruq abdominal soreness", "label": "epigastric and ruq abdominal soreness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "fever chills", "label": "fever chills", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "sinus  tenderness", "label": "sinus  tenderness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "rhinorrhea", "label": "rhinorrhea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "congestion", "label": "congestion", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "cough shortness of  breath", "label": "cough shortness of  breath", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "arthralgias", "label": "arthralgias", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "htn", "title": "associated", "to": "congenital deafness"}, {"from": "htn", "title": "associated", "to": "jaundicebiliary obstruction"}, {"from": "htn", "title": "associated", "to": "malignant pancreatic lesion"}, {"from": "htn", "title": "associated", "to": "nv"}, {"from": "htn", "title": "associated", "to": "alt"}, {"from": "htn", "title": "associated", "to": "malignancy"}, {"from": "htn", "title": "associated", "to": "epigastric and ruq abdominal soreness"}, {"from": "htn", "title": "associated", "to": "rhinorrhea"}, {"from": "htn", "title": "associated", "to": "chest pain"}, {"from": "htn", "title": "associated", "to": "dysuria"}, {"from": "htn", "title": "associated", "to": "arthralgias"}, {"from": "htn", "title": "associated", "to": "myalgias"}, {"from": "congenital deafness", "title": "associated", "to": "jaundicebiliary obstruction"}, {"from": "congenital deafness", "title": "associated", "to": "malignant pancreatic lesion"}, {"from": "congenital deafness", "title": "associated", "to": "malignancy"}, {"from": "congenital deafness", "title": "associated", "to": "rhinorrhea"}, {"from": "congenital deafness", "title": "associated", "to": "dysuria"}, {"from": "congenital deafness", "title": "associated", "to": "arthralgias"}, {"from": "congenital deafness", "title": "associated", "to": "myalgias"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "abdominal pain"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "malignant pancreatic lesion"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "malignancy"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "epigastric and ruq abdominal soreness"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "sinus  tenderness"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "rhinorrhea"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "congestion"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "dysuria"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "arthralgias"}, {"from": "jaundicebiliary obstruction", "title": "associated", "to": "myalgias"}, {"from": "abdominal pain", "title": "associated", "to": "malignancy"}, {"from": "abdominal pain", "title": "associated", "to": "epigastric and ruq abdominal soreness"}, {"from": "abdominal pain", "title": "associated", "to": "fever chills"}, {"from": "abdominal pain", "title": "associated", "to": "headache"}, {"from": "abdominal pain", "title": "associated", "to": "sinus  tenderness"}, {"from": "abdominal pain", "title": "associated", "to": "rhinorrhea"}, {"from": "abdominal pain", "title": "associated", "to": "cough shortness of  breath"}, {"from": "abdominal pain", "title": "associated", "to": "chest pain"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "arthralgias"}, {"from": "abdominal pain", "title": "associated", "to": "myalgias"}, {"from": "malignant pancreatic lesion", "title": "associated", "to": "malignancy"}, {"from": "malignant pancreatic lesion", "title": "associated", "to": "epigastric and ruq abdominal soreness"}, {"from": "malignant pancreatic lesion", "title": "associated", "to": "sinus  tenderness"}, {"from": "malignant pancreatic lesion", "title": "associated", "to": "rhinorrhea"}, {"from": "malignant pancreatic lesion", "title": "associated", "to": "dysuria"}, {"from": "malignant pancreatic lesion", "title": "associated", "to": "arthralgias"}, {"from": "atypical", "title": "associated", "to": "atypical  cells"}, {"from": "nv", "title": "associated", "to": "alt"}, {"from": "nv", "title": "associated", "to": "rhinorrhea"}, {"from": "nv", "title": "associated", "to": "congestion"}, {"from": "malignancy", "title": "associated", "to": "rhinorrhea"}, {"from": "malignancy", "title": "associated", "to": "dysuria"}, {"from": "malignancy", "title": "associated", "to": "arthralgias"}, {"from": "malignancy", "title": "associated", "to": "myalgias"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "fever chills"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "headache"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "sinus  tenderness"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "rhinorrhea"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "congestion"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "cough shortness of  breath"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "chest pain"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "dysuria"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "arthralgias"}, {"from": "epigastric and ruq abdominal soreness", "title": "associated", "to": "myalgias"}, {"from": "fever chills", "title": "associated", "to": "headache"}, {"from": "fever chills", "title": "associated", "to": "sinus  tenderness"}, {"from": "fever chills", "title": "associated", "to": "rhinorrhea"}, {"from": "fever chills", "title": "associated", "to": "cough shortness of  breath"}, {"from": "fever chills", "title": "associated", "to": "chest pain"}, {"from": "fever chills", "title": "associated", "to": "dysuria"}, {"from": "fever chills", "title": "associated", "to": "arthralgias"}, {"from": "fever chills", "title": "associated", "to": "myalgias"}, {"from": "headache", "title": "associated", "to": "rhinorrhea"}, {"from": "headache", "title": "associated", "to": "congestion"}, {"from": "headache", "title": "associated", "to": "chest pain"}, {"from": "headache", "title": "associated", "to": "dysuria"}, {"from": "headache", "title": "associated", "to": "myalgias"}, {"from": "sinus  tenderness", "title": "associated", "to": "rhinorrhea"}, {"from": "sinus  tenderness", "title": "associated", "to": "cough shortness of  breath"}, {"from": "sinus  tenderness", "title": "associated", "to": "chest pain"}, {"from": "sinus  tenderness", "title": "associated", "to": "arthralgias"}, {"from": "sinus  tenderness", "title": "associated", "to": "myalgias"}, {"from": "rhinorrhea", "title": "associated", "to": "congestion"}, {"from": "rhinorrhea", "title": "associated", "to": "cough shortness of  breath"}, {"from": "rhinorrhea", "title": "associated", "to": "chest pain"}, {"from": "rhinorrhea", "title": "associated", "to": "dysuria"}, {"from": "rhinorrhea", "title": "associated", "to": "arthralgias"}, {"from": "rhinorrhea", "title": "associated", "to": "myalgias"}, {"from": "cough shortness of  breath", "title": "associated", "to": "chest pain"}, {"from": "cough shortness of  breath", "title": "associated", "to": "dysuria"}, {"from": "cough shortness of  breath", "title": "associated", "to": "arthralgias"}, {"from": "cough shortness of  breath", "title": "associated", "to": "myalgias"}, {"from": "chest pain", "title": "associated", "to": "dysuria"}, {"from": "chest pain", "title": "associated", "to": "arthralgias"}, {"from": "chest pain", "title": "associated", "to": "myalgias"}, {"from": "dysuria", "title": "associated", "to": "arthralgias"}, {"from": "dysuria", "title": "associated", "to": "myalgias"}, {"from": "arthralgias", "title": "associated", "to": "myalgias"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
