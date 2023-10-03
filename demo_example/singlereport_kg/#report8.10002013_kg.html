@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#ADD8E6", "font": {"color": "black"}, "id": "woman", "label": "woman", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "diastolic chf", "label": "diastolic chf", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "copd", "label": "copd", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "dm", "label": "dm", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "htn", "label": "htn", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "hld", "label": "hld", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "cad", "label": "cad", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "lad", "label": "lad", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "pleuritic", "label": "pleuritic", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "dsyspnea", "label": "dsyspnea", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "lightheadedness", "label": "lightheadedness", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "troponin", "label": "troponin", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "asa", "label": "asa", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "chest", "label": "chest", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "chills sweats", "label": "chills sweats", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "presyncope", "label": "presyncope", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "syncope cough pnd", "label": "syncope cough pnd", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "orthopnea leg  swelling", "label": "orthopnea leg  swelling", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "abdominal pain nausea vomiting", "label": "abdominal pain nausea vomiting", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "hematemesis  diarrhea", "label": "hematemesis  diarrhea", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "dysuria hematuria", "label": "dysuria hematuria", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "arthralgias", "label": "arthralgias", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "rash", "label": "rash", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "dvt", "label": "dvt", "shape": "dot"}, {"color": "#ADD8E6", "font": {"color": "black"}, "id": "pe", "label": "pe", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "woman", "title": "associated", "to": "copd"}, {"from": "woman", "title": "associated", "to": "dm"}, {"from": "woman", "title": "associated", "to": "cad"}, {"from": "woman", "title": "associated", "to": "lad"}, {"from": "woman", "title": "associated", "to": "dsyspnea"}, {"from": "woman", "title": "associated", "to": "presyncope"}, {"from": "woman", "title": "associated", "to": "syncope cough pnd"}, {"from": "woman", "title": "associated", "to": "dysuria hematuria"}, {"from": "woman", "title": "associated", "to": "rash"}, {"from": "woman", "title": "associated", "to": "dvt"}, {"from": "diastolic chf", "title": "associated", "to": "copd"}, {"from": "diastolic chf", "title": "associated", "to": "dm"}, {"from": "diastolic chf", "title": "associated", "to": "htn"}, {"from": "diastolic chf", "title": "associated", "to": "cad"}, {"from": "diastolic chf", "title": "associated", "to": "pleuritic"}, {"from": "diastolic chf", "title": "associated", "to": "dsyspnea"}, {"from": "diastolic chf", "title": "associated", "to": "presyncope"}, {"from": "diastolic chf", "title": "associated", "to": "syncope cough pnd"}, {"from": "diastolic chf", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "diastolic chf", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "diastolic chf", "title": "associated", "to": "constipation"}, {"from": "diastolic chf", "title": "associated", "to": "dysuria hematuria"}, {"from": "diastolic chf", "title": "associated", "to": "myalgias"}, {"from": "diastolic chf", "title": "associated", "to": "arthralgias"}, {"from": "diastolic chf", "title": "associated", "to": "dvt"}, {"from": "copd", "title": "associated", "to": "dm"}, {"from": "copd", "title": "associated", "to": "htn"}, {"from": "copd", "title": "associated", "to": "hld"}, {"from": "copd", "title": "associated", "to": "cad"}, {"from": "copd", "title": "associated", "to": "lad"}, {"from": "copd", "title": "associated", "to": "pleuritic"}, {"from": "copd", "title": "associated", "to": "dsyspnea"}, {"from": "copd", "title": "associated", "to": "asa"}, {"from": "copd", "title": "associated", "to": "presyncope"}, {"from": "copd", "title": "associated", "to": "syncope cough pnd"}, {"from": "copd", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "copd", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "copd", "title": "associated", "to": "constipation"}, {"from": "copd", "title": "associated", "to": "dysuria hematuria"}, {"from": "copd", "title": "associated", "to": "rash"}, {"from": "copd", "title": "associated", "to": "dvt"}, {"from": "copd", "title": "associated", "to": "pe"}, {"from": "dm", "title": "associated", "to": "htn"}, {"from": "dm", "title": "associated", "to": "cad"}, {"from": "dm", "title": "associated", "to": "pleuritic"}, {"from": "dm", "title": "associated", "to": "dsyspnea"}, {"from": "dm", "title": "associated", "to": "asa"}, {"from": "dm", "title": "associated", "to": "presyncope"}, {"from": "dm", "title": "associated", "to": "syncope cough pnd"}, {"from": "dm", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "dm", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "dm", "title": "associated", "to": "constipation"}, {"from": "dm", "title": "associated", "to": "dysuria hematuria"}, {"from": "dm", "title": "associated", "to": "myalgias"}, {"from": "dm", "title": "associated", "to": "arthralgias"}, {"from": "dm", "title": "associated", "to": "rash"}, {"from": "dm", "title": "associated", "to": "dvt"}, {"from": "htn", "title": "associated", "to": "cad"}, {"from": "htn", "title": "associated", "to": "chest pain"}, {"from": "htn", "title": "associated", "to": "pleuritic"}, {"from": "htn", "title": "associated", "to": "dsyspnea"}, {"from": "htn", "title": "associated", "to": "asa"}, {"from": "htn", "title": "associated", "to": "presyncope"}, {"from": "htn", "title": "associated", "to": "syncope cough pnd"}, {"from": "htn", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "htn", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "htn", "title": "associated", "to": "constipation"}, {"from": "htn", "title": "associated", "to": "dysuria hematuria"}, {"from": "htn", "title": "associated", "to": "myalgias"}, {"from": "htn", "title": "associated", "to": "arthralgias"}, {"from": "htn", "title": "associated", "to": "rash"}, {"from": "htn", "title": "associated", "to": "dvt"}, {"from": "hld", "title": "associated", "to": "cad"}, {"from": "hld", "title": "associated", "to": "lad"}, {"from": "hld", "title": "associated", "to": "asa"}, {"from": "hld", "title": "associated", "to": "dvt"}, {"from": "hld", "title": "associated", "to": "pe"}, {"from": "cad", "title": "associated", "to": "lad"}, {"from": "cad", "title": "associated", "to": "pleuritic"}, {"from": "cad", "title": "associated", "to": "dsyspnea"}, {"from": "cad", "title": "associated", "to": "asa"}, {"from": "cad", "title": "associated", "to": "chest"}, {"from": "cad", "title": "associated", "to": "presyncope"}, {"from": "cad", "title": "associated", "to": "syncope cough pnd"}, {"from": "cad", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "cad", "title": "associated", "to": "dysuria hematuria"}, {"from": "cad", "title": "associated", "to": "rash"}, {"from": "cad", "title": "associated", "to": "dvt"}, {"from": "cad", "title": "associated", "to": "pe"}, {"from": "lad", "title": "associated", "to": "dvt"}, {"from": "chest pain", "title": "associated", "to": "pleuritic"}, {"from": "chest pain", "title": "associated", "to": "dsyspnea"}, {"from": "chest pain", "title": "associated", "to": "lightheadedness"}, {"from": "chest pain", "title": "associated", "to": "chills sweats"}, {"from": "chest pain", "title": "associated", "to": "presyncope"}, {"from": "chest pain", "title": "associated", "to": "syncope cough pnd"}, {"from": "chest pain", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "chest pain", "title": "associated", "to": "abdominal pain nausea vomiting"}, {"from": "chest pain", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "chest pain", "title": "associated", "to": "constipation"}, {"from": "chest pain", "title": "associated", "to": "dysuria hematuria"}, {"from": "chest pain", "title": "associated", "to": "myalgias"}, {"from": "chest pain", "title": "associated", "to": "arthralgias"}, {"from": "chest pain", "title": "associated", "to": "rash"}, {"from": "pleuritic", "title": "associated", "to": "dsyspnea"}, {"from": "pleuritic", "title": "associated", "to": "lightheadedness"}, {"from": "pleuritic", "title": "associated", "to": "chills sweats"}, {"from": "pleuritic", "title": "associated", "to": "presyncope"}, {"from": "pleuritic", "title": "associated", "to": "syncope cough pnd"}, {"from": "pleuritic", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "pleuritic", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "pleuritic", "title": "associated", "to": "constipation"}, {"from": "pleuritic", "title": "associated", "to": "dysuria hematuria"}, {"from": "pleuritic", "title": "associated", "to": "myalgias"}, {"from": "pleuritic", "title": "associated", "to": "arthralgias"}, {"from": "pleuritic", "title": "associated", "to": "rash"}, {"from": "pleuritic", "title": "associated", "to": "dvt"}, {"from": "dsyspnea", "title": "associated", "to": "lightheadedness"}, {"from": "dsyspnea", "title": "associated", "to": "asa"}, {"from": "dsyspnea", "title": "associated", "to": "chills sweats"}, {"from": "dsyspnea", "title": "associated", "to": "presyncope"}, {"from": "dsyspnea", "title": "associated", "to": "syncope cough pnd"}, {"from": "dsyspnea", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "dsyspnea", "title": "associated", "to": "abdominal pain nausea vomiting"}, {"from": "dsyspnea", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "dsyspnea", "title": "associated", "to": "constipation"}, {"from": "dsyspnea", "title": "associated", "to": "dysuria hematuria"}, {"from": "dsyspnea", "title": "associated", "to": "myalgias"}, {"from": "dsyspnea", "title": "associated", "to": "arthralgias"}, {"from": "dsyspnea", "title": "associated", "to": "rash"}, {"from": "dsyspnea", "title": "associated", "to": "dvt"}, {"from": "lightheadedness", "title": "associated", "to": "chills sweats"}, {"from": "lightheadedness", "title": "associated", "to": "presyncope"}, {"from": "lightheadedness", "title": "associated", "to": "abdominal pain nausea vomiting"}, {"from": "lightheadedness", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "lightheadedness", "title": "associated", "to": "constipation"}, {"from": "lightheadedness", "title": "associated", "to": "rash"}, {"from": "asa", "title": "associated", "to": "syncope cough pnd"}, {"from": "asa", "title": "associated", "to": "dvt"}, {"from": "asa", "title": "associated", "to": "pe"}, {"from": "chest", "title": "associated", "to": "dvt"}, {"from": "chills sweats", "title": "associated", "to": "presyncope"}, {"from": "chills sweats", "title": "associated", "to": "syncope cough pnd"}, {"from": "chills sweats", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "chills sweats", "title": "associated", "to": "abdominal pain nausea vomiting"}, {"from": "chills sweats", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "chills sweats", "title": "associated", "to": "constipation"}, {"from": "chills sweats", "title": "associated", "to": "dysuria hematuria"}, {"from": "chills sweats", "title": "associated", "to": "myalgias"}, {"from": "chills sweats", "title": "associated", "to": "arthralgias"}, {"from": "chills sweats", "title": "associated", "to": "rash"}, {"from": "presyncope", "title": "associated", "to": "syncope cough pnd"}, {"from": "presyncope", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "presyncope", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "presyncope", "title": "associated", "to": "constipation"}, {"from": "presyncope", "title": "associated", "to": "dysuria hematuria"}, {"from": "presyncope", "title": "associated", "to": "myalgias"}, {"from": "presyncope", "title": "associated", "to": "arthralgias"}, {"from": "presyncope", "title": "associated", "to": "rash"}, {"from": "presyncope", "title": "associated", "to": "dvt"}, {"from": "syncope cough pnd", "title": "associated", "to": "orthopnea leg  swelling"}, {"from": "syncope cough pnd", "title": "associated", "to": "abdominal pain nausea vomiting"}, {"from": "syncope cough pnd", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "syncope cough pnd", "title": "associated", "to": "constipation"}, {"from": "syncope cough pnd", "title": "associated", "to": "dysuria hematuria"}, {"from": "syncope cough pnd", "title": "associated", "to": "myalgias"}, {"from": "syncope cough pnd", "title": "associated", "to": "arthralgias"}, {"from": "syncope cough pnd", "title": "associated", "to": "rash"}, {"from": "syncope cough pnd", "title": "associated", "to": "dvt"}, {"from": "orthopnea leg  swelling", "title": "associated", "to": "abdominal pain nausea vomiting"}, {"from": "orthopnea leg  swelling", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "orthopnea leg  swelling", "title": "associated", "to": "constipation"}, {"from": "orthopnea leg  swelling", "title": "associated", "to": "dysuria hematuria"}, {"from": "orthopnea leg  swelling", "title": "associated", "to": "myalgias"}, {"from": "orthopnea leg  swelling", "title": "associated", "to": "arthralgias"}, {"from": "orthopnea leg  swelling", "title": "associated", "to": "rash"}, {"from": "abdominal pain nausea vomiting", "title": "associated", "to": "hematemesis  diarrhea"}, {"from": "abdominal pain nausea vomiting", "title": "associated", "to": "constipation"}, {"from": "abdominal pain nausea vomiting", "title": "associated", "to": "dysuria hematuria"}, {"from": "abdominal pain nausea vomiting", "title": "associated", "to": "myalgias"}, {"from": "abdominal pain nausea vomiting", "title": "associated", "to": "rash"}, {"from": "hematemesis  diarrhea", "title": "associated", "to": "constipation"}, {"from": "hematemesis  diarrhea", "title": "associated", "to": "dysuria hematuria"}, {"from": "hematemesis  diarrhea", "title": "associated", "to": "myalgias"}, {"from": "hematemesis  diarrhea", "title": "associated", "to": "arthralgias"}, {"from": "hematemesis  diarrhea", "title": "associated", "to": "rash"}, {"from": "constipation", "title": "associated", "to": "dysuria hematuria"}, {"from": "constipation", "title": "associated", "to": "myalgias"}, {"from": "constipation", "title": "associated", "to": "arthralgias"}, {"from": "constipation", "title": "associated", "to": "rash"}, {"from": "dysuria hematuria", "title": "associated", "to": "myalgias"}, {"from": "dysuria hematuria", "title": "associated", "to": "arthralgias"}, {"from": "dysuria hematuria", "title": "associated", "to": "rash"}, {"from": "myalgias", "title": "associated", "to": "arthralgias"}, {"from": "myalgias", "title": "associated", "to": "rash"}, {"from": "arthralgias", "title": "associated", "to": "rash"}, {"from": "rash", "title": "associated", "to": "dvt"}, {"from": "dvt", "title": "associated", "to": "pe"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

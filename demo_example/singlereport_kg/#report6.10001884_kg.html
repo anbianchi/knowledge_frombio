@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#D3D3D3", "font": {"color": "black"}, "id": "asthma", "label": "asthma", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "cold like  symptoms", "label": "cold like  symptoms", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "pt", "label": "pt", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "wheezing", "label": "wheezing", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "doe", "label": "doe", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "tylenol", "label": "tylenol", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "robitussin", "label": "robitussin", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "cp", "label": "cp", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "heart flutter", "label": "heart flutter", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "headache sore throat sneezing", "label": "headache sore throat sneezing", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "rhinorrhea  nausea vomiting diarrhea", "label": "rhinorrhea  nausea vomiting diarrhea", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "rml", "label": "rml", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "pna", "label": "pna", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "methylprednisone", "label": "methylprednisone", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "levaquin", "label": "levaquin", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "albuterolipratropim", "label": "albuterolipratropim", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "asthma", "title": "associated", "to": "robitussin"}, {"from": "asthma", "title": "associated", "to": "heart flutter"}, {"from": "asthma", "title": "associated", "to": "rhinorrhea  nausea vomiting diarrhea"}, {"from": "asthma", "title": "associated", "to": "pna"}, {"from": "asthma", "title": "associated", "to": "levaquin"}, {"from": "cold like  symptoms", "title": "associated", "to": "heart flutter"}, {"from": "cold like  symptoms", "title": "associated", "to": "headache sore throat sneezing"}, {"from": "cold like  symptoms", "title": "associated", "to": "rhinorrhea  nausea vomiting diarrhea"}, {"from": "cold like  symptoms", "title": "associated", "to": "abdominal pain"}, {"from": "pt", "title": "associated", "to": "robitussin"}, {"from": "pt", "title": "associated", "to": "cp"}, {"from": "pt", "title": "associated", "to": "rml"}, {"from": "wheezing", "title": "associated", "to": "headache sore throat sneezing"}, {"from": "wheezing", "title": "associated", "to": "rhinorrhea  nausea vomiting diarrhea"}, {"from": "wheezing", "title": "associated", "to": "rml"}, {"from": "doe", "title": "associated", "to": "robitussin"}, {"from": "doe", "title": "associated", "to": "cp"}, {"from": "doe", "title": "associated", "to": "rml"}, {"from": "doe", "title": "associated", "to": "pna"}, {"from": "doe", "title": "associated", "to": "levaquin"}, {"from": "tylenol", "title": "associated", "to": "robitussin"}, {"from": "tylenol", "title": "associated", "to": "methylprednisone"}, {"from": "tylenol", "title": "associated", "to": "levaquin"}, {"from": "tylenol", "title": "associated", "to": "albuterolipratropim"}, {"from": "robitussin", "title": "associated", "to": "cp"}, {"from": "robitussin", "title": "associated", "to": "rml"}, {"from": "robitussin", "title": "associated", "to": "pna"}, {"from": "robitussin", "title": "associated", "to": "methylprednisone"}, {"from": "robitussin", "title": "associated", "to": "levaquin"}, {"from": "robitussin", "title": "associated", "to": "albuterolipratropim"}, {"from": "cp", "title": "associated", "to": "rml"}, {"from": "cp", "title": "associated", "to": "pna"}, {"from": "cp", "title": "associated", "to": "levaquin"}, {"from": "heart flutter", "title": "associated", "to": "rhinorrhea  nausea vomiting diarrhea"}, {"from": "heart flutter", "title": "associated", "to": "abdominal pain"}, {"from": "heart flutter", "title": "associated", "to": "pna"}, {"from": "headache sore throat sneezing", "title": "associated", "to": "rhinorrhea  nausea vomiting diarrhea"}, {"from": "rhinorrhea  nausea vomiting diarrhea", "title": "associated", "to": "abdominal pain"}, {"from": "rml", "title": "associated", "to": "pna"}, {"from": "pna", "title": "associated", "to": "levaquin"}, {"from": "methylprednisone", "title": "associated", "to": "levaquin"}, {"from": "methylprednisone", "title": "associated", "to": "albuterolipratropim"}, {"from": "levaquin", "title": "associated", "to": "albuterolipratropim"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

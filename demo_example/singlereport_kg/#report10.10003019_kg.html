@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FFDAB9", "font": {"color": "black"}, "id": "hodgkins lymphoma", "label": "hodgkins lymphoma", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "neutropenic sepsis", "label": "neutropenic sepsis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "pulm  fibrosis", "label": "pulm  fibrosis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "syncope", "label": "syncope", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "systemic sarcoidosis", "label": "systemic sarcoidosis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "neurosarcodosis", "label": "neurosarcodosis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "remicade", "label": "remicade", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "neutropenic fever", "label": "neutropenic fever", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "pt", "label": "pt", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cpdyspneacough", "label": "cpdyspneacough", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "abd pain", "label": "abd pain", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "dysuria hematuria", "label": "dysuria hematuria", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "vanccefepime", "label": "vanccefepime", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "scalp laceration", "label": "scalp laceration", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "prbc", "label": "prbc", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "ciprofloxacin", "label": "ciprofloxacin", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "augmentin", "label": "augmentin", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "bleomycin", "label": "bleomycin", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "hodgkins lymphoma", "title": "associated", "to": "neutropenic sepsis"}, {"from": "hodgkins lymphoma", "title": "associated", "to": "pulm  fibrosis"}, {"from": "hodgkins lymphoma", "title": "associated", "to": "syncope"}, {"from": "hodgkins lymphoma", "title": "associated", "to": "systemic sarcoidosis"}, {"from": "hodgkins lymphoma", "title": "associated", "to": "neurosarcodosis"}, {"from": "hodgkins lymphoma", "title": "associated", "to": "neutropenic fever"}, {"from": "hodgkins lymphoma", "title": "associated", "to": "dysuria hematuria"}, {"from": "neutropenic sepsis", "title": "associated", "to": "pulm  fibrosis"}, {"from": "neutropenic sepsis", "title": "associated", "to": "syncope"}, {"from": "neutropenic sepsis", "title": "associated", "to": "systemic sarcoidosis"}, {"from": "neutropenic sepsis", "title": "associated", "to": "neurosarcodosis"}, {"from": "neutropenic sepsis", "title": "associated", "to": "neutropenic fever"}, {"from": "neutropenic sepsis", "title": "associated", "to": "dysuria hematuria"}, {"from": "neutropenic sepsis", "title": "associated", "to": "vanccefepime"}, {"from": "neutropenic sepsis", "title": "associated", "to": "scalp laceration"}, {"from": "neutropenic sepsis", "title": "associated", "to": "ciprofloxacin"}, {"from": "neutropenic sepsis", "title": "associated", "to": "bleomycin"}, {"from": "pulm  fibrosis", "title": "associated", "to": "syncope"}, {"from": "pulm  fibrosis", "title": "associated", "to": "systemic sarcoidosis"}, {"from": "pulm  fibrosis", "title": "associated", "to": "neurosarcodosis"}, {"from": "pulm  fibrosis", "title": "associated", "to": "neutropenic fever"}, {"from": "pulm  fibrosis", "title": "associated", "to": "cpdyspneacough"}, {"from": "pulm  fibrosis", "title": "associated", "to": "dysuria hematuria"}, {"from": "pulm  fibrosis", "title": "associated", "to": "scalp laceration"}, {"from": "pulm  fibrosis", "title": "associated", "to": "bleomycin"}, {"from": "syncope", "title": "associated", "to": "systemic sarcoidosis"}, {"from": "syncope", "title": "associated", "to": "neurosarcodosis"}, {"from": "syncope", "title": "associated", "to": "neutropenic fever"}, {"from": "syncope", "title": "associated", "to": "cpdyspneacough"}, {"from": "syncope", "title": "associated", "to": "dysuria hematuria"}, {"from": "syncope", "title": "associated", "to": "scalp laceration"}, {"from": "syncope", "title": "associated", "to": "augmentin"}, {"from": "syncope", "title": "associated", "to": "bleomycin"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "neurosarcodosis"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "neutropenic fever"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "dysuria hematuria"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "scalp laceration"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "bleomycin"}, {"from": "neurosarcodosis", "title": "associated", "to": "remicade"}, {"from": "neurosarcodosis", "title": "associated", "to": "neutropenic fever"}, {"from": "neurosarcodosis", "title": "associated", "to": "cpdyspneacough"}, {"from": "neurosarcodosis", "title": "associated", "to": "dysuria hematuria"}, {"from": "neurosarcodosis", "title": "associated", "to": "vanccefepime"}, {"from": "neurosarcodosis", "title": "associated", "to": "scalp laceration"}, {"from": "neurosarcodosis", "title": "associated", "to": "ciprofloxacin"}, {"from": "neurosarcodosis", "title": "associated", "to": "bleomycin"}, {"from": "remicade", "title": "associated", "to": "pt"}, {"from": "remicade", "title": "associated", "to": "cpdyspneacough"}, {"from": "remicade", "title": "associated", "to": "vanccefepime"}, {"from": "remicade", "title": "associated", "to": "prbc"}, {"from": "remicade", "title": "associated", "to": "augmentin"}, {"from": "remicade", "title": "associated", "to": "bleomycin"}, {"from": "neutropenic fever", "title": "associated", "to": "cpdyspneacough"}, {"from": "neutropenic fever", "title": "associated", "to": "dysuria hematuria"}, {"from": "neutropenic fever", "title": "associated", "to": "vanccefepime"}, {"from": "neutropenic fever", "title": "associated", "to": "scalp laceration"}, {"from": "neutropenic fever", "title": "associated", "to": "ciprofloxacin"}, {"from": "neutropenic fever", "title": "associated", "to": "bleomycin"}, {"from": "pt", "title": "associated", "to": "prbc"}, {"from": "nausea", "title": "associated", "to": "abd pain"}, {"from": "cpdyspneacough", "title": "associated", "to": "dysuria hematuria"}, {"from": "dysuria hematuria", "title": "associated", "to": "bleomycin"}, {"from": "vanccefepime", "title": "associated", "to": "prbc"}, {"from": "vanccefepime", "title": "associated", "to": "ciprofloxacin"}, {"from": "vanccefepime", "title": "associated", "to": "augmentin"}, {"from": "vanccefepime", "title": "associated", "to": "bleomycin"}, {"from": "prbc", "title": "associated", "to": "augmentin"}, {"from": "prbc", "title": "associated", "to": "bleomycin"}, {"from": "ciprofloxacin", "title": "associated", "to": "augmentin"}, {"from": "ciprofloxacin", "title": "associated", "to": "bleomycin"}, {"from": "augmentin", "title": "associated", "to": "bleomycin"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

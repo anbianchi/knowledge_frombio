@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FFDAB9", "font": {"color": "black"}, "id": "ho", "label": "ho", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cad", "label": "cad", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "systolic chf", "label": "systolic chf", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "atrial fibrillation", "label": "atrial fibrillation", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cardiac arrest", "label": "cardiac arrest", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "heart  block", "label": "heart  block", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "mrsa bacteremia", "label": "mrsa bacteremia", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "mrsa", "label": "mrsa", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "hematuria", "label": "hematuria", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "gi bleed", "label": "gi bleed", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "fevers", "label": "fevers", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "baceteria", "label": "baceteria", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "pneumonia", "label": "pneumonia", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "mrsa  bacteremia", "label": "mrsa  bacteremia", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "sepsis", "label": "sepsis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "vancomycin", "label": "vancomycin", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "aspirin", "label": "aspirin", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cough cold symptoms nausea", "label": "cough cold symptoms nausea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cp", "label": "cp", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "sob", "label": "sob", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "endocarditis", "label": "endocarditis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "sinus tenderness rhinorrhea or congestion", "label": "sinus tenderness rhinorrhea or congestion", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cough", "label": "cough", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "wheezing", "label": "wheezing", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "chest  pain", "label": "chest  pain", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "chest pressure palpitations", "label": "chest pressure palpitations", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "weakness", "label": "weakness", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "nausea  vomiting", "label": "nausea  vomiting", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "arthralgias", "label": "arthralgias", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "rashes", "label": "rashes", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "skin changes", "label": "skin changes", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "ho", "title": "associated", "to": "cad"}, {"from": "ho", "title": "associated", "to": "mrsa"}, {"from": "ho", "title": "associated", "to": "baceteria"}, {"from": "ho", "title": "associated", "to": "cp"}, {"from": "cad", "title": "associated", "to": "systolic chf"}, {"from": "cad", "title": "associated", "to": "heart  block"}, {"from": "cad", "title": "associated", "to": "mrsa bacteremia"}, {"from": "cad", "title": "associated", "to": "mrsa"}, {"from": "cad", "title": "associated", "to": "hematuria"}, {"from": "cad", "title": "associated", "to": "gi bleed"}, {"from": "cad", "title": "associated", "to": "baceteria"}, {"from": "cad", "title": "associated", "to": "pneumonia"}, {"from": "cad", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "cad", "title": "associated", "to": "sepsis"}, {"from": "cad", "title": "associated", "to": "aspirin"}, {"from": "cad", "title": "associated", "to": "diarrhea"}, {"from": "cad", "title": "associated", "to": "cp"}, {"from": "cad", "title": "associated", "to": "endocarditis"}, {"from": "cad", "title": "associated", "to": "dysuria"}, {"from": "systolic chf", "title": "associated", "to": "heart  block"}, {"from": "systolic chf", "title": "associated", "to": "mrsa bacteremia"}, {"from": "systolic chf", "title": "associated", "to": "mrsa"}, {"from": "systolic chf", "title": "associated", "to": "hematuria"}, {"from": "systolic chf", "title": "associated", "to": "gi bleed"}, {"from": "systolic chf", "title": "associated", "to": "baceteria"}, {"from": "systolic chf", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "systolic chf", "title": "associated", "to": "sepsis"}, {"from": "systolic chf", "title": "associated", "to": "aspirin"}, {"from": "systolic chf", "title": "associated", "to": "diarrhea"}, {"from": "systolic chf", "title": "associated", "to": "cp"}, {"from": "systolic chf", "title": "associated", "to": "endocarditis"}, {"from": "systolic chf", "title": "associated", "to": "constipation"}, {"from": "systolic chf", "title": "associated", "to": "dysuria"}, {"from": "systolic chf", "title": "associated", "to": "arthralgias"}, {"from": "atrial fibrillation", "title": "associated", "to": "heart  block"}, {"from": "atrial fibrillation", "title": "associated", "to": "mrsa bacteremia"}, {"from": "atrial fibrillation", "title": "associated", "to": "hematuria"}, {"from": "atrial fibrillation", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "atrial fibrillation", "title": "associated", "to": "diarrhea"}, {"from": "atrial fibrillation", "title": "associated", "to": "constipation"}, {"from": "atrial fibrillation", "title": "associated", "to": "arthralgias"}, {"from": "cardiac arrest", "title": "associated", "to": "heart  block"}, {"from": "cardiac arrest", "title": "associated", "to": "gi bleed"}, {"from": "cardiac arrest", "title": "associated", "to": "sepsis"}, {"from": "heart  block", "title": "associated", "to": "mrsa bacteremia"}, {"from": "heart  block", "title": "associated", "to": "hematuria"}, {"from": "heart  block", "title": "associated", "to": "gi bleed"}, {"from": "heart  block", "title": "associated", "to": "baceteria"}, {"from": "heart  block", "title": "associated", "to": "pneumonia"}, {"from": "heart  block", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "heart  block", "title": "associated", "to": "sepsis"}, {"from": "heart  block", "title": "associated", "to": "aspirin"}, {"from": "heart  block", "title": "associated", "to": "diarrhea"}, {"from": "heart  block", "title": "associated", "to": "endocarditis"}, {"from": "heart  block", "title": "associated", "to": "chest  pain"}, {"from": "heart  block", "title": "associated", "to": "constipation"}, {"from": "heart  block", "title": "associated", "to": "dysuria"}, {"from": "heart  block", "title": "associated", "to": "arthralgias"}, {"from": "heart  block", "title": "associated", "to": "myalgias"}, {"from": "mrsa bacteremia", "title": "associated", "to": "mrsa"}, {"from": "mrsa bacteremia", "title": "associated", "to": "hematuria"}, {"from": "mrsa bacteremia", "title": "associated", "to": "gi bleed"}, {"from": "mrsa bacteremia", "title": "associated", "to": "fevers"}, {"from": "mrsa bacteremia", "title": "associated", "to": "baceteria"}, {"from": "mrsa bacteremia", "title": "associated", "to": "pneumonia"}, {"from": "mrsa bacteremia", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "mrsa bacteremia", "title": "associated", "to": "sepsis"}, {"from": "mrsa bacteremia", "title": "associated", "to": "vancomycin"}, {"from": "mrsa bacteremia", "title": "associated", "to": "aspirin"}, {"from": "mrsa bacteremia", "title": "associated", "to": "diarrhea"}, {"from": "mrsa bacteremia", "title": "associated", "to": "endocarditis"}, {"from": "mrsa bacteremia", "title": "associated", "to": "constipation"}, {"from": "mrsa bacteremia", "title": "associated", "to": "dysuria"}, {"from": "mrsa bacteremia", "title": "associated", "to": "arthralgias"}, {"from": "mrsa bacteremia", "title": "associated", "to": "myalgias"}, {"from": "mrsa bacteremia", "title": "associated", "to": "rashes"}, {"from": "mrsa bacteremia", "title": "associated", "to": "skin changes"}, {"from": "mrsa", "title": "associated", "to": "baceteria"}, {"from": "mrsa", "title": "associated", "to": "pneumonia"}, {"from": "mrsa", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "mrsa", "title": "associated", "to": "cp"}, {"from": "mrsa", "title": "associated", "to": "endocarditis"}, {"from": "hematuria", "title": "associated", "to": "gi bleed"}, {"from": "hematuria", "title": "associated", "to": "fevers"}, {"from": "hematuria", "title": "associated", "to": "baceteria"}, {"from": "hematuria", "title": "associated", "to": "pneumonia"}, {"from": "hematuria", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "hematuria", "title": "associated", "to": "sepsis"}, {"from": "hematuria", "title": "associated", "to": "aspirin"}, {"from": "hematuria", "title": "associated", "to": "cough cold symptoms nausea"}, {"from": "hematuria", "title": "associated", "to": "diarrhea"}, {"from": "hematuria", "title": "associated", "to": "cp"}, {"from": "hematuria", "title": "associated", "to": "sob"}, {"from": "hematuria", "title": "associated", "to": "endocarditis"}, {"from": "hematuria", "title": "associated", "to": "headache"}, {"from": "hematuria", "title": "associated", "to": "cough"}, {"from": "hematuria", "title": "associated", "to": "chest  pain"}, {"from": "hematuria", "title": "associated", "to": "chest pressure palpitations"}, {"from": "hematuria", "title": "associated", "to": "weakness"}, {"from": "hematuria", "title": "associated", "to": "nausea  vomiting"}, {"from": "hematuria", "title": "associated", "to": "constipation"}, {"from": "hematuria", "title": "associated", "to": "abdominal pain"}, {"from": "hematuria", "title": "associated", "to": "dysuria"}, {"from": "hematuria", "title": "associated", "to": "arthralgias"}, {"from": "hematuria", "title": "associated", "to": "myalgias"}, {"from": "hematuria", "title": "associated", "to": "rashes"}, {"from": "hematuria", "title": "associated", "to": "skin changes"}, {"from": "gi bleed", "title": "associated", "to": "fevers"}, {"from": "gi bleed", "title": "associated", "to": "baceteria"}, {"from": "gi bleed", "title": "associated", "to": "pneumonia"}, {"from": "gi bleed", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "gi bleed", "title": "associated", "to": "sepsis"}, {"from": "gi bleed", "title": "associated", "to": "aspirin"}, {"from": "gi bleed", "title": "associated", "to": "diarrhea"}, {"from": "gi bleed", "title": "associated", "to": "cp"}, {"from": "gi bleed", "title": "associated", "to": "endocarditis"}, {"from": "gi bleed", "title": "associated", "to": "chest  pain"}, {"from": "gi bleed", "title": "associated", "to": "constipation"}, {"from": "gi bleed", "title": "associated", "to": "abdominal pain"}, {"from": "gi bleed", "title": "associated", "to": "dysuria"}, {"from": "gi bleed", "title": "associated", "to": "arthralgias"}, {"from": "gi bleed", "title": "associated", "to": "rashes"}, {"from": "gi bleed", "title": "associated", "to": "skin changes"}, {"from": "fevers", "title": "associated", "to": "baceteria"}, {"from": "fevers", "title": "associated", "to": "pneumonia"}, {"from": "fevers", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "fevers", "title": "associated", "to": "sepsis"}, {"from": "fevers", "title": "associated", "to": "cough cold symptoms nausea"}, {"from": "fevers", "title": "associated", "to": "diarrhea"}, {"from": "fevers", "title": "associated", "to": "sob"}, {"from": "fevers", "title": "associated", "to": "endocarditis"}, {"from": "fevers", "title": "associated", "to": "cough"}, {"from": "fevers", "title": "associated", "to": "chest  pain"}, {"from": "fevers", "title": "associated", "to": "chest pressure palpitations"}, {"from": "fevers", "title": "associated", "to": "weakness"}, {"from": "fevers", "title": "associated", "to": "nausea  vomiting"}, {"from": "fevers", "title": "associated", "to": "constipation"}, {"from": "fevers", "title": "associated", "to": "abdominal pain"}, {"from": "fevers", "title": "associated", "to": "dysuria"}, {"from": "fevers", "title": "associated", "to": "arthralgias"}, {"from": "fevers", "title": "associated", "to": "myalgias"}, {"from": "fevers", "title": "associated", "to": "rashes"}, {"from": "fevers", "title": "associated", "to": "skin changes"}, {"from": "baceteria", "title": "associated", "to": "pneumonia"}, {"from": "baceteria", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "baceteria", "title": "associated", "to": "sepsis"}, {"from": "baceteria", "title": "associated", "to": "vancomycin"}, {"from": "baceteria", "title": "associated", "to": "aspirin"}, {"from": "baceteria", "title": "associated", "to": "cough cold symptoms nausea"}, {"from": "baceteria", "title": "associated", "to": "diarrhea"}, {"from": "baceteria", "title": "associated", "to": "cp"}, {"from": "baceteria", "title": "associated", "to": "endocarditis"}, {"from": "baceteria", "title": "associated", "to": "cough"}, {"from": "baceteria", "title": "associated", "to": "constipation"}, {"from": "baceteria", "title": "associated", "to": "dysuria"}, {"from": "baceteria", "title": "associated", "to": "arthralgias"}, {"from": "baceteria", "title": "associated", "to": "myalgias"}, {"from": "baceteria", "title": "associated", "to": "rashes"}, {"from": "baceteria", "title": "associated", "to": "skin changes"}, {"from": "pneumonia", "title": "associated", "to": "mrsa  bacteremia"}, {"from": "pneumonia", "title": "associated", "to": "sepsis"}, {"from": "pneumonia", "title": "associated", "to": "sob"}, {"from": "pneumonia", "title": "associated", "to": "endocarditis"}, {"from": "pneumonia", "title": "associated", "to": "cough"}, {"from": "pneumonia", "title": "associated", "to": "weakness"}, {"from": "pneumonia", "title": "associated", "to": "rashes"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "sepsis"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "vancomycin"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "aspirin"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "diarrhea"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "endocarditis"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "constipation"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "dysuria"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "arthralgias"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "myalgias"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "rashes"}, {"from": "mrsa  bacteremia", "title": "associated", "to": "skin changes"}, {"from": "sepsis", "title": "associated", "to": "diarrhea"}, {"from": "sepsis", "title": "associated", "to": "endocarditis"}, {"from": "sepsis", "title": "associated", "to": "constipation"}, {"from": "sepsis", "title": "associated", "to": "skin changes"}, {"from": "vancomycin", "title": "associated", "to": "aspirin"}, {"from": "vancomycin", "title": "associated", "to": "diarrhea"}, {"from": "aspirin", "title": "associated", "to": "diarrhea"}, {"from": "aspirin", "title": "associated", "to": "cp"}, {"from": "aspirin", "title": "associated", "to": "endocarditis"}, {"from": "aspirin", "title": "associated", "to": "constipation"}, {"from": "aspirin", "title": "associated", "to": "dysuria"}, {"from": "aspirin", "title": "associated", "to": "arthralgias"}, {"from": "aspirin", "title": "associated", "to": "myalgias"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "diarrhea"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "sob"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "headache"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "cough"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "wheezing"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "chest  pain"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "chest pressure palpitations"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "weakness"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "nausea  vomiting"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "constipation"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "abdominal pain"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "dysuria"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "arthralgias"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "myalgias"}, {"from": "cough cold symptoms nausea", "title": "associated", "to": "rashes"}, {"from": "diarrhea", "title": "associated", "to": "endocarditis"}, {"from": "diarrhea", "title": "associated", "to": "headache"}, {"from": "diarrhea", "title": "associated", "to": "cough"}, {"from": "diarrhea", "title": "associated", "to": "wheezing"}, {"from": "diarrhea", "title": "associated", "to": "chest  pain"}, {"from": "diarrhea", "title": "associated", "to": "chest pressure palpitations"}, {"from": "diarrhea", "title": "associated", "to": "weakness"}, {"from": "diarrhea", "title": "associated", "to": "nausea  vomiting"}, {"from": "diarrhea", "title": "associated", "to": "constipation"}, {"from": "diarrhea", "title": "associated", "to": "abdominal pain"}, {"from": "diarrhea", "title": "associated", "to": "dysuria"}, {"from": "diarrhea", "title": "associated", "to": "arthralgias"}, {"from": "diarrhea", "title": "associated", "to": "myalgias"}, {"from": "diarrhea", "title": "associated", "to": "rashes"}, {"from": "diarrhea", "title": "associated", "to": "skin changes"}, {"from": "sob", "title": "associated", "to": "headache"}, {"from": "sob", "title": "associated", "to": "cough"}, {"from": "sob", "title": "associated", "to": "wheezing"}, {"from": "sob", "title": "associated", "to": "weakness"}, {"from": "sob", "title": "associated", "to": "nausea  vomiting"}, {"from": "sob", "title": "associated", "to": "constipation"}, {"from": "endocarditis", "title": "associated", "to": "constipation"}, {"from": "endocarditis", "title": "associated", "to": "abdominal pain"}, {"from": "endocarditis", "title": "associated", "to": "dysuria"}, {"from": "endocarditis", "title": "associated", "to": "arthralgias"}, {"from": "endocarditis", "title": "associated", "to": "myalgias"}, {"from": "endocarditis", "title": "associated", "to": "rashes"}, {"from": "endocarditis", "title": "associated", "to": "skin changes"}, {"from": "headache", "title": "associated", "to": "cough"}, {"from": "headache", "title": "associated", "to": "wheezing"}, {"from": "headache", "title": "associated", "to": "chest  pain"}, {"from": "headache", "title": "associated", "to": "chest pressure palpitations"}, {"from": "headache", "title": "associated", "to": "weakness"}, {"from": "headache", "title": "associated", "to": "nausea  vomiting"}, {"from": "headache", "title": "associated", "to": "constipation"}, {"from": "headache", "title": "associated", "to": "abdominal pain"}, {"from": "headache", "title": "associated", "to": "dysuria"}, {"from": "headache", "title": "associated", "to": "myalgias"}, {"from": "sinus tenderness rhinorrhea or congestion", "title": "associated", "to": "wheezing"}, {"from": "sinus tenderness rhinorrhea or congestion", "title": "associated", "to": "chest  pain"}, {"from": "sinus tenderness rhinorrhea or congestion", "title": "associated", "to": "chest pressure palpitations"}, {"from": "sinus tenderness rhinorrhea or congestion", "title": "associated", "to": "abdominal pain"}, {"from": "cough", "title": "associated", "to": "wheezing"}, {"from": "cough", "title": "associated", "to": "chest  pain"}, {"from": "cough", "title": "associated", "to": "chest pressure palpitations"}, {"from": "cough", "title": "associated", "to": "weakness"}, {"from": "cough", "title": "associated", "to": "constipation"}, {"from": "cough", "title": "associated", "to": "abdominal pain"}, {"from": "cough", "title": "associated", "to": "dysuria"}, {"from": "cough", "title": "associated", "to": "arthralgias"}, {"from": "cough", "title": "associated", "to": "myalgias"}, {"from": "shortness of breath", "title": "associated", "to": "chest  pain"}, {"from": "shortness of breath", "title": "associated", "to": "constipation"}, {"from": "wheezing", "title": "associated", "to": "chest pressure palpitations"}, {"from": "wheezing", "title": "associated", "to": "nausea  vomiting"}, {"from": "wheezing", "title": "associated", "to": "constipation"}, {"from": "wheezing", "title": "associated", "to": "myalgias"}, {"from": "wheezing", "title": "associated", "to": "rashes"}, {"from": "chest  pain", "title": "associated", "to": "chest pressure palpitations"}, {"from": "chest  pain", "title": "associated", "to": "weakness"}, {"from": "chest  pain", "title": "associated", "to": "nausea  vomiting"}, {"from": "chest  pain", "title": "associated", "to": "constipation"}, {"from": "chest  pain", "title": "associated", "to": "abdominal pain"}, {"from": "chest  pain", "title": "associated", "to": "dysuria"}, {"from": "chest  pain", "title": "associated", "to": "arthralgias"}, {"from": "chest  pain", "title": "associated", "to": "myalgias"}, {"from": "chest  pain", "title": "associated", "to": "rashes"}, {"from": "chest pressure palpitations", "title": "associated", "to": "nausea  vomiting"}, {"from": "chest pressure palpitations", "title": "associated", "to": "constipation"}, {"from": "chest pressure palpitations", "title": "associated", "to": "abdominal pain"}, {"from": "chest pressure palpitations", "title": "associated", "to": "dysuria"}, {"from": "chest pressure palpitations", "title": "associated", "to": "arthralgias"}, {"from": "chest pressure palpitations", "title": "associated", "to": "myalgias"}, {"from": "chest pressure palpitations", "title": "associated", "to": "rashes"}, {"from": "weakness", "title": "associated", "to": "constipation"}, {"from": "weakness", "title": "associated", "to": "abdominal pain"}, {"from": "weakness", "title": "associated", "to": "dysuria"}, {"from": "weakness", "title": "associated", "to": "arthralgias"}, {"from": "weakness", "title": "associated", "to": "myalgias"}, {"from": "weakness", "title": "associated", "to": "rashes"}, {"from": "nausea  vomiting", "title": "associated", "to": "constipation"}, {"from": "nausea  vomiting", "title": "associated", "to": "abdominal pain"}, {"from": "nausea  vomiting", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "abdominal pain"}, {"from": "constipation", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "arthralgias"}, {"from": "constipation", "title": "associated", "to": "myalgias"}, {"from": "constipation", "title": "associated", "to": "rashes"}, {"from": "constipation", "title": "associated", "to": "skin changes"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "arthralgias"}, {"from": "abdominal pain", "title": "associated", "to": "myalgias"}, {"from": "abdominal pain", "title": "associated", "to": "rashes"}, {"from": "dysuria", "title": "associated", "to": "arthralgias"}, {"from": "dysuria", "title": "associated", "to": "myalgias"}, {"from": "dysuria", "title": "associated", "to": "rashes"}, {"from": "arthralgias", "title": "associated", "to": "myalgias"}, {"from": "arthralgias", "title": "associated", "to": "rashes"}, {"from": "arthralgias", "title": "associated", "to": "skin changes"}, {"from": "myalgias", "title": "associated", "to": "rashes"}, {"from": "myalgias", "title": "associated", "to": "skin changes"}, {"from": "rashes", "title": "associated", "to": "skin changes"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

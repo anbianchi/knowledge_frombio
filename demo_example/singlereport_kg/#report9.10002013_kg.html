@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "cad", "label": "cad", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lad svg diag", "label": "lad svg diag", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "type 2 dm", "label": "type 2 dm", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "insulin", "label": "insulin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "htn", "label": "htn", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hyperlipidemia", "label": "hyperlipidemia", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "leftsided chest pain", "label": "leftsided chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "sob", "label": "sob", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "nitroglycerin", "label": "nitroglycerin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "diaphoresis", "label": "diaphoresis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "cough", "label": "cough", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "orthopnea", "label": "orthopnea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "pnd", "label": "pnd", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lower extremity edema", "label": "lower extremity edema", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "tachycardic", "label": "tachycardic", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "atelectasis", "label": "atelectasis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "troponin", "label": "troponin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "pulmonary embolus", "label": "pulmonary embolus", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "aspirin", "label": "aspirin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "stroke  tia", "label": "stroke  tia", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "deep venous thrombosis pulmonary embolism", "label": "deep venous thrombosis pulmonary embolism", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "joint pains", "label": "joint pains", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hemoptysis", "label": "hemoptysis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "black", "label": "black", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "rigors", "label": "rigors", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "buttock or calf pain", "label": "buttock or calf pain", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "cad", "title": "associated", "to": "lad svg diag"}, {"from": "cad", "title": "associated", "to": "type 2 dm"}, {"from": "cad", "title": "associated", "to": "htn"}, {"from": "cad", "title": "associated", "to": "hyperlipidemia"}, {"from": "cad", "title": "associated", "to": "pnd"}, {"from": "cad", "title": "associated", "to": "pulmonary embolus"}, {"from": "cad", "title": "associated", "to": "aspirin"}, {"from": "cad", "title": "associated", "to": "stroke  tia"}, {"from": "cad", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "cad", "title": "associated", "to": "hemoptysis"}, {"from": "cad", "title": "associated", "to": "black"}, {"from": "type 2 dm", "title": "associated", "to": "htn"}, {"from": "type 2 dm", "title": "associated", "to": "hyperlipidemia"}, {"from": "type 2 dm", "title": "associated", "to": "orthopnea"}, {"from": "type 2 dm", "title": "associated", "to": "aspirin"}, {"from": "type 2 dm", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "type 2 dm", "title": "associated", "to": "myalgias"}, {"from": "insulin", "title": "associated", "to": "aspirin"}, {"from": "htn", "title": "associated", "to": "hyperlipidemia"}, {"from": "htn", "title": "associated", "to": "chest pain"}, {"from": "htn", "title": "associated", "to": "diaphoresis"}, {"from": "htn", "title": "associated", "to": "orthopnea"}, {"from": "htn", "title": "associated", "to": "pulmonary embolus"}, {"from": "htn", "title": "associated", "to": "aspirin"}, {"from": "htn", "title": "associated", "to": "stroke  tia"}, {"from": "htn", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "htn", "title": "associated", "to": "myalgias"}, {"from": "htn", "title": "associated", "to": "joint pains"}, {"from": "htn", "title": "associated", "to": "hemoptysis"}, {"from": "hyperlipidemia", "title": "associated", "to": "orthopnea"}, {"from": "hyperlipidemia", "title": "associated", "to": "pulmonary embolus"}, {"from": "hyperlipidemia", "title": "associated", "to": "aspirin"}, {"from": "hyperlipidemia", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "hyperlipidemia", "title": "associated", "to": "myalgias"}, {"from": "hyperlipidemia", "title": "associated", "to": "joint pains"}, {"from": "hyperlipidemia", "title": "associated", "to": "hemoptysis"}, {"from": "leftsided chest pain", "title": "associated", "to": "chest pain"}, {"from": "leftsided chest pain", "title": "associated", "to": "diaphoresis"}, {"from": "leftsided chest pain", "title": "associated", "to": "cough"}, {"from": "leftsided chest pain", "title": "associated", "to": "shortness of breath"}, {"from": "leftsided chest pain", "title": "associated", "to": "lower extremity edema"}, {"from": "leftsided chest pain", "title": "associated", "to": "myalgias"}, {"from": "leftsided chest pain", "title": "associated", "to": "joint pains"}, {"from": "leftsided chest pain", "title": "associated", "to": "hemoptysis"}, {"from": "leftsided chest pain", "title": "associated", "to": "buttock or calf pain"}, {"from": "sob", "title": "associated", "to": "diaphoresis"}, {"from": "sob", "title": "associated", "to": "cough"}, {"from": "sob", "title": "associated", "to": "black"}, {"from": "sob", "title": "associated", "to": "rigors"}, {"from": "chest pain", "title": "associated", "to": "diaphoresis"}, {"from": "chest pain", "title": "associated", "to": "cough"}, {"from": "chest pain", "title": "associated", "to": "shortness of breath"}, {"from": "chest pain", "title": "associated", "to": "orthopnea"}, {"from": "chest pain", "title": "associated", "to": "lower extremity edema"}, {"from": "chest pain", "title": "associated", "to": "pulmonary embolus"}, {"from": "chest pain", "title": "associated", "to": "myalgias"}, {"from": "chest pain", "title": "associated", "to": "joint pains"}, {"from": "chest pain", "title": "associated", "to": "hemoptysis"}, {"from": "chest pain", "title": "associated", "to": "rigors"}, {"from": "chest pain", "title": "associated", "to": "buttock or calf pain"}, {"from": "nitroglycerin", "title": "associated", "to": "aspirin"}, {"from": "diaphoresis", "title": "associated", "to": "cough"}, {"from": "diaphoresis", "title": "associated", "to": "orthopnea"}, {"from": "diaphoresis", "title": "associated", "to": "lower extremity edema"}, {"from": "diaphoresis", "title": "associated", "to": "tachycardic"}, {"from": "diaphoresis", "title": "associated", "to": "myalgias"}, {"from": "diaphoresis", "title": "associated", "to": "joint pains"}, {"from": "diaphoresis", "title": "associated", "to": "hemoptysis"}, {"from": "diaphoresis", "title": "associated", "to": "rigors"}, {"from": "diaphoresis", "title": "associated", "to": "buttock or calf pain"}, {"from": "cough", "title": "associated", "to": "orthopnea"}, {"from": "cough", "title": "associated", "to": "myalgias"}, {"from": "cough", "title": "associated", "to": "joint pains"}, {"from": "cough", "title": "associated", "to": "hemoptysis"}, {"from": "cough", "title": "associated", "to": "rigors"}, {"from": "shortness of breath", "title": "associated", "to": "buttock or calf pain"}, {"from": "orthopnea", "title": "associated", "to": "pulmonary embolus"}, {"from": "orthopnea", "title": "associated", "to": "aspirin"}, {"from": "orthopnea", "title": "associated", "to": "stroke  tia"}, {"from": "orthopnea", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "orthopnea", "title": "associated", "to": "myalgias"}, {"from": "orthopnea", "title": "associated", "to": "joint pains"}, {"from": "orthopnea", "title": "associated", "to": "hemoptysis"}, {"from": "pnd", "title": "associated", "to": "stroke  tia"}, {"from": "pnd", "title": "associated", "to": "black"}, {"from": "lower extremity edema", "title": "associated", "to": "joint pains"}, {"from": "lower extremity edema", "title": "associated", "to": "buttock or calf pain"}, {"from": "pulmonary embolus", "title": "associated", "to": "stroke  tia"}, {"from": "pulmonary embolus", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "pulmonary embolus", "title": "associated", "to": "joint pains"}, {"from": "pulmonary embolus", "title": "associated", "to": "hemoptysis"}, {"from": "aspirin", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "aspirin", "title": "associated", "to": "myalgias"}, {"from": "aspirin", "title": "associated", "to": "joint pains"}, {"from": "aspirin", "title": "associated", "to": "hemoptysis"}, {"from": "stroke  tia", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "stroke  tia", "title": "associated", "to": "hemoptysis"}, {"from": "stroke  tia", "title": "associated", "to": "black"}, {"from": "stroke  tia", "title": "associated", "to": "rigors"}, {"from": "deep venous thrombosis pulmonary embolism", "title": "associated", "to": "myalgias"}, {"from": "deep venous thrombosis pulmonary embolism", "title": "associated", "to": "joint pains"}, {"from": "deep venous thrombosis pulmonary embolism", "title": "associated", "to": "hemoptysis"}, {"from": "myalgias", "title": "associated", "to": "joint pains"}, {"from": "myalgias", "title": "associated", "to": "hemoptysis"}, {"from": "myalgias", "title": "associated", "to": "rigors"}, {"from": "myalgias", "title": "associated", "to": "buttock or calf pain"}, {"from": "joint pains", "title": "associated", "to": "hemoptysis"}, {"from": "joint pains", "title": "associated", "to": "rigors"}, {"from": "joint pains", "title": "associated", "to": "buttock or calf pain"}, {"from": "hemoptysis", "title": "associated", "to": "rigors"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
