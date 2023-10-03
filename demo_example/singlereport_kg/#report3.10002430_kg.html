@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#E6E6FA", "font": {"color": "black"}, "id": "gentleman", "label": "gentleman", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cad  sp", "label": "cad  sp", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lm pci", "label": "lm pci", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pulmonary htn afib", "label": "pulmonary htn afib", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "rv dilation", "label": "rv dilation", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lower  extremity swelling", "label": "lower  extremity swelling", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest pain palpitations", "label": "chest pain palpitations", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "orthopnea", "label": "orthopnea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pnd", "label": "pnd", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "fevers cough", "label": "fevers cough", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "bilateral pitting edema", "label": "bilateral pitting edema", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hyponatremia", "label": "hyponatremia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "wbc", "label": "wbc", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hgb", "label": "hgb", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "ddimer", "label": "ddimer", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cardiomegaly", "label": "cardiomegaly", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pulmonary edema", "label": "pulmonary edema", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "emphysema", "label": "emphysema", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dilated", "label": "dilated", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "heart failure", "label": "heart failure", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "rv  dilation", "label": "rv  dilation", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "stroke", "label": "stroke", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "deep venous thrombosis pulmonary embolism", "label": "deep venous thrombosis pulmonary embolism", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "joint pains cough", "label": "joint pains cough", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hemoptysis", "label": "hemoptysis", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "fevers chills", "label": "fevers chills", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "rigors", "label": "rigors", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "buttock or calf pain", "label": "buttock or calf pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "paroxysmal nocturnal dyspnea", "label": "paroxysmal nocturnal dyspnea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "orthopnea palpitations syncope", "label": "orthopnea palpitations syncope", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "presyncope", "label": "presyncope", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "gentleman", "title": "associated", "to": "stroke"}, {"from": "cad  sp", "title": "associated", "to": "lm pci"}, {"from": "cad  sp", "title": "associated", "to": "pulmonary htn afib"}, {"from": "cad  sp", "title": "associated", "to": "rv dilation"}, {"from": "cad  sp", "title": "associated", "to": "orthopnea"}, {"from": "cad  sp", "title": "associated", "to": "pnd"}, {"from": "cad  sp", "title": "associated", "to": "hyponatremia"}, {"from": "cad  sp", "title": "associated", "to": "ddimer"}, {"from": "cad  sp", "title": "associated", "to": "emphysema"}, {"from": "cad  sp", "title": "associated", "to": "heart failure"}, {"from": "cad  sp", "title": "associated", "to": "rv  dilation"}, {"from": "cad  sp", "title": "associated", "to": "hemoptysis"}, {"from": "cad  sp", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "cad  sp", "title": "associated", "to": "presyncope"}, {"from": "lm pci", "title": "associated", "to": "rv dilation"}, {"from": "lm pci", "title": "associated", "to": "pnd"}, {"from": "lm pci", "title": "associated", "to": "ddimer"}, {"from": "lm pci", "title": "associated", "to": "rv  dilation"}, {"from": "pulmonary htn afib", "title": "associated", "to": "rv dilation"}, {"from": "pulmonary htn afib", "title": "associated", "to": "orthopnea"}, {"from": "pulmonary htn afib", "title": "associated", "to": "fevers cough"}, {"from": "pulmonary htn afib", "title": "associated", "to": "dyspnea"}, {"from": "pulmonary htn afib", "title": "associated", "to": "hyponatremia"}, {"from": "pulmonary htn afib", "title": "associated", "to": "cardiomegaly"}, {"from": "pulmonary htn afib", "title": "associated", "to": "pulmonary edema"}, {"from": "pulmonary htn afib", "title": "associated", "to": "emphysema"}, {"from": "pulmonary htn afib", "title": "associated", "to": "heart failure"}, {"from": "pulmonary htn afib", "title": "associated", "to": "rv  dilation"}, {"from": "pulmonary htn afib", "title": "associated", "to": "stroke"}, {"from": "pulmonary htn afib", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "pulmonary htn afib", "title": "associated", "to": "myalgias"}, {"from": "pulmonary htn afib", "title": "associated", "to": "joint pains cough"}, {"from": "pulmonary htn afib", "title": "associated", "to": "hemoptysis"}, {"from": "pulmonary htn afib", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "pulmonary htn afib", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "pulmonary htn afib", "title": "associated", "to": "presyncope"}, {"from": "rv dilation", "title": "associated", "to": "lower  extremity swelling"}, {"from": "rv dilation", "title": "associated", "to": "orthopnea"}, {"from": "rv dilation", "title": "associated", "to": "hyponatremia"}, {"from": "rv dilation", "title": "associated", "to": "cardiomegaly"}, {"from": "rv dilation", "title": "associated", "to": "pulmonary edema"}, {"from": "rv dilation", "title": "associated", "to": "emphysema"}, {"from": "rv dilation", "title": "associated", "to": "dilated"}, {"from": "rv dilation", "title": "associated", "to": "heart failure"}, {"from": "rv dilation", "title": "associated", "to": "rv  dilation"}, {"from": "rv dilation", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "rv dilation", "title": "associated", "to": "hemoptysis"}, {"from": "rv dilation", "title": "associated", "to": "chest pain"}, {"from": "rv dilation", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "rv dilation", "title": "associated", "to": "presyncope"}, {"from": "lower  extremity swelling", "title": "associated", "to": "orthopnea"}, {"from": "lower  extremity swelling", "title": "associated", "to": "fevers cough"}, {"from": "lower  extremity swelling", "title": "associated", "to": "dyspnea"}, {"from": "lower  extremity swelling", "title": "associated", "to": "bilateral pitting edema"}, {"from": "lower  extremity swelling", "title": "associated", "to": "hyponatremia"}, {"from": "lower  extremity swelling", "title": "associated", "to": "cardiomegaly"}, {"from": "lower  extremity swelling", "title": "associated", "to": "pulmonary edema"}, {"from": "lower  extremity swelling", "title": "associated", "to": "emphysema"}, {"from": "lower  extremity swelling", "title": "associated", "to": "heart failure"}, {"from": "lower  extremity swelling", "title": "associated", "to": "rv  dilation"}, {"from": "lower  extremity swelling", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "lower  extremity swelling", "title": "associated", "to": "myalgias"}, {"from": "lower  extremity swelling", "title": "associated", "to": "joint pains cough"}, {"from": "lower  extremity swelling", "title": "associated", "to": "hemoptysis"}, {"from": "lower  extremity swelling", "title": "associated", "to": "fevers chills"}, {"from": "lower  extremity swelling", "title": "associated", "to": "rigors"}, {"from": "lower  extremity swelling", "title": "associated", "to": "buttock or calf pain"}, {"from": "lower  extremity swelling", "title": "associated", "to": "chest pain"}, {"from": "lower  extremity swelling", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "lower  extremity swelling", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "lower  extremity swelling", "title": "associated", "to": "presyncope"}, {"from": "chest pain palpitations", "title": "associated", "to": "fevers cough"}, {"from": "chest pain palpitations", "title": "associated", "to": "dyspnea"}, {"from": "chest pain palpitations", "title": "associated", "to": "myalgias"}, {"from": "chest pain palpitations", "title": "associated", "to": "joint pains cough"}, {"from": "chest pain palpitations", "title": "associated", "to": "fevers chills"}, {"from": "chest pain palpitations", "title": "associated", "to": "buttock or calf pain"}, {"from": "chest pain palpitations", "title": "associated", "to": "chest pain"}, {"from": "chest pain palpitations", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "orthopnea", "title": "associated", "to": "fevers cough"}, {"from": "orthopnea", "title": "associated", "to": "dyspnea"}, {"from": "orthopnea", "title": "associated", "to": "hyponatremia"}, {"from": "orthopnea", "title": "associated", "to": "cardiomegaly"}, {"from": "orthopnea", "title": "associated", "to": "pulmonary edema"}, {"from": "orthopnea", "title": "associated", "to": "emphysema"}, {"from": "orthopnea", "title": "associated", "to": "heart failure"}, {"from": "orthopnea", "title": "associated", "to": "rv  dilation"}, {"from": "orthopnea", "title": "associated", "to": "stroke"}, {"from": "orthopnea", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "orthopnea", "title": "associated", "to": "myalgias"}, {"from": "orthopnea", "title": "associated", "to": "joint pains cough"}, {"from": "orthopnea", "title": "associated", "to": "hemoptysis"}, {"from": "orthopnea", "title": "associated", "to": "fevers chills"}, {"from": "orthopnea", "title": "associated", "to": "chest pain"}, {"from": "orthopnea", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "orthopnea", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "orthopnea", "title": "associated", "to": "presyncope"}, {"from": "pnd", "title": "associated", "to": "ddimer"}, {"from": "fevers cough", "title": "associated", "to": "dyspnea"}, {"from": "fevers cough", "title": "associated", "to": "hyponatremia"}, {"from": "fevers cough", "title": "associated", "to": "pulmonary edema"}, {"from": "fevers cough", "title": "associated", "to": "stroke"}, {"from": "fevers cough", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "fevers cough", "title": "associated", "to": "myalgias"}, {"from": "fevers cough", "title": "associated", "to": "joint pains cough"}, {"from": "fevers cough", "title": "associated", "to": "fevers chills"}, {"from": "fevers cough", "title": "associated", "to": "rigors"}, {"from": "fevers cough", "title": "associated", "to": "chest pain"}, {"from": "fevers cough", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "fevers cough", "title": "associated", "to": "presyncope"}, {"from": "dyspnea", "title": "associated", "to": "hyponatremia"}, {"from": "dyspnea", "title": "associated", "to": "pulmonary edema"}, {"from": "dyspnea", "title": "associated", "to": "emphysema"}, {"from": "dyspnea", "title": "associated", "to": "heart failure"}, {"from": "dyspnea", "title": "associated", "to": "myalgias"}, {"from": "dyspnea", "title": "associated", "to": "joint pains cough"}, {"from": "dyspnea", "title": "associated", "to": "hemoptysis"}, {"from": "dyspnea", "title": "associated", "to": "fevers chills"}, {"from": "dyspnea", "title": "associated", "to": "rigors"}, {"from": "dyspnea", "title": "associated", "to": "buttock or calf pain"}, {"from": "dyspnea", "title": "associated", "to": "chest pain"}, {"from": "dyspnea", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "dyspnea", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "dyspnea", "title": "associated", "to": "presyncope"}, {"from": "bilateral pitting edema", "title": "associated", "to": "cardiomegaly"}, {"from": "bilateral pitting edema", "title": "associated", "to": "pulmonary edema"}, {"from": "hyponatremia", "title": "associated", "to": "cardiomegaly"}, {"from": "hyponatremia", "title": "associated", "to": "pulmonary edema"}, {"from": "hyponatremia", "title": "associated", "to": "emphysema"}, {"from": "hyponatremia", "title": "associated", "to": "heart failure"}, {"from": "hyponatremia", "title": "associated", "to": "rv  dilation"}, {"from": "hyponatremia", "title": "associated", "to": "stroke"}, {"from": "hyponatremia", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "hyponatremia", "title": "associated", "to": "myalgias"}, {"from": "hyponatremia", "title": "associated", "to": "joint pains cough"}, {"from": "hyponatremia", "title": "associated", "to": "hemoptysis"}, {"from": "hyponatremia", "title": "associated", "to": "fevers chills"}, {"from": "hyponatremia", "title": "associated", "to": "rigors"}, {"from": "hyponatremia", "title": "associated", "to": "chest pain"}, {"from": "hyponatremia", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "hyponatremia", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "hyponatremia", "title": "associated", "to": "presyncope"}, {"from": "wbc", "title": "associated", "to": "hgb"}, {"from": "cardiomegaly", "title": "associated", "to": "pulmonary edema"}, {"from": "cardiomegaly", "title": "associated", "to": "emphysema"}, {"from": "cardiomegaly", "title": "associated", "to": "heart failure"}, {"from": "cardiomegaly", "title": "associated", "to": "rv  dilation"}, {"from": "cardiomegaly", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "cardiomegaly", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "cardiomegaly", "title": "associated", "to": "presyncope"}, {"from": "pulmonary edema", "title": "associated", "to": "emphysema"}, {"from": "pulmonary edema", "title": "associated", "to": "heart failure"}, {"from": "pulmonary edema", "title": "associated", "to": "rv  dilation"}, {"from": "pulmonary edema", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "pulmonary edema", "title": "associated", "to": "myalgias"}, {"from": "pulmonary edema", "title": "associated", "to": "hemoptysis"}, {"from": "pulmonary edema", "title": "associated", "to": "rigors"}, {"from": "pulmonary edema", "title": "associated", "to": "chest pain"}, {"from": "pulmonary edema", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "pulmonary edema", "title": "associated", "to": "presyncope"}, {"from": "emphysema", "title": "associated", "to": "heart failure"}, {"from": "emphysema", "title": "associated", "to": "rv  dilation"}, {"from": "emphysema", "title": "associated", "to": "stroke"}, {"from": "emphysema", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "emphysema", "title": "associated", "to": "myalgias"}, {"from": "emphysema", "title": "associated", "to": "hemoptysis"}, {"from": "emphysema", "title": "associated", "to": "chest pain"}, {"from": "emphysema", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "emphysema", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "emphysema", "title": "associated", "to": "presyncope"}, {"from": "dilated", "title": "associated", "to": "rv  dilation"}, {"from": "heart failure", "title": "associated", "to": "rv  dilation"}, {"from": "heart failure", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "heart failure", "title": "associated", "to": "myalgias"}, {"from": "heart failure", "title": "associated", "to": "hemoptysis"}, {"from": "heart failure", "title": "associated", "to": "chest pain"}, {"from": "heart failure", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "heart failure", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "heart failure", "title": "associated", "to": "presyncope"}, {"from": "rv  dilation", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "rv  dilation", "title": "associated", "to": "hemoptysis"}, {"from": "rv  dilation", "title": "associated", "to": "chest pain"}, {"from": "rv  dilation", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "rv  dilation", "title": "associated", "to": "presyncope"}, {"from": "stroke", "title": "associated", "to": "deep venous thrombosis pulmonary embolism"}, {"from": "stroke", "title": "associated", "to": "myalgias"}, {"from": "stroke", "title": "associated", "to": "joint pains cough"}, {"from": "stroke", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "stroke", "title": "associated", "to": "presyncope"}, {"from": "deep venous thrombosis pulmonary embolism", "title": "associated", "to": "myalgias"}, {"from": "deep venous thrombosis pulmonary embolism", "title": "associated", "to": "joint pains cough"}, {"from": "deep venous thrombosis pulmonary embolism", "title": "associated", "to": "hemoptysis"}, {"from": "deep venous thrombosis pulmonary embolism", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "deep venous thrombosis pulmonary embolism", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "deep venous thrombosis pulmonary embolism", "title": "associated", "to": "presyncope"}, {"from": "myalgias", "title": "associated", "to": "joint pains cough"}, {"from": "myalgias", "title": "associated", "to": "hemoptysis"}, {"from": "myalgias", "title": "associated", "to": "fevers chills"}, {"from": "myalgias", "title": "associated", "to": "rigors"}, {"from": "myalgias", "title": "associated", "to": "buttock or calf pain"}, {"from": "myalgias", "title": "associated", "to": "chest pain"}, {"from": "myalgias", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "myalgias", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "myalgias", "title": "associated", "to": "presyncope"}, {"from": "joint pains cough", "title": "associated", "to": "fevers chills"}, {"from": "joint pains cough", "title": "associated", "to": "rigors"}, {"from": "joint pains cough", "title": "associated", "to": "buttock or calf pain"}, {"from": "joint pains cough", "title": "associated", "to": "chest pain"}, {"from": "joint pains cough", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "joint pains cough", "title": "associated", "to": "presyncope"}, {"from": "hemoptysis", "title": "associated", "to": "fevers chills"}, {"from": "hemoptysis", "title": "associated", "to": "rigors"}, {"from": "hemoptysis", "title": "associated", "to": "chest pain"}, {"from": "hemoptysis", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "hemoptysis", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "hemoptysis", "title": "associated", "to": "presyncope"}, {"from": "fevers chills", "title": "associated", "to": "rigors"}, {"from": "fevers chills", "title": "associated", "to": "buttock or calf pain"}, {"from": "fevers chills", "title": "associated", "to": "chest pain"}, {"from": "fevers chills", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "fevers chills", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "fevers chills", "title": "associated", "to": "presyncope"}, {"from": "rigors", "title": "associated", "to": "chest pain"}, {"from": "rigors", "title": "associated", "to": "presyncope"}, {"from": "buttock or calf pain", "title": "associated", "to": "chest pain"}, {"from": "chest pain", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "chest pain", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "chest pain", "title": "associated", "to": "presyncope"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "orthopnea palpitations syncope"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "presyncope"}, {"from": "orthopnea palpitations syncope", "title": "associated", "to": "presyncope"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

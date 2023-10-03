@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#E6E6FA", "font": {"color": "black"}, "id": "coumadin", "label": "coumadin", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pleuritic chest pain", "label": "pleuritic chest pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lower extremity pain", "label": "lower extremity pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "feverschills", "label": "feverschills", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest  pain", "label": "chest  pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "alb", "label": "alb", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "ap", "label": "ap", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cbc", "label": "cbc", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pleural effusions", "label": "pleural effusions", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cardiomegaly", "label": "cardiomegaly", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pulmonary artery enlargement", "label": "pulmonary artery enlargement", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "warfarin", "label": "warfarin", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pleuritic pain", "label": "pleuritic pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "shortness  of breath", "label": "shortness  of breath", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "fever chills", "label": "fever chills", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "rhinorrhea congestion sore throat cough shortness of breath  chest", "label": "rhinorrhea congestion sore throat cough shortness of breath  chest", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pain abdominal pain nausea vomiting diarrhea", "label": "pain abdominal pain nausea vomiting diarrhea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "brbpr", "label": "brbpr", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "melena", "label": "melena", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hematochezia", "label": "hematochezia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hematuria", "label": "hematuria", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "coumadin", "title": "associated", "to": "feverschills"}, {"from": "coumadin", "title": "associated", "to": "alb"}, {"from": "coumadin", "title": "associated", "to": "cbc"}, {"from": "coumadin", "title": "associated", "to": "warfarin"}, {"from": "coumadin", "title": "associated", "to": "constipation"}, {"from": "coumadin", "title": "associated", "to": "brbpr"}, {"from": "coumadin", "title": "associated", "to": "melena"}, {"from": "coumadin", "title": "associated", "to": "hematochezia"}, {"from": "coumadin", "title": "associated", "to": "dysuria"}, {"from": "coumadin", "title": "associated", "to": "hematuria"}, {"from": "pleuritic chest pain", "title": "associated", "to": "dyspnea"}, {"from": "pleuritic chest pain", "title": "associated", "to": "lower extremity pain"}, {"from": "pleuritic chest pain", "title": "associated", "to": "chest  pain"}, {"from": "pleuritic chest pain", "title": "associated", "to": "abdominal pain"}, {"from": "pleuritic chest pain", "title": "associated", "to": "cardiomegaly"}, {"from": "pleuritic chest pain", "title": "associated", "to": "pleuritic pain"}, {"from": "pleuritic chest pain", "title": "associated", "to": "fever chills"}, {"from": "pleuritic chest pain", "title": "associated", "to": "headache"}, {"from": "pleuritic chest pain", "title": "associated", "to": "rhinorrhea congestion sore throat cough shortness of breath  chest"}, {"from": "pleuritic chest pain", "title": "associated", "to": "pain abdominal pain nausea vomiting diarrhea"}, {"from": "pleuritic chest pain", "title": "associated", "to": "constipation"}, {"from": "pleuritic chest pain", "title": "associated", "to": "melena"}, {"from": "pleuritic chest pain", "title": "associated", "to": "hematochezia"}, {"from": "pleuritic chest pain", "title": "associated", "to": "dysuria"}, {"from": "pleuritic chest pain", "title": "associated", "to": "hematuria"}, {"from": "dyspnea", "title": "associated", "to": "lower extremity pain"}, {"from": "dyspnea", "title": "associated", "to": "chest  pain"}, {"from": "dyspnea", "title": "associated", "to": "abdominal pain"}, {"from": "dyspnea", "title": "associated", "to": "shortness of breath"}, {"from": "dyspnea", "title": "associated", "to": "pleuritic pain"}, {"from": "dyspnea", "title": "associated", "to": "shortness  of breath"}, {"from": "dyspnea", "title": "associated", "to": "fever chills"}, {"from": "dyspnea", "title": "associated", "to": "headache"}, {"from": "dyspnea", "title": "associated", "to": "rhinorrhea congestion sore throat cough shortness of breath  chest"}, {"from": "dyspnea", "title": "associated", "to": "pain abdominal pain nausea vomiting diarrhea"}, {"from": "dyspnea", "title": "associated", "to": "constipation"}, {"from": "dyspnea", "title": "associated", "to": "melena"}, {"from": "dyspnea", "title": "associated", "to": "hematochezia"}, {"from": "dyspnea", "title": "associated", "to": "dysuria"}, {"from": "dyspnea", "title": "associated", "to": "hematuria"}, {"from": "lower extremity pain", "title": "associated", "to": "chest  pain"}, {"from": "lower extremity pain", "title": "associated", "to": "abdominal pain"}, {"from": "lower extremity pain", "title": "associated", "to": "pleuritic pain"}, {"from": "lower extremity pain", "title": "associated", "to": "fever chills"}, {"from": "lower extremity pain", "title": "associated", "to": "constipation"}, {"from": "lower extremity pain", "title": "associated", "to": "dysuria"}, {"from": "lower extremity pain", "title": "associated", "to": "hematuria"}, {"from": "feverschills", "title": "associated", "to": "alb"}, {"from": "feverschills", "title": "associated", "to": "fever chills"}, {"from": "feverschills", "title": "associated", "to": "constipation"}, {"from": "feverschills", "title": "associated", "to": "melena"}, {"from": "feverschills", "title": "associated", "to": "hematochezia"}, {"from": "feverschills", "title": "associated", "to": "dysuria"}, {"from": "feverschills", "title": "associated", "to": "hematuria"}, {"from": "chest  pain", "title": "associated", "to": "abdominal pain"}, {"from": "chest  pain", "title": "associated", "to": "shortness of breath"}, {"from": "chest  pain", "title": "associated", "to": "pleuritic pain"}, {"from": "chest  pain", "title": "associated", "to": "shortness  of breath"}, {"from": "chest  pain", "title": "associated", "to": "fever chills"}, {"from": "chest  pain", "title": "associated", "to": "headache"}, {"from": "chest  pain", "title": "associated", "to": "pain abdominal pain nausea vomiting diarrhea"}, {"from": "chest  pain", "title": "associated", "to": "constipation"}, {"from": "chest  pain", "title": "associated", "to": "melena"}, {"from": "chest  pain", "title": "associated", "to": "hematochezia"}, {"from": "chest  pain", "title": "associated", "to": "dysuria"}, {"from": "chest  pain", "title": "associated", "to": "hematuria"}, {"from": "abdominal pain", "title": "associated", "to": "pleuritic pain"}, {"from": "abdominal pain", "title": "associated", "to": "fever chills"}, {"from": "abdominal pain", "title": "associated", "to": "headache"}, {"from": "abdominal pain", "title": "associated", "to": "pain abdominal pain nausea vomiting diarrhea"}, {"from": "abdominal pain", "title": "associated", "to": "constipation"}, {"from": "abdominal pain", "title": "associated", "to": "melena"}, {"from": "abdominal pain", "title": "associated", "to": "hematochezia"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "hematuria"}, {"from": "shortness of breath", "title": "associated", "to": "shortness  of breath"}, {"from": "shortness of breath", "title": "associated", "to": "constipation"}, {"from": "alb", "title": "associated", "to": "ap"}, {"from": "alb", "title": "associated", "to": "cbc"}, {"from": "alb", "title": "associated", "to": "pleural effusions"}, {"from": "alb", "title": "associated", "to": "warfarin"}, {"from": "alb", "title": "associated", "to": "brbpr"}, {"from": "alb", "title": "associated", "to": "melena"}, {"from": "alb", "title": "associated", "to": "hematochezia"}, {"from": "alb", "title": "associated", "to": "hematuria"}, {"from": "ap", "title": "associated", "to": "brbpr"}, {"from": "cbc", "title": "associated", "to": "brbpr"}, {"from": "pleural effusions", "title": "associated", "to": "cardiomegaly"}, {"from": "pleural effusions", "title": "associated", "to": "pulmonary artery enlargement"}, {"from": "pleural effusions", "title": "associated", "to": "hematochezia"}, {"from": "pleural effusions", "title": "associated", "to": "hematuria"}, {"from": "cardiomegaly", "title": "associated", "to": "pulmonary artery enlargement"}, {"from": "cardiomegaly", "title": "associated", "to": "hematochezia"}, {"from": "cardiomegaly", "title": "associated", "to": "dysuria"}, {"from": "cardiomegaly", "title": "associated", "to": "hematuria"}, {"from": "warfarin", "title": "associated", "to": "constipation"}, {"from": "warfarin", "title": "associated", "to": "hematochezia"}, {"from": "warfarin", "title": "associated", "to": "dysuria"}, {"from": "warfarin", "title": "associated", "to": "hematuria"}, {"from": "pleuritic pain", "title": "associated", "to": "fever chills"}, {"from": "pleuritic pain", "title": "associated", "to": "headache"}, {"from": "pleuritic pain", "title": "associated", "to": "rhinorrhea congestion sore throat cough shortness of breath  chest"}, {"from": "pleuritic pain", "title": "associated", "to": "pain abdominal pain nausea vomiting diarrhea"}, {"from": "pleuritic pain", "title": "associated", "to": "constipation"}, {"from": "pleuritic pain", "title": "associated", "to": "melena"}, {"from": "pleuritic pain", "title": "associated", "to": "hematochezia"}, {"from": "pleuritic pain", "title": "associated", "to": "dysuria"}, {"from": "pleuritic pain", "title": "associated", "to": "hematuria"}, {"from": "shortness  of breath", "title": "associated", "to": "constipation"}, {"from": "fever chills", "title": "associated", "to": "headache"}, {"from": "fever chills", "title": "associated", "to": "pain abdominal pain nausea vomiting diarrhea"}, {"from": "fever chills", "title": "associated", "to": "constipation"}, {"from": "fever chills", "title": "associated", "to": "melena"}, {"from": "fever chills", "title": "associated", "to": "dysuria"}, {"from": "fever chills", "title": "associated", "to": "hematuria"}, {"from": "headache", "title": "associated", "to": "pain abdominal pain nausea vomiting diarrhea"}, {"from": "headache", "title": "associated", "to": "constipation"}, {"from": "headache", "title": "associated", "to": "melena"}, {"from": "headache", "title": "associated", "to": "dysuria"}, {"from": "headache", "title": "associated", "to": "hematuria"}, {"from": "rhinorrhea congestion sore throat cough shortness of breath  chest", "title": "associated", "to": "pain abdominal pain nausea vomiting diarrhea"}, {"from": "rhinorrhea congestion sore throat cough shortness of breath  chest", "title": "associated", "to": "constipation"}, {"from": "rhinorrhea congestion sore throat cough shortness of breath  chest", "title": "associated", "to": "melena"}, {"from": "rhinorrhea congestion sore throat cough shortness of breath  chest", "title": "associated", "to": "dysuria"}, {"from": "pain abdominal pain nausea vomiting diarrhea", "title": "associated", "to": "constipation"}, {"from": "pain abdominal pain nausea vomiting diarrhea", "title": "associated", "to": "melena"}, {"from": "pain abdominal pain nausea vomiting diarrhea", "title": "associated", "to": "dysuria"}, {"from": "pain abdominal pain nausea vomiting diarrhea", "title": "associated", "to": "hematuria"}, {"from": "constipation", "title": "associated", "to": "melena"}, {"from": "constipation", "title": "associated", "to": "hematochezia"}, {"from": "constipation", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "hematuria"}, {"from": "melena", "title": "associated", "to": "hematochezia"}, {"from": "melena", "title": "associated", "to": "dysuria"}, {"from": "melena", "title": "associated", "to": "hematuria"}, {"from": "hematochezia", "title": "associated", "to": "dysuria"}, {"from": "hematochezia", "title": "associated", "to": "hematuria"}, {"from": "dysuria", "title": "associated", "to": "hematuria"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

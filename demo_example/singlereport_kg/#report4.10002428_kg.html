@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FFC0CB", "font": {"color": "black"}, "id": "pt", "label": "pt", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "ho sjogrens syndrome", "label": "ho sjogrens syndrome", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fever", "label": "fever", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "patietn", "label": "patietn", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "diarreha", "label": "diarreha", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "crampy bl lower quadrant abdominal  pain", "label": "crampy bl lower quadrant abdominal  pain", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "distension", "label": "distension", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "rigors", "label": "rigors", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nausea vomiting", "label": "nausea vomiting", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hyaline casts", "label": "hyaline casts", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "pancolitis", "label": "pancolitis", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "intrahepatic biliary duct dilatation", "label": "intrahepatic biliary duct dilatation", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "right", "label": "right", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "bibasilar opacities", "label": "bibasilar opacities", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "pulm edema", "label": "pulm edema", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "cipro", "label": "cipro", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "flagyl", "label": "flagyl", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "tylenol", "label": "tylenol", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hypoxia", "label": "hypoxia", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "pneumonia", "label": "pneumonia", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "pulmonary edema", "label": "pulmonary edema", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "ceftriaxone", "label": "ceftriaxone", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "crampy abdominal pain", "label": "crampy abdominal pain", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fevers", "label": "fevers", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "azithromycin", "label": "azithromycin", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hpi", "label": "hpi", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "sinus tenderness  rhinorrhea or", "label": "sinus tenderness  rhinorrhea or", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "congestion", "label": "congestion", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "wheezing", "label": "wheezing", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "chest pressure palpitations", "label": "chest pressure palpitations", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "weakness", "label": "weakness", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "urgency", "label": "urgency", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "arthralgias", "label": "arthralgias", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "rashes", "label": "rashes", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "skin  changes", "label": "skin  changes", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "pt", "title": "associated", "to": "patietn"}, {"from": "pt", "title": "associated", "to": "cipro"}, {"from": "pt", "title": "associated", "to": "ceftriaxone"}, {"from": "ho sjogrens syndrome", "title": "associated", "to": "diarrhea"}, {"from": "ho sjogrens syndrome", "title": "associated", "to": "patietn"}, {"from": "ho sjogrens syndrome", "title": "associated", "to": "dysuria"}, {"from": "ho sjogrens syndrome", "title": "associated", "to": "pancolitis"}, {"from": "ho sjogrens syndrome", "title": "associated", "to": "hypoxia"}, {"from": "ho sjogrens syndrome", "title": "associated", "to": "arthralgias"}, {"from": "ho sjogrens syndrome", "title": "associated", "to": "myalgias"}, {"from": "diarrhea", "title": "associated", "to": "fever"}, {"from": "diarrhea", "title": "associated", "to": "patietn"}, {"from": "diarrhea", "title": "associated", "to": "diarreha"}, {"from": "diarrhea", "title": "associated", "to": "crampy bl lower quadrant abdominal  pain"}, {"from": "diarrhea", "title": "associated", "to": "distension"}, {"from": "diarrhea", "title": "associated", "to": "rigors"}, {"from": "diarrhea", "title": "associated", "to": "nausea vomiting"}, {"from": "diarrhea", "title": "associated", "to": "dysuria"}, {"from": "diarrhea", "title": "associated", "to": "hyaline casts"}, {"from": "diarrhea", "title": "associated", "to": "pancolitis"}, {"from": "diarrhea", "title": "associated", "to": "pulm edema"}, {"from": "diarrhea", "title": "associated", "to": "cipro"}, {"from": "diarrhea", "title": "associated", "to": "flagyl"}, {"from": "diarrhea", "title": "associated", "to": "tylenol"}, {"from": "diarrhea", "title": "associated", "to": "hypoxia"}, {"from": "diarrhea", "title": "associated", "to": "pulmonary edema"}, {"from": "diarrhea", "title": "associated", "to": "ceftriaxone"}, {"from": "diarrhea", "title": "associated", "to": "crampy abdominal pain"}, {"from": "diarrhea", "title": "associated", "to": "fevers"}, {"from": "diarrhea", "title": "associated", "to": "nausea"}, {"from": "diarrhea", "title": "associated", "to": "headache"}, {"from": "diarrhea", "title": "associated", "to": "sinus tenderness  rhinorrhea or"}, {"from": "diarrhea", "title": "associated", "to": "wheezing"}, {"from": "diarrhea", "title": "associated", "to": "chest pain"}, {"from": "diarrhea", "title": "associated", "to": "chest pressure palpitations"}, {"from": "diarrhea", "title": "associated", "to": "weakness"}, {"from": "diarrhea", "title": "associated", "to": "urgency"}, {"from": "diarrhea", "title": "associated", "to": "arthralgias"}, {"from": "diarrhea", "title": "associated", "to": "myalgias"}, {"from": "diarrhea", "title": "associated", "to": "rashes"}, {"from": "diarrhea", "title": "associated", "to": "skin  changes"}, {"from": "fever", "title": "associated", "to": "patietn"}, {"from": "fever", "title": "associated", "to": "diarreha"}, {"from": "fever", "title": "associated", "to": "rigors"}, {"from": "fever", "title": "associated", "to": "dysuria"}, {"from": "fever", "title": "associated", "to": "pancolitis"}, {"from": "fever", "title": "associated", "to": "pulm edema"}, {"from": "fever", "title": "associated", "to": "flagyl"}, {"from": "fever", "title": "associated", "to": "hypoxia"}, {"from": "fever", "title": "associated", "to": "pneumonia"}, {"from": "fever", "title": "associated", "to": "pulmonary edema"}, {"from": "fever", "title": "associated", "to": "fevers"}, {"from": "fever", "title": "associated", "to": "nausea"}, {"from": "fever", "title": "associated", "to": "headache"}, {"from": "fever", "title": "associated", "to": "congestion"}, {"from": "fever", "title": "associated", "to": "chest pain"}, {"from": "fever", "title": "associated", "to": "weakness"}, {"from": "fever", "title": "associated", "to": "urgency"}, {"from": "fever", "title": "associated", "to": "myalgias"}, {"from": "fever", "title": "associated", "to": "rashes"}, {"from": "fever", "title": "associated", "to": "skin  changes"}, {"from": "patietn", "title": "associated", "to": "diarreha"}, {"from": "patietn", "title": "associated", "to": "rigors"}, {"from": "patietn", "title": "associated", "to": "dysuria"}, {"from": "patietn", "title": "associated", "to": "hyaline casts"}, {"from": "patietn", "title": "associated", "to": "pancolitis"}, {"from": "patietn", "title": "associated", "to": "right"}, {"from": "patietn", "title": "associated", "to": "pulm edema"}, {"from": "patietn", "title": "associated", "to": "flagyl"}, {"from": "patietn", "title": "associated", "to": "hypoxia"}, {"from": "patietn", "title": "associated", "to": "pneumonia"}, {"from": "patietn", "title": "associated", "to": "pulmonary edema"}, {"from": "patietn", "title": "associated", "to": "ceftriaxone"}, {"from": "patietn", "title": "associated", "to": "hpi"}, {"from": "patietn", "title": "associated", "to": "congestion"}, {"from": "patietn", "title": "associated", "to": "urgency"}, {"from": "patietn", "title": "associated", "to": "arthralgias"}, {"from": "patietn", "title": "associated", "to": "skin  changes"}, {"from": "diarreha", "title": "associated", "to": "rigors"}, {"from": "diarreha", "title": "associated", "to": "nausea vomiting"}, {"from": "diarreha", "title": "associated", "to": "dysuria"}, {"from": "diarreha", "title": "associated", "to": "hyaline casts"}, {"from": "diarreha", "title": "associated", "to": "pancolitis"}, {"from": "diarreha", "title": "associated", "to": "pulm edema"}, {"from": "diarreha", "title": "associated", "to": "flagyl"}, {"from": "diarreha", "title": "associated", "to": "pneumonia"}, {"from": "diarreha", "title": "associated", "to": "pulmonary edema"}, {"from": "diarreha", "title": "associated", "to": "fevers"}, {"from": "diarreha", "title": "associated", "to": "nausea"}, {"from": "diarreha", "title": "associated", "to": "congestion"}, {"from": "diarreha", "title": "associated", "to": "wheezing"}, {"from": "diarreha", "title": "associated", "to": "weakness"}, {"from": "diarreha", "title": "associated", "to": "urgency"}, {"from": "diarreha", "title": "associated", "to": "myalgias"}, {"from": "diarreha", "title": "associated", "to": "rashes"}, {"from": "diarreha", "title": "associated", "to": "skin  changes"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "distension"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "rigors"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "nausea vomiting"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "dysuria"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "crampy abdominal pain"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "nausea"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "headache"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "sinus tenderness  rhinorrhea or"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "wheezing"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "chest pain"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "chest pressure palpitations"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "weakness"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "myalgias"}, {"from": "crampy bl lower quadrant abdominal  pain", "title": "associated", "to": "rashes"}, {"from": "distension", "title": "associated", "to": "rigors"}, {"from": "distension", "title": "associated", "to": "nausea vomiting"}, {"from": "distension", "title": "associated", "to": "pulm edema"}, {"from": "distension", "title": "associated", "to": "crampy abdominal pain"}, {"from": "distension", "title": "associated", "to": "nausea"}, {"from": "distension", "title": "associated", "to": "headache"}, {"from": "distension", "title": "associated", "to": "sinus tenderness  rhinorrhea or"}, {"from": "distension", "title": "associated", "to": "congestion"}, {"from": "distension", "title": "associated", "to": "wheezing"}, {"from": "distension", "title": "associated", "to": "chest pain"}, {"from": "distension", "title": "associated", "to": "chest pressure palpitations"}, {"from": "distension", "title": "associated", "to": "rashes"}, {"from": "rigors", "title": "associated", "to": "nausea vomiting"}, {"from": "rigors", "title": "associated", "to": "dysuria"}, {"from": "rigors", "title": "associated", "to": "hyaline casts"}, {"from": "rigors", "title": "associated", "to": "pancolitis"}, {"from": "rigors", "title": "associated", "to": "pulm edema"}, {"from": "rigors", "title": "associated", "to": "flagyl"}, {"from": "rigors", "title": "associated", "to": "hypoxia"}, {"from": "rigors", "title": "associated", "to": "pneumonia"}, {"from": "rigors", "title": "associated", "to": "pulmonary edema"}, {"from": "rigors", "title": "associated", "to": "crampy abdominal pain"}, {"from": "rigors", "title": "associated", "to": "fevers"}, {"from": "rigors", "title": "associated", "to": "nausea"}, {"from": "rigors", "title": "associated", "to": "headache"}, {"from": "rigors", "title": "associated", "to": "congestion"}, {"from": "rigors", "title": "associated", "to": "chest pain"}, {"from": "rigors", "title": "associated", "to": "chest pressure palpitations"}, {"from": "rigors", "title": "associated", "to": "weakness"}, {"from": "rigors", "title": "associated", "to": "urgency"}, {"from": "rigors", "title": "associated", "to": "arthralgias"}, {"from": "rigors", "title": "associated", "to": "myalgias"}, {"from": "rigors", "title": "associated", "to": "rashes"}, {"from": "rigors", "title": "associated", "to": "skin  changes"}, {"from": "nausea vomiting", "title": "associated", "to": "dysuria"}, {"from": "nausea vomiting", "title": "associated", "to": "crampy abdominal pain"}, {"from": "nausea vomiting", "title": "associated", "to": "fevers"}, {"from": "nausea vomiting", "title": "associated", "to": "nausea"}, {"from": "nausea vomiting", "title": "associated", "to": "headache"}, {"from": "nausea vomiting", "title": "associated", "to": "sinus tenderness  rhinorrhea or"}, {"from": "nausea vomiting", "title": "associated", "to": "wheezing"}, {"from": "nausea vomiting", "title": "associated", "to": "chest pain"}, {"from": "nausea vomiting", "title": "associated", "to": "chest pressure palpitations"}, {"from": "nausea vomiting", "title": "associated", "to": "urgency"}, {"from": "dysuria", "title": "associated", "to": "hyaline casts"}, {"from": "dysuria", "title": "associated", "to": "pancolitis"}, {"from": "dysuria", "title": "associated", "to": "hypoxia"}, {"from": "dysuria", "title": "associated", "to": "pulmonary edema"}, {"from": "dysuria", "title": "associated", "to": "crampy abdominal pain"}, {"from": "dysuria", "title": "associated", "to": "fevers"}, {"from": "dysuria", "title": "associated", "to": "nausea"}, {"from": "dysuria", "title": "associated", "to": "headache"}, {"from": "dysuria", "title": "associated", "to": "chest pain"}, {"from": "dysuria", "title": "associated", "to": "chest pressure palpitations"}, {"from": "dysuria", "title": "associated", "to": "weakness"}, {"from": "dysuria", "title": "associated", "to": "urgency"}, {"from": "dysuria", "title": "associated", "to": "arthralgias"}, {"from": "dysuria", "title": "associated", "to": "myalgias"}, {"from": "dysuria", "title": "associated", "to": "rashes"}, {"from": "hyaline casts", "title": "associated", "to": "pancolitis"}, {"from": "hyaline casts", "title": "associated", "to": "intrahepatic biliary duct dilatation"}, {"from": "hyaline casts", "title": "associated", "to": "pulm edema"}, {"from": "hyaline casts", "title": "associated", "to": "pneumonia"}, {"from": "hyaline casts", "title": "associated", "to": "pulmonary edema"}, {"from": "hyaline casts", "title": "associated", "to": "congestion"}, {"from": "hyaline casts", "title": "associated", "to": "urgency"}, {"from": "hyaline casts", "title": "associated", "to": "arthralgias"}, {"from": "hyaline casts", "title": "associated", "to": "myalgias"}, {"from": "hyaline casts", "title": "associated", "to": "rashes"}, {"from": "hyaline casts", "title": "associated", "to": "skin  changes"}, {"from": "pancolitis", "title": "associated", "to": "intrahepatic biliary duct dilatation"}, {"from": "pancolitis", "title": "associated", "to": "pulm edema"}, {"from": "pancolitis", "title": "associated", "to": "cipro"}, {"from": "pancolitis", "title": "associated", "to": "flagyl"}, {"from": "pancolitis", "title": "associated", "to": "hypoxia"}, {"from": "pancolitis", "title": "associated", "to": "pneumonia"}, {"from": "pancolitis", "title": "associated", "to": "pulmonary edema"}, {"from": "pancolitis", "title": "associated", "to": "ceftriaxone"}, {"from": "pancolitis", "title": "associated", "to": "fevers"}, {"from": "pancolitis", "title": "associated", "to": "chest pain"}, {"from": "pancolitis", "title": "associated", "to": "urgency"}, {"from": "pancolitis", "title": "associated", "to": "arthralgias"}, {"from": "pancolitis", "title": "associated", "to": "myalgias"}, {"from": "pancolitis", "title": "associated", "to": "rashes"}, {"from": "pancolitis", "title": "associated", "to": "skin  changes"}, {"from": "intrahepatic biliary duct dilatation", "title": "associated", "to": "pulm edema"}, {"from": "intrahepatic biliary duct dilatation", "title": "associated", "to": "pneumonia"}, {"from": "intrahepatic biliary duct dilatation", "title": "associated", "to": "pulmonary edema"}, {"from": "intrahepatic biliary duct dilatation", "title": "associated", "to": "arthralgias"}, {"from": "bibasilar opacities", "title": "associated", "to": "pulm edema"}, {"from": "bibasilar opacities", "title": "associated", "to": "pulmonary edema"}, {"from": "pulm edema", "title": "associated", "to": "hypoxia"}, {"from": "pulm edema", "title": "associated", "to": "pneumonia"}, {"from": "pulm edema", "title": "associated", "to": "pulmonary edema"}, {"from": "pulm edema", "title": "associated", "to": "congestion"}, {"from": "pulm edema", "title": "associated", "to": "wheezing"}, {"from": "pulm edema", "title": "associated", "to": "urgency"}, {"from": "cipro", "title": "associated", "to": "flagyl"}, {"from": "cipro", "title": "associated", "to": "tylenol"}, {"from": "cipro", "title": "associated", "to": "hypoxia"}, {"from": "cipro", "title": "associated", "to": "ceftriaxone"}, {"from": "cipro", "title": "associated", "to": "azithromycin"}, {"from": "flagyl", "title": "associated", "to": "tylenol"}, {"from": "flagyl", "title": "associated", "to": "ceftriaxone"}, {"from": "flagyl", "title": "associated", "to": "fevers"}, {"from": "flagyl", "title": "associated", "to": "azithromycin"}, {"from": "tylenol", "title": "associated", "to": "ceftriaxone"}, {"from": "tylenol", "title": "associated", "to": "azithromycin"}, {"from": "hypoxia", "title": "associated", "to": "pneumonia"}, {"from": "hypoxia", "title": "associated", "to": "pulmonary edema"}, {"from": "hypoxia", "title": "associated", "to": "ceftriaxone"}, {"from": "hypoxia", "title": "associated", "to": "crampy abdominal pain"}, {"from": "hypoxia", "title": "associated", "to": "fevers"}, {"from": "hypoxia", "title": "associated", "to": "congestion"}, {"from": "hypoxia", "title": "associated", "to": "chest pain"}, {"from": "hypoxia", "title": "associated", "to": "weakness"}, {"from": "hypoxia", "title": "associated", "to": "urgency"}, {"from": "hypoxia", "title": "associated", "to": "arthralgias"}, {"from": "hypoxia", "title": "associated", "to": "myalgias"}, {"from": "hypoxia", "title": "associated", "to": "rashes"}, {"from": "pneumonia", "title": "associated", "to": "pulmonary edema"}, {"from": "pneumonia", "title": "associated", "to": "fevers"}, {"from": "pneumonia", "title": "associated", "to": "congestion"}, {"from": "pneumonia", "title": "associated", "to": "weakness"}, {"from": "pneumonia", "title": "associated", "to": "urgency"}, {"from": "pneumonia", "title": "associated", "to": "rashes"}, {"from": "pulmonary edema", "title": "associated", "to": "fevers"}, {"from": "pulmonary edema", "title": "associated", "to": "congestion"}, {"from": "pulmonary edema", "title": "associated", "to": "chest pain"}, {"from": "pulmonary edema", "title": "associated", "to": "weakness"}, {"from": "pulmonary edema", "title": "associated", "to": "urgency"}, {"from": "pulmonary edema", "title": "associated", "to": "arthralgias"}, {"from": "pulmonary edema", "title": "associated", "to": "myalgias"}, {"from": "pulmonary edema", "title": "associated", "to": "rashes"}, {"from": "pulmonary edema", "title": "associated", "to": "skin  changes"}, {"from": "ceftriaxone", "title": "associated", "to": "azithromycin"}, {"from": "ceftriaxone", "title": "associated", "to": "arthralgias"}, {"from": "crampy abdominal pain", "title": "associated", "to": "fevers"}, {"from": "crampy abdominal pain", "title": "associated", "to": "nausea"}, {"from": "crampy abdominal pain", "title": "associated", "to": "headache"}, {"from": "crampy abdominal pain", "title": "associated", "to": "sinus tenderness  rhinorrhea or"}, {"from": "crampy abdominal pain", "title": "associated", "to": "wheezing"}, {"from": "crampy abdominal pain", "title": "associated", "to": "chest pain"}, {"from": "crampy abdominal pain", "title": "associated", "to": "chest pressure palpitations"}, {"from": "crampy abdominal pain", "title": "associated", "to": "weakness"}, {"from": "crampy abdominal pain", "title": "associated", "to": "arthralgias"}, {"from": "crampy abdominal pain", "title": "associated", "to": "myalgias"}, {"from": "crampy abdominal pain", "title": "associated", "to": "rashes"}, {"from": "fevers", "title": "associated", "to": "nausea"}, {"from": "fevers", "title": "associated", "to": "congestion"}, {"from": "fevers", "title": "associated", "to": "chest pain"}, {"from": "fevers", "title": "associated", "to": "chest pressure palpitations"}, {"from": "fevers", "title": "associated", "to": "weakness"}, {"from": "fevers", "title": "associated", "to": "urgency"}, {"from": "fevers", "title": "associated", "to": "arthralgias"}, {"from": "fevers", "title": "associated", "to": "myalgias"}, {"from": "fevers", "title": "associated", "to": "rashes"}, {"from": "fevers", "title": "associated", "to": "skin  changes"}, {"from": "nausea", "title": "associated", "to": "headache"}, {"from": "nausea", "title": "associated", "to": "congestion"}, {"from": "nausea", "title": "associated", "to": "wheezing"}, {"from": "nausea", "title": "associated", "to": "chest pain"}, {"from": "nausea", "title": "associated", "to": "chest pressure palpitations"}, {"from": "nausea", "title": "associated", "to": "weakness"}, {"from": "nausea", "title": "associated", "to": "urgency"}, {"from": "nausea", "title": "associated", "to": "myalgias"}, {"from": "headache", "title": "associated", "to": "congestion"}, {"from": "headache", "title": "associated", "to": "wheezing"}, {"from": "headache", "title": "associated", "to": "chest pain"}, {"from": "headache", "title": "associated", "to": "chest pressure palpitations"}, {"from": "headache", "title": "associated", "to": "weakness"}, {"from": "headache", "title": "associated", "to": "urgency"}, {"from": "headache", "title": "associated", "to": "myalgias"}, {"from": "sinus tenderness  rhinorrhea or", "title": "associated", "to": "wheezing"}, {"from": "sinus tenderness  rhinorrhea or", "title": "associated", "to": "chest pressure palpitations"}, {"from": "sinus tenderness  rhinorrhea or", "title": "associated", "to": "myalgias"}, {"from": "sinus tenderness  rhinorrhea or", "title": "associated", "to": "rashes"}, {"from": "congestion", "title": "associated", "to": "wheezing"}, {"from": "congestion", "title": "associated", "to": "weakness"}, {"from": "congestion", "title": "associated", "to": "urgency"}, {"from": "congestion", "title": "associated", "to": "rashes"}, {"from": "congestion", "title": "associated", "to": "skin  changes"}, {"from": "shortness of breath", "title": "associated", "to": "chest pain"}, {"from": "wheezing", "title": "associated", "to": "chest pressure palpitations"}, {"from": "wheezing", "title": "associated", "to": "myalgias"}, {"from": "wheezing", "title": "associated", "to": "rashes"}, {"from": "chest pain", "title": "associated", "to": "chest pressure palpitations"}, {"from": "chest pain", "title": "associated", "to": "weakness"}, {"from": "chest pain", "title": "associated", "to": "arthralgias"}, {"from": "chest pain", "title": "associated", "to": "myalgias"}, {"from": "chest pain", "title": "associated", "to": "rashes"}, {"from": "chest pressure palpitations", "title": "associated", "to": "arthralgias"}, {"from": "chest pressure palpitations", "title": "associated", "to": "myalgias"}, {"from": "chest pressure palpitations", "title": "associated", "to": "rashes"}, {"from": "weakness", "title": "associated", "to": "urgency"}, {"from": "weakness", "title": "associated", "to": "arthralgias"}, {"from": "weakness", "title": "associated", "to": "myalgias"}, {"from": "weakness", "title": "associated", "to": "rashes"}, {"from": "urgency", "title": "associated", "to": "arthralgias"}, {"from": "urgency", "title": "associated", "to": "myalgias"}, {"from": "urgency", "title": "associated", "to": "rashes"}, {"from": "arthralgias", "title": "associated", "to": "myalgias"}, {"from": "arthralgias", "title": "associated", "to": "rashes"}, {"from": "arthralgias", "title": "associated", "to": "skin  changes"}, {"from": "myalgias", "title": "associated", "to": "rashes"}, {"from": "myalgias", "title": "associated", "to": "skin  changes"}, {"from": "rashes", "title": "associated", "to": "skin  changes"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#E6E6FA", "font": {"color": "black"}, "id": "man", "label": "man", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cad", "label": "cad", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "systolic dysfunction", "label": "systolic dysfunction", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chronic atrial fibrillation", "label": "chronic atrial fibrillation", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "warfarin", "label": "warfarin", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "vf arrest", "label": "vf arrest", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "rectal cancer", "label": "rectal cancer", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "melena", "label": "melena", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "nausea vomiting hematemesis pain", "label": "nausea vomiting hematemesis pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "epigastric pain", "label": "epigastric pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dysphagia", "label": "dysphagia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "syncope", "label": "syncope", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lightheadedness", "label": "lightheadedness", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "colon  cancer", "label": "colon  cancer", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pantoprazole", "label": "pantoprazole", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest  pain", "label": "chest  pain", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "cad", "title": "associated", "to": "warfarin"}, {"from": "cad", "title": "associated", "to": "vf arrest"}, {"from": "cad", "title": "associated", "to": "rectal cancer"}, {"from": "cad", "title": "associated", "to": "melena"}, {"from": "cad", "title": "associated", "to": "diarrhea"}, {"from": "cad", "title": "associated", "to": "dysphagia"}, {"from": "cad", "title": "associated", "to": "syncope"}, {"from": "cad", "title": "associated", "to": "colon  cancer"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "warfarin"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "rectal cancer"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "constipation"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "diarrhea"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "dysphagia"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "syncope"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "chest pain"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "colon  cancer"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "dyspnea"}, {"from": "chronic atrial fibrillation", "title": "associated", "to": "chest  pain"}, {"from": "warfarin", "title": "associated", "to": "rectal cancer"}, {"from": "warfarin", "title": "associated", "to": "constipation"}, {"from": "warfarin", "title": "associated", "to": "diarrhea"}, {"from": "warfarin", "title": "associated", "to": "dysphagia"}, {"from": "warfarin", "title": "associated", "to": "syncope"}, {"from": "warfarin", "title": "associated", "to": "colon  cancer"}, {"from": "warfarin", "title": "associated", "to": "pantoprazole"}, {"from": "vf arrest", "title": "associated", "to": "syncope"}, {"from": "rectal cancer", "title": "associated", "to": "epigastric pain"}, {"from": "rectal cancer", "title": "associated", "to": "abdominal pain"}, {"from": "rectal cancer", "title": "associated", "to": "constipation"}, {"from": "rectal cancer", "title": "associated", "to": "diarrhea"}, {"from": "rectal cancer", "title": "associated", "to": "dysphagia"}, {"from": "rectal cancer", "title": "associated", "to": "syncope"}, {"from": "rectal cancer", "title": "associated", "to": "chest pain"}, {"from": "rectal cancer", "title": "associated", "to": "colon  cancer"}, {"from": "rectal cancer", "title": "associated", "to": "pantoprazole"}, {"from": "rectal cancer", "title": "associated", "to": "dyspnea"}, {"from": "rectal cancer", "title": "associated", "to": "chest  pain"}, {"from": "melena", "title": "associated", "to": "nausea vomiting hematemesis pain"}, {"from": "melena", "title": "associated", "to": "epigastric pain"}, {"from": "melena", "title": "associated", "to": "abdominal pain"}, {"from": "melena", "title": "associated", "to": "constipation"}, {"from": "melena", "title": "associated", "to": "diarrhea"}, {"from": "melena", "title": "associated", "to": "dysphagia"}, {"from": "melena", "title": "associated", "to": "syncope"}, {"from": "melena", "title": "associated", "to": "lightheadedness"}, {"from": "melena", "title": "associated", "to": "chest pain"}, {"from": "melena", "title": "associated", "to": "colon  cancer"}, {"from": "melena", "title": "associated", "to": "dyspnea"}, {"from": "melena", "title": "associated", "to": "chest  pain"}, {"from": "nausea vomiting hematemesis pain", "title": "associated", "to": "epigastric pain"}, {"from": "nausea vomiting hematemesis pain", "title": "associated", "to": "abdominal pain"}, {"from": "nausea vomiting hematemesis pain", "title": "associated", "to": "constipation"}, {"from": "nausea vomiting hematemesis pain", "title": "associated", "to": "diarrhea"}, {"from": "nausea vomiting hematemesis pain", "title": "associated", "to": "dysphagia"}, {"from": "nausea vomiting hematemesis pain", "title": "associated", "to": "lightheadedness"}, {"from": "nausea vomiting hematemesis pain", "title": "associated", "to": "chest pain"}, {"from": "nausea vomiting hematemesis pain", "title": "associated", "to": "dyspnea"}, {"from": "nausea vomiting hematemesis pain", "title": "associated", "to": "chest  pain"}, {"from": "epigastric pain", "title": "associated", "to": "abdominal pain"}, {"from": "epigastric pain", "title": "associated", "to": "constipation"}, {"from": "epigastric pain", "title": "associated", "to": "diarrhea"}, {"from": "epigastric pain", "title": "associated", "to": "dysphagia"}, {"from": "epigastric pain", "title": "associated", "to": "syncope"}, {"from": "epigastric pain", "title": "associated", "to": "lightheadedness"}, {"from": "epigastric pain", "title": "associated", "to": "chest pain"}, {"from": "epigastric pain", "title": "associated", "to": "colon  cancer"}, {"from": "epigastric pain", "title": "associated", "to": "dyspnea"}, {"from": "epigastric pain", "title": "associated", "to": "chest  pain"}, {"from": "abdominal pain", "title": "associated", "to": "constipation"}, {"from": "abdominal pain", "title": "associated", "to": "diarrhea"}, {"from": "abdominal pain", "title": "associated", "to": "dysphagia"}, {"from": "abdominal pain", "title": "associated", "to": "syncope"}, {"from": "abdominal pain", "title": "associated", "to": "lightheadedness"}, {"from": "abdominal pain", "title": "associated", "to": "chest pain"}, {"from": "abdominal pain", "title": "associated", "to": "colon  cancer"}, {"from": "abdominal pain", "title": "associated", "to": "dyspnea"}, {"from": "abdominal pain", "title": "associated", "to": "chest  pain"}, {"from": "constipation", "title": "associated", "to": "diarrhea"}, {"from": "constipation", "title": "associated", "to": "dysphagia"}, {"from": "constipation", "title": "associated", "to": "syncope"}, {"from": "constipation", "title": "associated", "to": "lightheadedness"}, {"from": "constipation", "title": "associated", "to": "shortness of breath"}, {"from": "constipation", "title": "associated", "to": "chest pain"}, {"from": "constipation", "title": "associated", "to": "colon  cancer"}, {"from": "constipation", "title": "associated", "to": "pantoprazole"}, {"from": "constipation", "title": "associated", "to": "dyspnea"}, {"from": "constipation", "title": "associated", "to": "chest  pain"}, {"from": "diarrhea", "title": "associated", "to": "dysphagia"}, {"from": "diarrhea", "title": "associated", "to": "syncope"}, {"from": "diarrhea", "title": "associated", "to": "lightheadedness"}, {"from": "diarrhea", "title": "associated", "to": "chest pain"}, {"from": "diarrhea", "title": "associated", "to": "colon  cancer"}, {"from": "diarrhea", "title": "associated", "to": "pantoprazole"}, {"from": "diarrhea", "title": "associated", "to": "dyspnea"}, {"from": "diarrhea", "title": "associated", "to": "chest  pain"}, {"from": "dysphagia", "title": "associated", "to": "syncope"}, {"from": "dysphagia", "title": "associated", "to": "chest pain"}, {"from": "dysphagia", "title": "associated", "to": "colon  cancer"}, {"from": "dysphagia", "title": "associated", "to": "pantoprazole"}, {"from": "dysphagia", "title": "associated", "to": "dyspnea"}, {"from": "dysphagia", "title": "associated", "to": "chest  pain"}, {"from": "syncope", "title": "associated", "to": "chest pain"}, {"from": "syncope", "title": "associated", "to": "colon  cancer"}, {"from": "syncope", "title": "associated", "to": "pantoprazole"}, {"from": "syncope", "title": "associated", "to": "dyspnea"}, {"from": "syncope", "title": "associated", "to": "chest  pain"}, {"from": "lightheadedness", "title": "associated", "to": "shortness of breath"}, {"from": "lightheadedness", "title": "associated", "to": "chest pain"}, {"from": "lightheadedness", "title": "associated", "to": "dyspnea"}, {"from": "lightheadedness", "title": "associated", "to": "chest  pain"}, {"from": "shortness of breath", "title": "associated", "to": "chest pain"}, {"from": "shortness of breath", "title": "associated", "to": "dyspnea"}, {"from": "shortness of breath", "title": "associated", "to": "chest  pain"}, {"from": "chest pain", "title": "associated", "to": "colon  cancer"}, {"from": "chest pain", "title": "associated", "to": "dyspnea"}, {"from": "chest pain", "title": "associated", "to": "chest  pain"}, {"from": "colon  cancer", "title": "associated", "to": "pantoprazole"}, {"from": "colon  cancer", "title": "associated", "to": "dyspnea"}, {"from": "colon  cancer", "title": "associated", "to": "chest  pain"}, {"from": "dyspnea", "title": "associated", "to": "chest  pain"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

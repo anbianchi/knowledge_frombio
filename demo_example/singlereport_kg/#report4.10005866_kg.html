@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FFC0CB", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "etoh and hep c cirrhosis", "label": "etoh and hep c cirrhosis", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "etoh", "label": "etoh", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "cirrhosis", "label": "cirrhosis", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "ethanol", "label": "ethanol", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hep c", "label": "hep c", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "internal hernia", "label": "internal hernia", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fever", "label": "fever", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "urinary urgency or frequency", "label": "urinary urgency or frequency", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "leukocytosis", "label": "leukocytosis", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "acidosis", "label": "acidosis", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "distal ileum bowel obstruction", "label": "distal ileum bowel obstruction", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "bowel ischemia", "label": "bowel ischemia", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "ascites", "label": "ascites", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "weight loss", "label": "weight loss", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fatiguemalaiselethargy changes", "label": "fatiguemalaiselethargy changes", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "pruritis jaundice", "label": "pruritis jaundice", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "rashes", "label": "rashes", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dizziness vertigo syncope", "label": "dizziness vertigo syncope", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "weakness", "label": "weakness", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "paresthesias nausea", "label": "paresthesias nausea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "vomiting", "label": "vomiting", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hematemesis bloating cramping melena", "label": "hematemesis bloating cramping melena", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "brbpr", "label": "brbpr", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dysphagia chest pain shortness of breath cough edema", "label": "dysphagia chest pain shortness of breath cough edema", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "urinary frequency urgency", "label": "urinary frequency urgency", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "etoh and hep c cirrhosis", "title": "associated", "to": "etoh"}, {"from": "etoh and hep c cirrhosis", "title": "associated", "to": "cirrhosis"}, {"from": "etoh and hep c cirrhosis", "title": "associated", "to": "hep c"}, {"from": "etoh and hep c cirrhosis", "title": "associated", "to": "dysuria"}, {"from": "etoh and hep c cirrhosis", "title": "associated", "to": "leukocytosis"}, {"from": "etoh and hep c cirrhosis", "title": "associated", "to": "distal ileum bowel obstruction"}, {"from": "etoh and hep c cirrhosis", "title": "associated", "to": "bowel ischemia"}, {"from": "etoh and hep c cirrhosis", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "etoh", "title": "associated", "to": "cirrhosis"}, {"from": "etoh", "title": "associated", "to": "hep c"}, {"from": "etoh", "title": "associated", "to": "internal hernia"}, {"from": "etoh", "title": "associated", "to": "dysuria"}, {"from": "etoh", "title": "associated", "to": "leukocytosis"}, {"from": "etoh", "title": "associated", "to": "distal ileum bowel obstruction"}, {"from": "etoh", "title": "associated", "to": "bowel ischemia"}, {"from": "etoh", "title": "associated", "to": "ascites"}, {"from": "etoh", "title": "associated", "to": "rashes"}, {"from": "etoh", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "etoh", "title": "associated", "to": "paresthesias nausea"}, {"from": "etoh", "title": "associated", "to": "urinary frequency urgency"}, {"from": "cirrhosis", "title": "associated", "to": "hep c"}, {"from": "cirrhosis", "title": "associated", "to": "internal hernia"}, {"from": "cirrhosis", "title": "associated", "to": "dysuria"}, {"from": "cirrhosis", "title": "associated", "to": "leukocytosis"}, {"from": "cirrhosis", "title": "associated", "to": "acidosis"}, {"from": "cirrhosis", "title": "associated", "to": "distal ileum bowel obstruction"}, {"from": "cirrhosis", "title": "associated", "to": "bowel ischemia"}, {"from": "cirrhosis", "title": "associated", "to": "ascites"}, {"from": "cirrhosis", "title": "associated", "to": "fatiguemalaiselethargy changes"}, {"from": "cirrhosis", "title": "associated", "to": "pruritis jaundice"}, {"from": "cirrhosis", "title": "associated", "to": "rashes"}, {"from": "cirrhosis", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "cirrhosis", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "cirrhosis", "title": "associated", "to": "urinary frequency urgency"}, {"from": "ethanol", "title": "associated", "to": "hep c"}, {"from": "ethanol", "title": "associated", "to": "ascites"}, {"from": "hep c", "title": "associated", "to": "dysuria"}, {"from": "hep c", "title": "associated", "to": "leukocytosis"}, {"from": "hep c", "title": "associated", "to": "distal ileum bowel obstruction"}, {"from": "hep c", "title": "associated", "to": "fatiguemalaiselethargy changes"}, {"from": "hep c", "title": "associated", "to": "pruritis jaundice"}, {"from": "hep c", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "hep c", "title": "associated", "to": "brbpr"}, {"from": "hep c", "title": "associated", "to": "urinary frequency urgency"}, {"from": "internal hernia", "title": "associated", "to": "dysuria"}, {"from": "internal hernia", "title": "associated", "to": "distal ileum bowel obstruction"}, {"from": "internal hernia", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "fever", "title": "associated", "to": "dysuria"}, {"from": "fever", "title": "associated", "to": "nausea"}, {"from": "fever", "title": "associated", "to": "leukocytosis"}, {"from": "fever", "title": "associated", "to": "acidosis"}, {"from": "fever", "title": "associated", "to": "pruritis jaundice"}, {"from": "fever", "title": "associated", "to": "rashes"}, {"from": "fever", "title": "associated", "to": "headache"}, {"from": "fever", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "fever", "title": "associated", "to": "weakness"}, {"from": "fever", "title": "associated", "to": "paresthesias nausea"}, {"from": "fever", "title": "associated", "to": "vomiting"}, {"from": "fever", "title": "associated", "to": "urinary frequency urgency"}, {"from": "dysuria", "title": "associated", "to": "urinary urgency or frequency"}, {"from": "dysuria", "title": "associated", "to": "nausea"}, {"from": "dysuria", "title": "associated", "to": "leukocytosis"}, {"from": "dysuria", "title": "associated", "to": "distal ileum bowel obstruction"}, {"from": "dysuria", "title": "associated", "to": "bowel ischemia"}, {"from": "dysuria", "title": "associated", "to": "fatiguemalaiselethargy changes"}, {"from": "dysuria", "title": "associated", "to": "pruritis jaundice"}, {"from": "dysuria", "title": "associated", "to": "rashes"}, {"from": "dysuria", "title": "associated", "to": "headache"}, {"from": "dysuria", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "dysuria", "title": "associated", "to": "weakness"}, {"from": "dysuria", "title": "associated", "to": "paresthesias nausea"}, {"from": "dysuria", "title": "associated", "to": "vomiting"}, {"from": "dysuria", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "dysuria", "title": "associated", "to": "dysphagia chest pain shortness of breath cough edema"}, {"from": "dysuria", "title": "associated", "to": "urinary frequency urgency"}, {"from": "urinary urgency or frequency", "title": "associated", "to": "leukocytosis"}, {"from": "urinary urgency or frequency", "title": "associated", "to": "urinary frequency urgency"}, {"from": "nausea", "title": "associated", "to": "pruritis jaundice"}, {"from": "nausea", "title": "associated", "to": "headache"}, {"from": "nausea", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "nausea", "title": "associated", "to": "weakness"}, {"from": "nausea", "title": "associated", "to": "paresthesias nausea"}, {"from": "nausea", "title": "associated", "to": "vomiting"}, {"from": "nausea", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "nausea", "title": "associated", "to": "urinary frequency urgency"}, {"from": "leukocytosis", "title": "associated", "to": "acidosis"}, {"from": "leukocytosis", "title": "associated", "to": "distal ileum bowel obstruction"}, {"from": "leukocytosis", "title": "associated", "to": "bowel ischemia"}, {"from": "leukocytosis", "title": "associated", "to": "ascites"}, {"from": "leukocytosis", "title": "associated", "to": "fatiguemalaiselethargy changes"}, {"from": "leukocytosis", "title": "associated", "to": "pruritis jaundice"}, {"from": "leukocytosis", "title": "associated", "to": "rashes"}, {"from": "leukocytosis", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "leukocytosis", "title": "associated", "to": "weakness"}, {"from": "leukocytosis", "title": "associated", "to": "vomiting"}, {"from": "leukocytosis", "title": "associated", "to": "urinary frequency urgency"}, {"from": "acidosis", "title": "associated", "to": "bowel ischemia"}, {"from": "acidosis", "title": "associated", "to": "ascites"}, {"from": "acidosis", "title": "associated", "to": "pruritis jaundice"}, {"from": "distal ileum bowel obstruction", "title": "associated", "to": "bowel ischemia"}, {"from": "distal ileum bowel obstruction", "title": "associated", "to": "ascites"}, {"from": "distal ileum bowel obstruction", "title": "associated", "to": "fatiguemalaiselethargy changes"}, {"from": "distal ileum bowel obstruction", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "bowel ischemia", "title": "associated", "to": "weight loss"}, {"from": "bowel ischemia", "title": "associated", "to": "pruritis jaundice"}, {"from": "bowel ischemia", "title": "associated", "to": "rashes"}, {"from": "bowel ischemia", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "bowel ischemia", "title": "associated", "to": "vomiting"}, {"from": "ascites", "title": "associated", "to": "fatiguemalaiselethargy changes"}, {"from": "ascites", "title": "associated", "to": "pruritis jaundice"}, {"from": "ascites", "title": "associated", "to": "paresthesias nausea"}, {"from": "weight loss", "title": "associated", "to": "vomiting"}, {"from": "fatiguemalaiselethargy changes", "title": "associated", "to": "pruritis jaundice"}, {"from": "fatiguemalaiselethargy changes", "title": "associated", "to": "rashes"}, {"from": "fatiguemalaiselethargy changes", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "fatiguemalaiselethargy changes", "title": "associated", "to": "weakness"}, {"from": "fatiguemalaiselethargy changes", "title": "associated", "to": "paresthesias nausea"}, {"from": "fatiguemalaiselethargy changes", "title": "associated", "to": "dysphagia chest pain shortness of breath cough edema"}, {"from": "fatiguemalaiselethargy changes", "title": "associated", "to": "urinary frequency urgency"}, {"from": "pruritis jaundice", "title": "associated", "to": "rashes"}, {"from": "pruritis jaundice", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "pruritis jaundice", "title": "associated", "to": "weakness"}, {"from": "pruritis jaundice", "title": "associated", "to": "paresthesias nausea"}, {"from": "pruritis jaundice", "title": "associated", "to": "vomiting"}, {"from": "pruritis jaundice", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "pruritis jaundice", "title": "associated", "to": "dysphagia chest pain shortness of breath cough edema"}, {"from": "pruritis jaundice", "title": "associated", "to": "urinary frequency urgency"}, {"from": "rashes", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "rashes", "title": "associated", "to": "weakness"}, {"from": "rashes", "title": "associated", "to": "paresthesias nausea"}, {"from": "rashes", "title": "associated", "to": "vomiting"}, {"from": "rashes", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "rashes", "title": "associated", "to": "urinary frequency urgency"}, {"from": "headache", "title": "associated", "to": "dizziness vertigo syncope"}, {"from": "headache", "title": "associated", "to": "weakness"}, {"from": "headache", "title": "associated", "to": "paresthesias nausea"}, {"from": "headache", "title": "associated", "to": "vomiting"}, {"from": "headache", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "headache", "title": "associated", "to": "urinary frequency urgency"}, {"from": "dizziness vertigo syncope", "title": "associated", "to": "weakness"}, {"from": "dizziness vertigo syncope", "title": "associated", "to": "paresthesias nausea"}, {"from": "dizziness vertigo syncope", "title": "associated", "to": "vomiting"}, {"from": "dizziness vertigo syncope", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "dizziness vertigo syncope", "title": "associated", "to": "dysphagia chest pain shortness of breath cough edema"}, {"from": "dizziness vertigo syncope", "title": "associated", "to": "urinary frequency urgency"}, {"from": "weakness", "title": "associated", "to": "paresthesias nausea"}, {"from": "weakness", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "paresthesias nausea", "title": "associated", "to": "vomiting"}, {"from": "paresthesias nausea", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "paresthesias nausea", "title": "associated", "to": "dysphagia chest pain shortness of breath cough edema"}, {"from": "paresthesias nausea", "title": "associated", "to": "urinary frequency urgency"}, {"from": "vomiting", "title": "associated", "to": "hematemesis bloating cramping melena"}, {"from": "vomiting", "title": "associated", "to": "urinary frequency urgency"}, {"from": "hematemesis bloating cramping melena", "title": "associated", "to": "dysphagia chest pain shortness of breath cough edema"}, {"from": "hematemesis bloating cramping melena", "title": "associated", "to": "urinary frequency urgency"}, {"from": "dysphagia chest pain shortness of breath cough edema", "title": "associated", "to": "urinary frequency urgency"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

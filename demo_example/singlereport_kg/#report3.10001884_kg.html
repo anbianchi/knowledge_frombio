@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#E6E6FA", "font": {"color": "black"}, "id": "woman", "label": "woman", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "copd", "label": "copd", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "afib", "label": "afib", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "apixaban", "label": "apixaban", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "htn cad", "label": "htn cad", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hld", "label": "hld", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "copd exacerbation", "label": "copd exacerbation", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "prednisone", "label": "prednisone", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "oxygen", "label": "oxygen", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "albuterol", "label": "albuterol", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lower extremity edema", "label": "lower extremity edema", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pedal edema", "label": "pedal edema", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "bicarb", "label": "bicarb", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "rbcs", "label": "rbcs", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cardiomegaly", "label": "cardiomegaly", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "atelectasis", "label": "atelectasis", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "ipratropium", "label": "ipratropium", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "azithromycin", "label": "azithromycin", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "sob", "label": "sob", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "fever chills", "label": "fever chills", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "rhinorrhea congestion", "label": "rhinorrhea congestion", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "sore throat abdominal pain nausea  vomiting diarrhea constipation", "label": "sore throat abdominal pain nausea  vomiting diarrhea constipation", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "brbpr", "label": "brbpr", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "melena", "label": "melena", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hematochezia", "label": "hematochezia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hematuria", "label": "hematuria", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "woman", "title": "associated", "to": "copd"}, {"from": "woman", "title": "associated", "to": "oxygen"}, {"from": "woman", "title": "associated", "to": "sob"}, {"from": "woman", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "woman", "title": "associated", "to": "melena"}, {"from": "woman", "title": "associated", "to": "dysuria"}, {"from": "woman", "title": "associated", "to": "hematuria"}, {"from": "copd", "title": "associated", "to": "afib"}, {"from": "copd", "title": "associated", "to": "apixaban"}, {"from": "copd", "title": "associated", "to": "htn cad"}, {"from": "copd", "title": "associated", "to": "hld"}, {"from": "copd", "title": "associated", "to": "copd exacerbation"}, {"from": "copd", "title": "associated", "to": "oxygen"}, {"from": "copd", "title": "associated", "to": "bicarb"}, {"from": "copd", "title": "associated", "to": "rbcs"}, {"from": "copd", "title": "associated", "to": "sob"}, {"from": "copd", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "copd", "title": "associated", "to": "brbpr"}, {"from": "copd", "title": "associated", "to": "melena"}, {"from": "copd", "title": "associated", "to": "hematochezia"}, {"from": "copd", "title": "associated", "to": "dysuria"}, {"from": "copd", "title": "associated", "to": "hematuria"}, {"from": "afib", "title": "associated", "to": "apixaban"}, {"from": "afib", "title": "associated", "to": "htn cad"}, {"from": "afib", "title": "associated", "to": "dyspnea"}, {"from": "afib", "title": "associated", "to": "copd exacerbation"}, {"from": "afib", "title": "associated", "to": "prednisone"}, {"from": "afib", "title": "associated", "to": "chest pain"}, {"from": "afib", "title": "associated", "to": "bicarb"}, {"from": "afib", "title": "associated", "to": "rbcs"}, {"from": "afib", "title": "associated", "to": "cardiomegaly"}, {"from": "afib", "title": "associated", "to": "sob"}, {"from": "afib", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "afib", "title": "associated", "to": "brbpr"}, {"from": "afib", "title": "associated", "to": "melena"}, {"from": "afib", "title": "associated", "to": "hematochezia"}, {"from": "afib", "title": "associated", "to": "dysuria"}, {"from": "afib", "title": "associated", "to": "hematuria"}, {"from": "apixaban", "title": "associated", "to": "copd exacerbation"}, {"from": "apixaban", "title": "associated", "to": "prednisone"}, {"from": "apixaban", "title": "associated", "to": "oxygen"}, {"from": "apixaban", "title": "associated", "to": "albuterol"}, {"from": "apixaban", "title": "associated", "to": "bicarb"}, {"from": "apixaban", "title": "associated", "to": "rbcs"}, {"from": "apixaban", "title": "associated", "to": "ipratropium"}, {"from": "apixaban", "title": "associated", "to": "azithromycin"}, {"from": "apixaban", "title": "associated", "to": "hematochezia"}, {"from": "apixaban", "title": "associated", "to": "hematuria"}, {"from": "htn cad", "title": "associated", "to": "hld"}, {"from": "htn cad", "title": "associated", "to": "dyspnea"}, {"from": "htn cad", "title": "associated", "to": "copd exacerbation"}, {"from": "htn cad", "title": "associated", "to": "prednisone"}, {"from": "htn cad", "title": "associated", "to": "rbcs"}, {"from": "htn cad", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "htn cad", "title": "associated", "to": "brbpr"}, {"from": "htn cad", "title": "associated", "to": "melena"}, {"from": "htn cad", "title": "associated", "to": "hematochezia"}, {"from": "htn cad", "title": "associated", "to": "dysuria"}, {"from": "htn cad", "title": "associated", "to": "hematuria"}, {"from": "hld", "title": "associated", "to": "brbpr"}, {"from": "hld", "title": "associated", "to": "melena"}, {"from": "dyspnea", "title": "associated", "to": "copd exacerbation"}, {"from": "dyspnea", "title": "associated", "to": "chest pain"}, {"from": "dyspnea", "title": "associated", "to": "lower extremity edema"}, {"from": "dyspnea", "title": "associated", "to": "sob"}, {"from": "dyspnea", "title": "associated", "to": "fever chills"}, {"from": "dyspnea", "title": "associated", "to": "headache"}, {"from": "dyspnea", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "dyspnea", "title": "associated", "to": "sore throat abdominal pain nausea  vomiting diarrhea constipation"}, {"from": "dyspnea", "title": "associated", "to": "melena"}, {"from": "dyspnea", "title": "associated", "to": "hematochezia"}, {"from": "dyspnea", "title": "associated", "to": "dysuria"}, {"from": "dyspnea", "title": "associated", "to": "hematuria"}, {"from": "copd exacerbation", "title": "associated", "to": "prednisone"}, {"from": "copd exacerbation", "title": "associated", "to": "chest pain"}, {"from": "copd exacerbation", "title": "associated", "to": "cardiomegaly"}, {"from": "copd exacerbation", "title": "associated", "to": "hematochezia"}, {"from": "copd exacerbation", "title": "associated", "to": "dysuria"}, {"from": "copd exacerbation", "title": "associated", "to": "hematuria"}, {"from": "prednisone", "title": "associated", "to": "albuterol"}, {"from": "prednisone", "title": "associated", "to": "bicarb"}, {"from": "prednisone", "title": "associated", "to": "ipratropium"}, {"from": "prednisone", "title": "associated", "to": "azithromycin"}, {"from": "oxygen", "title": "associated", "to": "bicarb"}, {"from": "oxygen", "title": "associated", "to": "rbcs"}, {"from": "oxygen", "title": "associated", "to": "sob"}, {"from": "oxygen", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "oxygen", "title": "associated", "to": "brbpr"}, {"from": "oxygen", "title": "associated", "to": "melena"}, {"from": "albuterol", "title": "associated", "to": "bicarb"}, {"from": "albuterol", "title": "associated", "to": "ipratropium"}, {"from": "albuterol", "title": "associated", "to": "azithromycin"}, {"from": "chest pain", "title": "associated", "to": "lower extremity edema"}, {"from": "chest pain", "title": "associated", "to": "fever chills"}, {"from": "chest pain", "title": "associated", "to": "headache"}, {"from": "chest pain", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "chest pain", "title": "associated", "to": "sore throat abdominal pain nausea  vomiting diarrhea constipation"}, {"from": "chest pain", "title": "associated", "to": "melena"}, {"from": "chest pain", "title": "associated", "to": "hematochezia"}, {"from": "chest pain", "title": "associated", "to": "dysuria"}, {"from": "chest pain", "title": "associated", "to": "hematuria"}, {"from": "lower extremity edema", "title": "associated", "to": "pedal edema"}, {"from": "lower extremity edema", "title": "associated", "to": "cardiomegaly"}, {"from": "lower extremity edema", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "bicarb", "title": "associated", "to": "rbcs"}, {"from": "bicarb", "title": "associated", "to": "brbpr"}, {"from": "bicarb", "title": "associated", "to": "hematuria"}, {"from": "rbcs", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "rbcs", "title": "associated", "to": "brbpr"}, {"from": "rbcs", "title": "associated", "to": "hematuria"}, {"from": "cardiomegaly", "title": "associated", "to": "atelectasis"}, {"from": "cardiomegaly", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "cardiomegaly", "title": "associated", "to": "hematochezia"}, {"from": "cardiomegaly", "title": "associated", "to": "dysuria"}, {"from": "cardiomegaly", "title": "associated", "to": "hematuria"}, {"from": "ipratropium", "title": "associated", "to": "azithromycin"}, {"from": "sob", "title": "associated", "to": "fever chills"}, {"from": "sob", "title": "associated", "to": "headache"}, {"from": "sob", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "sob", "title": "associated", "to": "brbpr"}, {"from": "sob", "title": "associated", "to": "melena"}, {"from": "sob", "title": "associated", "to": "hematuria"}, {"from": "fever chills", "title": "associated", "to": "headache"}, {"from": "fever chills", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "fever chills", "title": "associated", "to": "sore throat abdominal pain nausea  vomiting diarrhea constipation"}, {"from": "fever chills", "title": "associated", "to": "melena"}, {"from": "fever chills", "title": "associated", "to": "dysuria"}, {"from": "fever chills", "title": "associated", "to": "hematuria"}, {"from": "headache", "title": "associated", "to": "rhinorrhea congestion"}, {"from": "headache", "title": "associated", "to": "sore throat abdominal pain nausea  vomiting diarrhea constipation"}, {"from": "headache", "title": "associated", "to": "melena"}, {"from": "headache", "title": "associated", "to": "dysuria"}, {"from": "headache", "title": "associated", "to": "hematuria"}, {"from": "rhinorrhea congestion", "title": "associated", "to": "sore throat abdominal pain nausea  vomiting diarrhea constipation"}, {"from": "rhinorrhea congestion", "title": "associated", "to": "brbpr"}, {"from": "rhinorrhea congestion", "title": "associated", "to": "melena"}, {"from": "rhinorrhea congestion", "title": "associated", "to": "hematochezia"}, {"from": "rhinorrhea congestion", "title": "associated", "to": "dysuria"}, {"from": "rhinorrhea congestion", "title": "associated", "to": "hematuria"}, {"from": "sore throat abdominal pain nausea  vomiting diarrhea constipation", "title": "associated", "to": "melena"}, {"from": "sore throat abdominal pain nausea  vomiting diarrhea constipation", "title": "associated", "to": "dysuria"}, {"from": "sore throat abdominal pain nausea  vomiting diarrhea constipation", "title": "associated", "to": "hematuria"}, {"from": "melena", "title": "associated", "to": "hematochezia"}, {"from": "melena", "title": "associated", "to": "dysuria"}, {"from": "melena", "title": "associated", "to": "hematuria"}, {"from": "hematochezia", "title": "associated", "to": "dysuria"}, {"from": "hematochezia", "title": "associated", "to": "hematuria"}, {"from": "dysuria", "title": "associated", "to": "hematuria"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

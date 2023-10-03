@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#E6E6FA", "font": {"color": "black"}, "id": "congenital deafness", "label": "congenital deafness", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pancreatic head adenocarcinoma", "label": "pancreatic head adenocarcinoma", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "folfirinox", "label": "folfirinox", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "watery brown nonbloody diarrhea", "label": "watery brown nonbloody diarrhea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "vomiting", "label": "vomiting", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "feverschills", "label": "feverschills", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "headache dizzinesslightheadedness shortness of breath cough", "label": "headache dizzinesslightheadedness shortness of breath cough", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "palpitations", "label": "palpitations", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abdominal pain vomiting", "label": "abdominal pain vomiting", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "rashes", "label": "rashes", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "congenital deafness", "title": "associated", "to": "pancreatic head adenocarcinoma"}, {"from": "congenital deafness", "title": "associated", "to": "diarrhea"}, {"from": "congenital deafness", "title": "associated", "to": "constipation"}, {"from": "congenital deafness", "title": "associated", "to": "dysuria"}, {"from": "pancreatic head adenocarcinoma", "title": "associated", "to": "diarrhea"}, {"from": "pancreatic head adenocarcinoma", "title": "associated", "to": "constipation"}, {"from": "pancreatic head adenocarcinoma", "title": "associated", "to": "dysuria"}, {"from": "folfirinox", "title": "associated", "to": "diarrhea"}, {"from": "folfirinox", "title": "associated", "to": "feverschills"}, {"from": "diarrhea", "title": "associated", "to": "watery brown nonbloody diarrhea"}, {"from": "diarrhea", "title": "associated", "to": "nausea"}, {"from": "diarrhea", "title": "associated", "to": "abdominal pain"}, {"from": "diarrhea", "title": "associated", "to": "vomiting"}, {"from": "diarrhea", "title": "associated", "to": "feverschills"}, {"from": "diarrhea", "title": "associated", "to": "headache dizzinesslightheadedness shortness of breath cough"}, {"from": "diarrhea", "title": "associated", "to": "chest pain"}, {"from": "diarrhea", "title": "associated", "to": "palpitations"}, {"from": "diarrhea", "title": "associated", "to": "abdominal pain vomiting"}, {"from": "diarrhea", "title": "associated", "to": "constipation"}, {"from": "diarrhea", "title": "associated", "to": "dysuria"}, {"from": "diarrhea", "title": "associated", "to": "rashes"}, {"from": "watery brown nonbloody diarrhea", "title": "associated", "to": "nausea"}, {"from": "watery brown nonbloody diarrhea", "title": "associated", "to": "abdominal pain"}, {"from": "watery brown nonbloody diarrhea", "title": "associated", "to": "vomiting"}, {"from": "watery brown nonbloody diarrhea", "title": "associated", "to": "headache dizzinesslightheadedness shortness of breath cough"}, {"from": "watery brown nonbloody diarrhea", "title": "associated", "to": "palpitations"}, {"from": "watery brown nonbloody diarrhea", "title": "associated", "to": "abdominal pain vomiting"}, {"from": "watery brown nonbloody diarrhea", "title": "associated", "to": "constipation"}, {"from": "watery brown nonbloody diarrhea", "title": "associated", "to": "dysuria"}, {"from": "nausea", "title": "associated", "to": "abdominal pain"}, {"from": "nausea", "title": "associated", "to": "vomiting"}, {"from": "nausea", "title": "associated", "to": "chest pain"}, {"from": "nausea", "title": "associated", "to": "palpitations"}, {"from": "nausea", "title": "associated", "to": "abdominal pain vomiting"}, {"from": "nausea", "title": "associated", "to": "constipation"}, {"from": "nausea", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "vomiting"}, {"from": "abdominal pain", "title": "associated", "to": "chest pain"}, {"from": "abdominal pain", "title": "associated", "to": "palpitations"}, {"from": "abdominal pain", "title": "associated", "to": "abdominal pain vomiting"}, {"from": "abdominal pain", "title": "associated", "to": "constipation"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "rashes"}, {"from": "vomiting", "title": "associated", "to": "chest pain"}, {"from": "vomiting", "title": "associated", "to": "abdominal pain vomiting"}, {"from": "vomiting", "title": "associated", "to": "constipation"}, {"from": "vomiting", "title": "associated", "to": "dysuria"}, {"from": "vomiting", "title": "associated", "to": "rashes"}, {"from": "feverschills", "title": "associated", "to": "constipation"}, {"from": "feverschills", "title": "associated", "to": "dysuria"}, {"from": "feverschills", "title": "associated", "to": "rashes"}, {"from": "headache dizzinesslightheadedness shortness of breath cough", "title": "associated", "to": "chest pain"}, {"from": "headache dizzinesslightheadedness shortness of breath cough", "title": "associated", "to": "palpitations"}, {"from": "headache dizzinesslightheadedness shortness of breath cough", "title": "associated", "to": "abdominal pain vomiting"}, {"from": "headache dizzinesslightheadedness shortness of breath cough", "title": "associated", "to": "constipation"}, {"from": "headache dizzinesslightheadedness shortness of breath cough", "title": "associated", "to": "dysuria"}, {"from": "chest pain", "title": "associated", "to": "palpitations"}, {"from": "chest pain", "title": "associated", "to": "abdominal pain vomiting"}, {"from": "chest pain", "title": "associated", "to": "constipation"}, {"from": "chest pain", "title": "associated", "to": "dysuria"}, {"from": "chest pain", "title": "associated", "to": "rashes"}, {"from": "palpitations", "title": "associated", "to": "abdominal pain vomiting"}, {"from": "palpitations", "title": "associated", "to": "constipation"}, {"from": "palpitations", "title": "associated", "to": "rashes"}, {"from": "abdominal pain vomiting", "title": "associated", "to": "constipation"}, {"from": "abdominal pain vomiting", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain vomiting", "title": "associated", "to": "rashes"}, {"from": "constipation", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "rashes"}, {"from": "dysuria", "title": "associated", "to": "rashes"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
