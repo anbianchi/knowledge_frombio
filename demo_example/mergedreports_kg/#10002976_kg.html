@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "dm", "label": "dm", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "heart attack", "label": "heart attack", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "myocardial infarction", "label": "myocardial infarction", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "diffuse edema of", "label": "diffuse edema of", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "motrin", "label": "motrin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "gout attack", "label": "gout attack", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "prednisone", "label": "prednisone", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "upper respiratory symptoms", "label": "upper respiratory symptoms", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "trauma", "label": "trauma", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abnormal movement of his shoulder", "label": "abnormal movement of his shoulder", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "morphine", "label": "morphine", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "creatinine", "label": "creatinine", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "fever chills", "label": "fever chills", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "rhinorrhea congestion sore throat cough shortness  of breath chest pain", "label": "rhinorrhea congestion sore throat cough shortness  of breath chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abdominal pain nausea vomiting  diarrhea", "label": "abdominal pain nausea vomiting  diarrhea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "melena", "label": "melena", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hematochezia", "label": "hematochezia", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hematuria", "label": "hematuria", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "type 2 diabetes", "label": "type 2 diabetes", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cad", "label": "cad", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "myositis", "label": "myositis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "edema", "label": "edema", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "trapezius and deltoid muscles", "label": "trapezius and deltoid muscles", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "pt", "label": "pt", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "inflammatory  myositis", "label": "inflammatory  myositis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "shoulder pain", "label": "shoulder pain", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "rigors", "label": "rigors", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "rash", "label": "rash", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cellulities of the left foot", "label": "cellulities of the left foot", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "esrcrp", "label": "esrcrp", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "ac joint", "label": "ac joint", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "gram positive cocci", "label": "gram positive cocci", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "leukocytosis", "label": "leukocytosis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "zosynvancomycin", "label": "zosynvancomycin", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "dm", "title": "associated", "to": "heart attack"}, {"from": "dm", "title": "associated", "to": "motrin"}, {"from": "dm", "title": "associated", "to": "gout attack"}, {"from": "dm", "title": "associated", "to": "prednisone"}, {"from": "dm", "title": "associated", "to": "upper respiratory symptoms"}, {"from": "dm", "title": "associated", "to": "morphine"}, {"from": "dm", "title": "associated", "to": "constipation"}, {"from": "dm", "title": "associated", "to": "melena"}, {"from": "dm", "title": "associated", "to": "hematochezia"}, {"from": "dm", "title": "associated", "to": "dysuria"}, {"from": "dm", "title": "associated", "to": "hematuria"}, {"from": "heart attack", "title": "associated", "to": "myocardial infarction"}, {"from": "heart attack", "title": "associated", "to": "gout attack"}, {"from": "heart attack", "title": "associated", "to": "upper respiratory symptoms"}, {"from": "heart attack", "title": "associated", "to": "trauma"}, {"from": "heart attack", "title": "associated", "to": "constipation"}, {"from": "heart attack", "title": "associated", "to": "melena"}, {"from": "heart attack", "title": "associated", "to": "hematochezia"}, {"from": "heart attack", "title": "associated", "to": "dysuria"}, {"from": "heart attack", "title": "associated", "to": "hematuria"}, {"from": "myocardial infarction", "title": "associated", "to": "gout attack"}, {"from": "myocardial infarction", "title": "associated", "to": "upper respiratory symptoms"}, {"from": "myocardial infarction", "title": "associated", "to": "constipation"}, {"from": "myocardial infarction", "title": "associated", "to": "hematochezia"}, {"from": "myocardial infarction", "title": "associated", "to": "dysuria"}, {"from": "motrin", "title": "associated", "to": "gout attack"}, {"from": "motrin", "title": "associated", "to": "prednisone"}, {"from": "motrin", "title": "associated", "to": "morphine"}, {"from": "motrin", "title": "associated", "to": "hematuria"}, {"from": "gout attack", "title": "associated", "to": "upper respiratory symptoms"}, {"from": "gout attack", "title": "associated", "to": "trauma"}, {"from": "gout attack", "title": "associated", "to": "morphine"}, {"from": "gout attack", "title": "associated", "to": "fever chills"}, {"from": "gout attack", "title": "associated", "to": "rhinorrhea congestion sore throat cough shortness  of breath chest pain"}, {"from": "gout attack", "title": "associated", "to": "abdominal pain nausea vomiting  diarrhea"}, {"from": "gout attack", "title": "associated", "to": "constipation"}, {"from": "gout attack", "title": "associated", "to": "melena"}, {"from": "gout attack", "title": "associated", "to": "hematochezia"}, {"from": "gout attack", "title": "associated", "to": "dysuria"}, {"from": "gout attack", "title": "associated", "to": "hematuria"}, {"from": "prednisone", "title": "associated", "to": "morphine"}, {"from": "prednisone", "title": "associated", "to": "constipation"}, {"from": "upper respiratory symptoms", "title": "associated", "to": "morphine"}, {"from": "upper respiratory symptoms", "title": "associated", "to": "fever chills"}, {"from": "upper respiratory symptoms", "title": "associated", "to": "abdominal pain nausea vomiting  diarrhea"}, {"from": "upper respiratory symptoms", "title": "associated", "to": "constipation"}, {"from": "upper respiratory symptoms", "title": "associated", "to": "melena"}, {"from": "upper respiratory symptoms", "title": "associated", "to": "hematochezia"}, {"from": "upper respiratory symptoms", "title": "associated", "to": "dysuria"}, {"from": "upper respiratory symptoms", "title": "associated", "to": "hematuria"}, {"from": "trauma", "title": "associated", "to": "hematochezia"}, {"from": "morphine", "title": "associated", "to": "melena"}, {"from": "morphine", "title": "associated", "to": "hematochezia"}, {"from": "morphine", "title": "associated", "to": "hematuria"}, {"from": "fever chills", "title": "associated", "to": "rhinorrhea congestion sore throat cough shortness  of breath chest pain"}, {"from": "fever chills", "title": "associated", "to": "abdominal pain nausea vomiting  diarrhea"}, {"from": "fever chills", "title": "associated", "to": "constipation"}, {"from": "fever chills", "title": "associated", "to": "melena"}, {"from": "fever chills", "title": "associated", "to": "dysuria"}, {"from": "fever chills", "title": "associated", "to": "hematuria"}, {"from": "rhinorrhea congestion sore throat cough shortness  of breath chest pain", "title": "associated", "to": "abdominal pain nausea vomiting  diarrhea"}, {"from": "rhinorrhea congestion sore throat cough shortness  of breath chest pain", "title": "associated", "to": "constipation"}, {"from": "rhinorrhea congestion sore throat cough shortness  of breath chest pain", "title": "associated", "to": "melena"}, {"from": "rhinorrhea congestion sore throat cough shortness  of breath chest pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain nausea vomiting  diarrhea", "title": "associated", "to": "constipation"}, {"from": "abdominal pain nausea vomiting  diarrhea", "title": "associated", "to": "melena"}, {"from": "abdominal pain nausea vomiting  diarrhea", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain nausea vomiting  diarrhea", "title": "associated", "to": "hematuria"}, {"from": "constipation", "title": "associated", "to": "melena"}, {"from": "constipation", "title": "associated", "to": "hematochezia"}, {"from": "constipation", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "hematuria"}, {"from": "melena", "title": "associated", "to": "hematochezia"}, {"from": "melena", "title": "associated", "to": "dysuria"}, {"from": "melena", "title": "associated", "to": "hematuria"}, {"from": "hematochezia", "title": "associated", "to": "dysuria"}, {"from": "hematochezia", "title": "associated", "to": "hematuria"}, {"from": "dysuria", "title": "associated", "to": "hematuria"}, {"from": "type 2 diabetes", "title": "associated", "to": "myositis"}, {"from": "type 2 diabetes", "title": "associated", "to": "inflammatory  myositis"}, {"from": "cad", "title": "associated", "to": "myositis"}, {"from": "cad", "title": "associated", "to": "pt"}, {"from": "cad", "title": "associated", "to": "inflammatory  myositis"}, {"from": "cad", "title": "associated", "to": "rash"}, {"from": "cad", "title": "associated", "to": "esrcrp"}, {"from": "cad", "title": "associated", "to": "ac joint"}, {"from": "cad", "title": "associated", "to": "leukocytosis"}, {"from": "myositis", "title": "associated", "to": "inflammatory  myositis"}, {"from": "myositis", "title": "associated", "to": "shoulder pain"}, {"from": "myositis", "title": "associated", "to": "rash"}, {"from": "myositis", "title": "associated", "to": "dyspnea"}, {"from": "myositis", "title": "associated", "to": "leukocytosis"}, {"from": "edema", "title": "associated", "to": "rigors"}, {"from": "edema", "title": "associated", "to": "rash"}, {"from": "edema", "title": "associated", "to": "leukocytosis"}, {"from": "trapezius and deltoid muscles", "title": "associated", "to": "cellulities of the left foot"}, {"from": "pt", "title": "associated", "to": "leukocytosis"}, {"from": "inflammatory  myositis", "title": "associated", "to": "rigors"}, {"from": "inflammatory  myositis", "title": "associated", "to": "rash"}, {"from": "inflammatory  myositis", "title": "associated", "to": "dyspnea"}, {"from": "inflammatory  myositis", "title": "associated", "to": "esrcrp"}, {"from": "inflammatory  myositis", "title": "associated", "to": "leukocytosis"}, {"from": "shoulder pain", "title": "associated", "to": "rash"}, {"from": "shoulder pain", "title": "associated", "to": "dyspnea"}, {"from": "rigors", "title": "associated", "to": "rash"}, {"from": "rigors", "title": "associated", "to": "nausea"}, {"from": "rigors", "title": "associated", "to": "dyspnea"}, {"from": "rigors", "title": "associated", "to": "leukocytosis"}, {"from": "rash", "title": "associated", "to": "nausea"}, {"from": "rash", "title": "associated", "to": "dyspnea"}, {"from": "rash", "title": "associated", "to": "esrcrp"}, {"from": "rash", "title": "associated", "to": "leukocytosis"}, {"from": "nausea", "title": "associated", "to": "dyspnea"}, {"from": "dyspnea", "title": "associated", "to": "leukocytosis"}, {"from": "cellulities of the left foot", "title": "associated", "to": "ac joint"}, {"from": "gram positive cocci", "title": "associated", "to": "leukocytosis"}, {"from": "leukocytosis", "title": "associated", "to": "zosynvancomycin"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

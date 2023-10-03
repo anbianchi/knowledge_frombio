@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "f", "label": "f", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hypertension obesity", "label": "hypertension obesity", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "osteoarthritis", "label": "osteoarthritis", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "hypothyroidism", "label": "hypothyroidism", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "sarcoidosis", "label": "sarcoidosis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lower  extremity swelling", "label": "lower  extremity swelling", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "bendopnea", "label": "bendopnea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "orthopnea", "label": "orthopnea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "rhinorrhea sore throat", "label": "rhinorrhea sore throat", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lower extremity edema", "label": "lower extremity edema", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hgb", "label": "hgb", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "albcr", "label": "albcr", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "pulmonary vascular congestion", "label": "pulmonary vascular congestion", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lasix", "label": "lasix", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "strepinduced nephritis", "label": "strepinduced nephritis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "paroxysmal nocturnal dyspnea", "label": "paroxysmal nocturnal dyspnea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "palpitations syncope", "label": "palpitations syncope", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "presyncope", "label": "presyncope", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "stroke tia deep venous thrombosis pulmonary embolism", "label": "stroke tia deep venous thrombosis pulmonary embolism", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hemoptysis", "label": "hemoptysis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "buttock or calf pain", "label": "buttock or calf pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "fevers chills", "label": "fevers chills", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "cerebral aneurysm", "label": "cerebral aneurysm", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "ccy", "label": "ccy", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "tonsillectomy", "label": "tonsillectomy", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "tah fibroids", "label": "tah fibroids", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "appy", "label": "appy", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "operative site", "label": "operative site", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lower extremity weakness parasthesias", "label": "lower extremity weakness parasthesias", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "anesthesia", "label": "anesthesia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "urinary incontinence", "label": "urinary incontinence", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cp", "label": "cp", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dyspnea cough", "label": "dyspnea cough", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abd  pain", "label": "abd  pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "lbp", "label": "lbp", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "knee buckling", "label": "knee buckling", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "pt", "label": "pt", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "numbness", "label": "numbness", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "head strike", "label": "head strike", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "tramadol", "label": "tramadol", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dexamethasone", "label": "dexamethasone", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "woman", "label": "woman", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "infected knee", "label": "infected knee", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "morbidly obese", "label": "morbidly obese", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "multinodular goiter sarcoid  htn", "label": "multinodular goiter sarcoid  htn", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "spinal stenosis", "label": "spinal stenosis", "shape": "dot"}, {"color": "#D3D3D3", "font": {"color": "black"}, "id": "macromastia", "label": "macromastia", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "hypertension obesity", "title": "associated", "to": "osteoarthritis"}, {"from": "hypertension obesity", "title": "associated", "to": "hypothyroidism"}, {"from": "hypertension obesity", "title": "associated", "to": "sarcoidosis"}, {"from": "hypertension obesity", "title": "associated", "to": "bendopnea"}, {"from": "hypertension obesity", "title": "associated", "to": "orthopnea"}, {"from": "hypertension obesity", "title": "associated", "to": "rhinorrhea sore throat"}, {"from": "hypertension obesity", "title": "associated", "to": "dyspnea"}, {"from": "hypertension obesity", "title": "associated", "to": "strepinduced nephritis"}, {"from": "hypertension obesity", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "hypertension obesity", "title": "associated", "to": "palpitations syncope"}, {"from": "hypertension obesity", "title": "associated", "to": "presyncope"}, {"from": "hypertension obesity", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "hypertension obesity", "title": "associated", "to": "myalgias"}, {"from": "osteoarthritis", "title": "associated", "to": "hypothyroidism"}, {"from": "osteoarthritis", "title": "associated", "to": "sarcoidosis"}, {"from": "osteoarthritis", "title": "associated", "to": "lower  extremity swelling"}, {"from": "osteoarthritis", "title": "associated", "to": "bendopnea"}, {"from": "osteoarthritis", "title": "associated", "to": "orthopnea"}, {"from": "osteoarthritis", "title": "associated", "to": "chest pain"}, {"from": "osteoarthritis", "title": "associated", "to": "rhinorrhea sore throat"}, {"from": "osteoarthritis", "title": "associated", "to": "pulmonary vascular congestion"}, {"from": "osteoarthritis", "title": "associated", "to": "dyspnea"}, {"from": "osteoarthritis", "title": "associated", "to": "strepinduced nephritis"}, {"from": "osteoarthritis", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "osteoarthritis", "title": "associated", "to": "palpitations syncope"}, {"from": "osteoarthritis", "title": "associated", "to": "presyncope"}, {"from": "osteoarthritis", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "osteoarthritis", "title": "associated", "to": "myalgias"}, {"from": "osteoarthritis", "title": "associated", "to": "hemoptysis"}, {"from": "hypothyroidism", "title": "associated", "to": "sarcoidosis"}, {"from": "hypothyroidism", "title": "associated", "to": "lower  extremity swelling"}, {"from": "hypothyroidism", "title": "associated", "to": "bendopnea"}, {"from": "hypothyroidism", "title": "associated", "to": "orthopnea"}, {"from": "hypothyroidism", "title": "associated", "to": "chest pain"}, {"from": "hypothyroidism", "title": "associated", "to": "rhinorrhea sore throat"}, {"from": "hypothyroidism", "title": "associated", "to": "pulmonary vascular congestion"}, {"from": "hypothyroidism", "title": "associated", "to": "dyspnea"}, {"from": "hypothyroidism", "title": "associated", "to": "strepinduced nephritis"}, {"from": "hypothyroidism", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "hypothyroidism", "title": "associated", "to": "palpitations syncope"}, {"from": "hypothyroidism", "title": "associated", "to": "presyncope"}, {"from": "hypothyroidism", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "hypothyroidism", "title": "associated", "to": "myalgias"}, {"from": "hypothyroidism", "title": "associated", "to": "hemoptysis"}, {"from": "hypothyroidism", "title": "associated", "to": "tonsillectomy"}, {"from": "hypothyroidism", "title": "associated", "to": "tah fibroids"}, {"from": "hypothyroidism", "title": "associated", "to": "lower extremity weakness parasthesias"}, {"from": "hypothyroidism", "title": "associated", "to": "urinary incontinence"}, {"from": "hypothyroidism", "title": "associated", "to": "dyspnea cough"}, {"from": "hypothyroidism", "title": "associated", "to": "dysuria"}, {"from": "hypothyroidism", "title": "associated", "to": "dexamethasone"}, {"from": "sarcoidosis", "title": "associated", "to": "lower  extremity swelling"}, {"from": "sarcoidosis", "title": "associated", "to": "bendopnea"}, {"from": "sarcoidosis", "title": "associated", "to": "orthopnea"}, {"from": "sarcoidosis", "title": "associated", "to": "chest pain"}, {"from": "sarcoidosis", "title": "associated", "to": "rhinorrhea sore throat"}, {"from": "sarcoidosis", "title": "associated", "to": "pulmonary vascular congestion"}, {"from": "sarcoidosis", "title": "associated", "to": "dyspnea"}, {"from": "sarcoidosis", "title": "associated", "to": "strepinduced nephritis"}, {"from": "sarcoidosis", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "sarcoidosis", "title": "associated", "to": "palpitations syncope"}, {"from": "sarcoidosis", "title": "associated", "to": "presyncope"}, {"from": "sarcoidosis", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "sarcoidosis", "title": "associated", "to": "myalgias"}, {"from": "sarcoidosis", "title": "associated", "to": "hemoptysis"}, {"from": "sarcoidosis", "title": "associated", "to": "fevers chills"}, {"from": "lower  extremity swelling", "title": "associated", "to": "bendopnea"}, {"from": "lower  extremity swelling", "title": "associated", "to": "orthopnea"}, {"from": "lower  extremity swelling", "title": "associated", "to": "chest pain"}, {"from": "lower  extremity swelling", "title": "associated", "to": "rhinorrhea sore throat"}, {"from": "lower  extremity swelling", "title": "associated", "to": "lower extremity edema"}, {"from": "lower  extremity swelling", "title": "associated", "to": "pulmonary vascular congestion"}, {"from": "lower  extremity swelling", "title": "associated", "to": "dyspnea"}, {"from": "lower  extremity swelling", "title": "associated", "to": "strepinduced nephritis"}, {"from": "lower  extremity swelling", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "lower  extremity swelling", "title": "associated", "to": "palpitations syncope"}, {"from": "lower  extremity swelling", "title": "associated", "to": "presyncope"}, {"from": "lower  extremity swelling", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "lower  extremity swelling", "title": "associated", "to": "myalgias"}, {"from": "lower  extremity swelling", "title": "associated", "to": "hemoptysis"}, {"from": "lower  extremity swelling", "title": "associated", "to": "buttock or calf pain"}, {"from": "lower  extremity swelling", "title": "associated", "to": "fevers chills"}, {"from": "bendopnea", "title": "associated", "to": "orthopnea"}, {"from": "bendopnea", "title": "associated", "to": "chest pain"}, {"from": "bendopnea", "title": "associated", "to": "rhinorrhea sore throat"}, {"from": "bendopnea", "title": "associated", "to": "pulmonary vascular congestion"}, {"from": "bendopnea", "title": "associated", "to": "dyspnea"}, {"from": "bendopnea", "title": "associated", "to": "strepinduced nephritis"}, {"from": "bendopnea", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "bendopnea", "title": "associated", "to": "palpitations syncope"}, {"from": "bendopnea", "title": "associated", "to": "presyncope"}, {"from": "bendopnea", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "bendopnea", "title": "associated", "to": "myalgias"}, {"from": "bendopnea", "title": "associated", "to": "hemoptysis"}, {"from": "bendopnea", "title": "associated", "to": "fevers chills"}, {"from": "orthopnea", "title": "associated", "to": "chest pain"}, {"from": "orthopnea", "title": "associated", "to": "rhinorrhea sore throat"}, {"from": "orthopnea", "title": "associated", "to": "pulmonary vascular congestion"}, {"from": "orthopnea", "title": "associated", "to": "dyspnea"}, {"from": "orthopnea", "title": "associated", "to": "strepinduced nephritis"}, {"from": "orthopnea", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "orthopnea", "title": "associated", "to": "palpitations syncope"}, {"from": "orthopnea", "title": "associated", "to": "presyncope"}, {"from": "orthopnea", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "orthopnea", "title": "associated", "to": "myalgias"}, {"from": "orthopnea", "title": "associated", "to": "hemoptysis"}, {"from": "orthopnea", "title": "associated", "to": "fevers chills"}, {"from": "chest pain", "title": "associated", "to": "rhinorrhea sore throat"}, {"from": "chest pain", "title": "associated", "to": "lower extremity edema"}, {"from": "chest pain", "title": "associated", "to": "pulmonary vascular congestion"}, {"from": "chest pain", "title": "associated", "to": "dyspnea"}, {"from": "chest pain", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "chest pain", "title": "associated", "to": "palpitations syncope"}, {"from": "chest pain", "title": "associated", "to": "presyncope"}, {"from": "chest pain", "title": "associated", "to": "myalgias"}, {"from": "chest pain", "title": "associated", "to": "hemoptysis"}, {"from": "chest pain", "title": "associated", "to": "buttock or calf pain"}, {"from": "chest pain", "title": "associated", "to": "fevers chills"}, {"from": "rhinorrhea sore throat", "title": "associated", "to": "dyspnea"}, {"from": "rhinorrhea sore throat", "title": "associated", "to": "strepinduced nephritis"}, {"from": "rhinorrhea sore throat", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "rhinorrhea sore throat", "title": "associated", "to": "palpitations syncope"}, {"from": "rhinorrhea sore throat", "title": "associated", "to": "presyncope"}, {"from": "rhinorrhea sore throat", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "rhinorrhea sore throat", "title": "associated", "to": "myalgias"}, {"from": "rhinorrhea sore throat", "title": "associated", "to": "fevers chills"}, {"from": "lower extremity edema", "title": "associated", "to": "pulmonary vascular congestion"}, {"from": "lower extremity edema", "title": "associated", "to": "dyspnea"}, {"from": "lower extremity edema", "title": "associated", "to": "buttock or calf pain"}, {"from": "hgb", "title": "associated", "to": "albcr"}, {"from": "albcr", "title": "associated", "to": "lasix"}, {"from": "pulmonary vascular congestion", "title": "associated", "to": "strepinduced nephritis"}, {"from": "pulmonary vascular congestion", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "pulmonary vascular congestion", "title": "associated", "to": "presyncope"}, {"from": "pulmonary vascular congestion", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "pulmonary vascular congestion", "title": "associated", "to": "hemoptysis"}, {"from": "dyspnea", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "dyspnea", "title": "associated", "to": "palpitations syncope"}, {"from": "dyspnea", "title": "associated", "to": "presyncope"}, {"from": "dyspnea", "title": "associated", "to": "myalgias"}, {"from": "dyspnea", "title": "associated", "to": "hemoptysis"}, {"from": "dyspnea", "title": "associated", "to": "buttock or calf pain"}, {"from": "dyspnea", "title": "associated", "to": "fevers chills"}, {"from": "lasix", "title": "associated", "to": "hemoptysis"}, {"from": "strepinduced nephritis", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "strepinduced nephritis", "title": "associated", "to": "palpitations syncope"}, {"from": "strepinduced nephritis", "title": "associated", "to": "presyncope"}, {"from": "strepinduced nephritis", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "strepinduced nephritis", "title": "associated", "to": "myalgias"}, {"from": "strepinduced nephritis", "title": "associated", "to": "hemoptysis"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "palpitations syncope"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "presyncope"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "myalgias"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "hemoptysis"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "fevers chills"}, {"from": "palpitations syncope", "title": "associated", "to": "presyncope"}, {"from": "palpitations syncope", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "palpitations syncope", "title": "associated", "to": "myalgias"}, {"from": "palpitations syncope", "title": "associated", "to": "hemoptysis"}, {"from": "palpitations syncope", "title": "associated", "to": "buttock or calf pain"}, {"from": "palpitations syncope", "title": "associated", "to": "fevers chills"}, {"from": "presyncope", "title": "associated", "to": "stroke tia deep venous thrombosis pulmonary embolism"}, {"from": "presyncope", "title": "associated", "to": "myalgias"}, {"from": "presyncope", "title": "associated", "to": "hemoptysis"}, {"from": "presyncope", "title": "associated", "to": "fevers chills"}, {"from": "stroke tia deep venous thrombosis pulmonary embolism", "title": "associated", "to": "myalgias"}, {"from": "stroke tia deep venous thrombosis pulmonary embolism", "title": "associated", "to": "hemoptysis"}, {"from": "myalgias", "title": "associated", "to": "hemoptysis"}, {"from": "myalgias", "title": "associated", "to": "buttock or calf pain"}, {"from": "myalgias", "title": "associated", "to": "fevers chills"}, {"from": "hemoptysis", "title": "associated", "to": "fevers chills"}, {"from": "buttock or calf pain", "title": "associated", "to": "fevers chills"}, {"from": "cerebral aneurysm", "title": "associated", "to": "head strike"}, {"from": "ccy", "title": "associated", "to": "tonsillectomy"}, {"from": "ccy", "title": "associated", "to": "tah fibroids"}, {"from": "ccy", "title": "associated", "to": "appy"}, {"from": "ccy", "title": "associated", "to": "cp"}, {"from": "ccy", "title": "associated", "to": "lbp"}, {"from": "tonsillectomy", "title": "associated", "to": "tah fibroids"}, {"from": "tonsillectomy", "title": "associated", "to": "appy"}, {"from": "tonsillectomy", "title": "associated", "to": "urinary incontinence"}, {"from": "tonsillectomy", "title": "associated", "to": "dysuria"}, {"from": "tah fibroids", "title": "associated", "to": "appy"}, {"from": "tah fibroids", "title": "associated", "to": "urinary incontinence"}, {"from": "tah fibroids", "title": "associated", "to": "dyspnea cough"}, {"from": "tah fibroids", "title": "associated", "to": "dysuria"}, {"from": "appy", "title": "associated", "to": "dysuria"}, {"from": "lower extremity weakness parasthesias", "title": "associated", "to": "urinary incontinence"}, {"from": "lower extremity weakness parasthesias", "title": "associated", "to": "dyspnea cough"}, {"from": "lower extremity weakness parasthesias", "title": "associated", "to": "dysuria"}, {"from": "urinary incontinence", "title": "associated", "to": "dyspnea cough"}, {"from": "urinary incontinence", "title": "associated", "to": "dysuria"}, {"from": "dyspnea cough", "title": "associated", "to": "abd  pain"}, {"from": "dyspnea cough", "title": "associated", "to": "dysuria"}, {"from": "abd  pain", "title": "associated", "to": "dysuria"}, {"from": "lbp", "title": "associated", "to": "pt"}, {"from": "tramadol", "title": "associated", "to": "dexamethasone"}, {"from": "multinodular goiter sarcoid  htn", "title": "associated", "to": "spinal stenosis"}, {"from": "multinodular goiter sarcoid  htn", "title": "associated", "to": "macromastia"}, {"from": "spinal stenosis", "title": "associated", "to": "macromastia"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

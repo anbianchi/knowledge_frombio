@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "mrs", "label": "mrs", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "hiv", "label": "hiv", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hcv  cirrhosis", "label": "hcv  cirrhosis", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "ascites", "label": "ascites", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "hepatic encephalopathy", "label": "hepatic encephalopathy", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hypotension", "label": "hypotension", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "cirrhosis", "label": "cirrhosis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lightheadedness", "label": "lightheadedness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "person", "label": "person", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "na", "label": "na", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "ceftriaxone", "label": "ceftriaxone", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "regular insulin", "label": "regular insulin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "calcium gluconate", "label": "calcium gluconate", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "lactulose", "label": "lactulose", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "albumin", "label": "albumin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abdominal pain nausea vomiting", "label": "abdominal pain nausea vomiting", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chronic cough", "label": "chronic cough", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chills", "label": "chills", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "hcv cirrhosis", "label": "hcv cirrhosis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "abd  pain", "label": "abd  pain", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "fever chills", "label": "fever chills", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "shortness of breath  cough", "label": "shortness of breath  cough", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "lactate", "label": "lactate", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "leukocytosis", "label": "leukocytosis", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "wbc", "label": "wbc", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "morphine sulfate", "label": "morphine sulfate", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abdominal distention", "label": "abdominal distention", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hyponatremia", "label": "hyponatremia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hyperkalemia", "label": "hyperkalemia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "forgetfulness", "label": "forgetfulness", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "leuk", "label": "leuk", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "ruq us", "label": "ruq us", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pv", "label": "pv", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pv thrombus", "label": "pv thrombus", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "ondansetron", "label": "ondansetron", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "morphine", "label": "morphine", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abdominal  distention", "label": "abdominal  distention", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "nausea vomiting", "label": "nausea vomiting", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "frequency", "label": "frequency", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "cb ascites", "label": "cb ascites", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "ptsd", "label": "ptsd", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "abd  distension", "label": "abd  distension", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "pt", "label": "pt", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "lasix", "label": "lasix", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "spirnolactone", "label": "spirnolactone", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "abd distension", "label": "abd distension", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "edema", "label": "edema", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "sob", "label": "sob", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "orthopnea", "label": "orthopnea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fcnv dc", "label": "fcnv dc", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "food poisoning", "label": "food poisoning", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hemetesis", "label": "hemetesis", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hemoptysis", "label": "hemoptysis", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hematuria", "label": "hematuria", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "abd pain", "label": "abd pain", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "alcohol", "label": "alcohol", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "platelet", "label": "platelet", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "mrs", "title": "associated", "to": "hiv"}, {"from": "hiv", "title": "associated", "to": "ascites"}, {"from": "hiv", "title": "associated", "to": "na"}, {"from": "hiv", "title": "associated", "to": "leuk"}, {"from": "hiv", "title": "associated", "to": "ruq us"}, {"from": "hiv", "title": "associated", "to": "pv"}, {"from": "hiv", "title": "associated", "to": "pv thrombus"}, {"from": "hiv", "title": "associated", "to": "ondansetron"}, {"from": "hiv", "title": "associated", "to": "morphine"}, {"from": "hiv", "title": "associated", "to": "cb ascites"}, {"from": "hiv", "title": "associated", "to": "ptsd"}, {"from": "hiv", "title": "associated", "to": "lasix"}, {"from": "hiv", "title": "associated", "to": "sob"}, {"from": "hiv", "title": "associated", "to": "fcnv dc"}, {"from": "hiv", "title": "associated", "to": "hemetesis"}, {"from": "hcv  cirrhosis", "title": "associated", "to": "hepatic encephalopathy"}, {"from": "hcv  cirrhosis", "title": "associated", "to": "cirrhosis"}, {"from": "hcv  cirrhosis", "title": "associated", "to": "lactulose"}, {"from": "hcv  cirrhosis", "title": "associated", "to": "chronic cough"}, {"from": "ascites", "title": "associated", "to": "hepatic encephalopathy"}, {"from": "ascites", "title": "associated", "to": "cirrhosis"}, {"from": "ascites", "title": "associated", "to": "leukocytosis"}, {"from": "ascites", "title": "associated", "to": "abdominal distention"}, {"from": "ascites", "title": "associated", "to": "hyponatremia"}, {"from": "ascites", "title": "associated", "to": "hyperkalemia"}, {"from": "ascites", "title": "associated", "to": "forgetfulness"}, {"from": "ascites", "title": "associated", "to": "ruq us"}, {"from": "ascites", "title": "associated", "to": "pv thrombus"}, {"from": "ascites", "title": "associated", "to": "abdominal  distention"}, {"from": "hepatic encephalopathy", "title": "associated", "to": "hypotension"}, {"from": "hepatic encephalopathy", "title": "associated", "to": "cirrhosis"}, {"from": "hepatic encephalopathy", "title": "associated", "to": "lactulose"}, {"from": "hepatic encephalopathy", "title": "associated", "to": "chronic cough"}, {"from": "hepatic encephalopathy", "title": "associated", "to": "hcv cirrhosis"}, {"from": "hepatic encephalopathy", "title": "associated", "to": "abdominal pain"}, {"from": "hepatic encephalopathy", "title": "associated", "to": "dysuria"}, {"from": "hepatic encephalopathy", "title": "associated", "to": "leukocytosis"}, {"from": "hypotension", "title": "associated", "to": "lightheadedness"}, {"from": "hypotension", "title": "associated", "to": "chest pain"}, {"from": "hypotension", "title": "associated", "to": "chills"}, {"from": "patient", "title": "associated", "to": "person"}, {"from": "cirrhosis", "title": "associated", "to": "ceftriaxone"}, {"from": "cirrhosis", "title": "associated", "to": "lactulose"}, {"from": "cirrhosis", "title": "associated", "to": "chronic cough"}, {"from": "lightheadedness", "title": "associated", "to": "abdominal pain nausea vomiting"}, {"from": "lightheadedness", "title": "associated", "to": "chest pain"}, {"from": "lightheadedness", "title": "associated", "to": "chills"}, {"from": "na", "title": "associated", "to": "leukocytosis"}, {"from": "ceftriaxone", "title": "associated", "to": "calcium gluconate"}, {"from": "ceftriaxone", "title": "associated", "to": "lactulose"}, {"from": "ceftriaxone", "title": "associated", "to": "albumin"}, {"from": "calcium gluconate", "title": "associated", "to": "lactulose"}, {"from": "calcium gluconate", "title": "associated", "to": "albumin"}, {"from": "lactulose", "title": "associated", "to": "albumin"}, {"from": "lactulose", "title": "associated", "to": "chronic cough"}, {"from": "lactulose", "title": "associated", "to": "hcv cirrhosis"}, {"from": "lactulose", "title": "associated", "to": "dysuria"}, {"from": "lactulose", "title": "associated", "to": "leukocytosis"}, {"from": "lactulose", "title": "associated", "to": "morphine sulfate"}, {"from": "lactulose", "title": "associated", "to": "hyponatremia"}, {"from": "lactulose", "title": "associated", "to": "hyperkalemia"}, {"from": "lactulose", "title": "associated", "to": "ruq us"}, {"from": "lactulose", "title": "associated", "to": "ondansetron"}, {"from": "lactulose", "title": "associated", "to": "morphine"}, {"from": "albumin", "title": "associated", "to": "leuk"}, {"from": "albumin", "title": "associated", "to": "ondansetron"}, {"from": "albumin", "title": "associated", "to": "morphine"}, {"from": "abdominal pain nausea vomiting", "title": "associated", "to": "chest pain"}, {"from": "abdominal pain nausea vomiting", "title": "associated", "to": "chills"}, {"from": "chest pain", "title": "associated", "to": "chronic cough"}, {"from": "chest pain", "title": "associated", "to": "chills"}, {"from": "chest pain", "title": "associated", "to": "abdominal distention"}, {"from": "chest pain", "title": "associated", "to": "hyponatremia"}, {"from": "chest pain", "title": "associated", "to": "hyperkalemia"}, {"from": "chest pain", "title": "associated", "to": "forgetfulness"}, {"from": "chest pain", "title": "associated", "to": "abdominal  distention"}, {"from": "chest pain", "title": "associated", "to": "nausea vomiting"}, {"from": "chest pain", "title": "associated", "to": "dysuria"}, {"from": "chronic cough", "title": "associated", "to": "chills"}, {"from": "hcv cirrhosis", "title": "associated", "to": "dysuria"}, {"from": "hcv cirrhosis", "title": "associated", "to": "leukocytosis"}, {"from": "hcv cirrhosis", "title": "associated", "to": "hyponatremia"}, {"from": "hcv cirrhosis", "title": "associated", "to": "hyperkalemia"}, {"from": "hcv cirrhosis", "title": "associated", "to": "pv thrombus"}, {"from": "hcv cirrhosis", "title": "associated", "to": "orthopnea"}, {"from": "hcv cirrhosis", "title": "associated", "to": "food poisoning"}, {"from": "hcv cirrhosis", "title": "associated", "to": "hemetesis"}, {"from": "hcv cirrhosis", "title": "associated", "to": "hemoptysis"}, {"from": "hcv cirrhosis", "title": "associated", "to": "hematuria"}, {"from": "abd  pain", "title": "associated", "to": "abdominal pain"}, {"from": "abd  pain", "title": "associated", "to": "fever chills"}, {"from": "abd  pain", "title": "associated", "to": "shortness of breath  cough"}, {"from": "abd  pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "fever chills"}, {"from": "abdominal pain", "title": "associated", "to": "shortness of breath  cough"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "fever chills", "title": "associated", "to": "shortness of breath  cough"}, {"from": "fever chills", "title": "associated", "to": "dysuria"}, {"from": "fever chills", "title": "associated", "to": "leukocytosis"}, {"from": "shortness of breath  cough", "title": "associated", "to": "dysuria"}, {"from": "dysuria", "title": "associated", "to": "leukocytosis"}, {"from": "dysuria", "title": "associated", "to": "abdominal distention"}, {"from": "dysuria", "title": "associated", "to": "hyponatremia"}, {"from": "dysuria", "title": "associated", "to": "hyperkalemia"}, {"from": "dysuria", "title": "associated", "to": "forgetfulness"}, {"from": "dysuria", "title": "associated", "to": "ondansetron"}, {"from": "dysuria", "title": "associated", "to": "abdominal  distention"}, {"from": "dysuria", "title": "associated", "to": "nausea vomiting"}, {"from": "dysuria", "title": "associated", "to": "orthopnea"}, {"from": "dysuria", "title": "associated", "to": "food poisoning"}, {"from": "dysuria", "title": "associated", "to": "hemetesis"}, {"from": "dysuria", "title": "associated", "to": "hemoptysis"}, {"from": "dysuria", "title": "associated", "to": "hematuria"}, {"from": "dysuria", "title": "associated", "to": "abd pain"}, {"from": "dysuria", "title": "associated", "to": "alcohol"}, {"from": "lactate", "title": "associated", "to": "leukocytosis"}, {"from": "lactate", "title": "associated", "to": "wbc"}, {"from": "abdominal distention", "title": "associated", "to": "hyponatremia"}, {"from": "abdominal distention", "title": "associated", "to": "forgetfulness"}, {"from": "abdominal distention", "title": "associated", "to": "abdominal  distention"}, {"from": "hyponatremia", "title": "associated", "to": "hyperkalemia"}, {"from": "hyponatremia", "title": "associated", "to": "forgetfulness"}, {"from": "hyponatremia", "title": "associated", "to": "ondansetron"}, {"from": "hyponatremia", "title": "associated", "to": "abdominal  distention"}, {"from": "hyperkalemia", "title": "associated", "to": "forgetfulness"}, {"from": "hyperkalemia", "title": "associated", "to": "ondansetron"}, {"from": "forgetfulness", "title": "associated", "to": "abdominal  distention"}, {"from": "leuk", "title": "associated", "to": "ruq us"}, {"from": "ruq us", "title": "associated", "to": "pv"}, {"from": "ruq us", "title": "associated", "to": "pv thrombus"}, {"from": "ruq us", "title": "associated", "to": "ondansetron"}, {"from": "ruq us", "title": "associated", "to": "morphine"}, {"from": "pv", "title": "associated", "to": "pv thrombus"}, {"from": "ondansetron", "title": "associated", "to": "morphine"}, {"from": "morphine", "title": "associated", "to": "frequency"}, {"from": "cb ascites", "title": "associated", "to": "ptsd"}, {"from": "cb ascites", "title": "associated", "to": "lasix"}, {"from": "cb ascites", "title": "associated", "to": "fcnv dc"}, {"from": "cb ascites", "title": "associated", "to": "hemetesis"}, {"from": "cb ascites", "title": "associated", "to": "hematuria"}, {"from": "ptsd", "title": "associated", "to": "pt"}, {"from": "ptsd", "title": "associated", "to": "lasix"}, {"from": "ptsd", "title": "associated", "to": "fcnv dc"}, {"from": "ptsd", "title": "associated", "to": "hemetesis"}, {"from": "abd  distension", "title": "associated", "to": "abd distension"}, {"from": "abd  distension", "title": "associated", "to": "edema"}, {"from": "abd  distension", "title": "associated", "to": "hematuria"}, {"from": "abd  distension", "title": "associated", "to": "abd pain"}, {"from": "pt", "title": "associated", "to": "lasix"}, {"from": "pt", "title": "associated", "to": "fcnv dc"}, {"from": "lasix", "title": "associated", "to": "fcnv dc"}, {"from": "lasix", "title": "associated", "to": "hemetesis"}, {"from": "lasix", "title": "associated", "to": "hemoptysis"}, {"from": "lasix", "title": "associated", "to": "hematuria"}, {"from": "abd distension", "title": "associated", "to": "edema"}, {"from": "abd distension", "title": "associated", "to": "hematuria"}, {"from": "abd distension", "title": "associated", "to": "abd pain"}, {"from": "edema", "title": "associated", "to": "sob"}, {"from": "edema", "title": "associated", "to": "hematuria"}, {"from": "sob", "title": "associated", "to": "hematuria"}, {"from": "sob", "title": "associated", "to": "alcohol"}, {"from": "orthopnea", "title": "associated", "to": "food poisoning"}, {"from": "orthopnea", "title": "associated", "to": "hemetesis"}, {"from": "orthopnea", "title": "associated", "to": "hemoptysis"}, {"from": "orthopnea", "title": "associated", "to": "hematuria"}, {"from": "orthopnea", "title": "associated", "to": "alcohol"}, {"from": "food poisoning", "title": "associated", "to": "hemetesis"}, {"from": "food poisoning", "title": "associated", "to": "hemoptysis"}, {"from": "food poisoning", "title": "associated", "to": "hematuria"}, {"from": "food poisoning", "title": "associated", "to": "alcohol"}, {"from": "hemetesis", "title": "associated", "to": "hemoptysis"}, {"from": "hemetesis", "title": "associated", "to": "hematuria"}, {"from": "hemetesis", "title": "associated", "to": "alcohol"}, {"from": "hemoptysis", "title": "associated", "to": "hematuria"}, {"from": "hemoptysis", "title": "associated", "to": "alcohol"}, {"from": "hematuria", "title": "associated", "to": "abd pain"}, {"from": "hematuria", "title": "associated", "to": "alcohol"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

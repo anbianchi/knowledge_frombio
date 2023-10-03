@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "cervical fusion", "label": "cervical fusion", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "etoh  abuse", "label": "etoh  abuse", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "etoh", "label": "etoh", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "htn", "label": "htn", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hematemesiscoffeeground  emesis", "label": "hematemesiscoffeeground  emesis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "melena", "label": "melena", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "tylenol", "label": "tylenol", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "neck", "label": "neck", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "nausea and vomiting", "label": "nausea and vomiting", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hematemesis", "label": "hematemesis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lightheadedness", "label": "lightheadedness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dizziness", "label": "dizziness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "tachycardia", "label": "tachycardia", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hgb", "label": "hgb", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lipase", "label": "lipase", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "pantoprazole", "label": "pantoprazole", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "ondansetron", "label": "ondansetron", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "morphine", "label": "morphine", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "laceration", "label": "laceration", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "t2", "label": "t2", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "sternal  fracture", "label": "sternal  fracture", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "numbness tingling weakness or loss", "label": "numbness tingling weakness or loss", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "cervical fusion", "title": "associated", "to": "etoh  abuse"}, {"from": "etoh  abuse", "title": "associated", "to": "etoh"}, {"from": "etoh  abuse", "title": "associated", "to": "htn"}, {"from": "etoh  abuse", "title": "associated", "to": "hematemesiscoffeeground  emesis"}, {"from": "etoh  abuse", "title": "associated", "to": "melena"}, {"from": "etoh  abuse", "title": "associated", "to": "nausea and vomiting"}, {"from": "etoh  abuse", "title": "associated", "to": "hematemesis"}, {"from": "etoh  abuse", "title": "associated", "to": "chest pain"}, {"from": "etoh  abuse", "title": "associated", "to": "abdominal pain"}, {"from": "etoh  abuse", "title": "associated", "to": "diarrhea"}, {"from": "etoh  abuse", "title": "associated", "to": "tachycardia"}, {"from": "etoh  abuse", "title": "associated", "to": "pantoprazole"}, {"from": "etoh  abuse", "title": "associated", "to": "ondansetron"}, {"from": "etoh  abuse", "title": "associated", "to": "morphine"}, {"from": "etoh", "title": "associated", "to": "htn"}, {"from": "etoh", "title": "associated", "to": "hematemesiscoffeeground  emesis"}, {"from": "etoh", "title": "associated", "to": "melena"}, {"from": "etoh", "title": "associated", "to": "hematemesis"}, {"from": "etoh", "title": "associated", "to": "chest pain"}, {"from": "etoh", "title": "associated", "to": "diarrhea"}, {"from": "etoh", "title": "associated", "to": "tachycardia"}, {"from": "etoh", "title": "associated", "to": "pantoprazole"}, {"from": "etoh", "title": "associated", "to": "ondansetron"}, {"from": "htn", "title": "associated", "to": "hematemesiscoffeeground  emesis"}, {"from": "htn", "title": "associated", "to": "melena"}, {"from": "htn", "title": "associated", "to": "chest pain"}, {"from": "htn", "title": "associated", "to": "diarrhea"}, {"from": "htn", "title": "associated", "to": "tachycardia"}, {"from": "htn", "title": "associated", "to": "ondansetron"}, {"from": "htn", "title": "associated", "to": "morphine"}, {"from": "nausea", "title": "associated", "to": "hematemesiscoffeeground  emesis"}, {"from": "nausea", "title": "associated", "to": "melena"}, {"from": "nausea", "title": "associated", "to": "nausea and vomiting"}, {"from": "nausea", "title": "associated", "to": "hematemesis"}, {"from": "nausea", "title": "associated", "to": "lightheadedness"}, {"from": "nausea", "title": "associated", "to": "dizziness"}, {"from": "nausea", "title": "associated", "to": "chest pain"}, {"from": "nausea", "title": "associated", "to": "abdominal pain"}, {"from": "nausea", "title": "associated", "to": "diarrhea"}, {"from": "nausea", "title": "associated", "to": "tachycardia"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "melena"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "nausea and vomiting"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "hematemesis"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "lightheadedness"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "dizziness"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "chest pain"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "abdominal pain"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "diarrhea"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "tachycardia"}, {"from": "hematemesiscoffeeground  emesis", "title": "associated", "to": "ondansetron"}, {"from": "melena", "title": "associated", "to": "nausea and vomiting"}, {"from": "melena", "title": "associated", "to": "hematemesis"}, {"from": "melena", "title": "associated", "to": "lightheadedness"}, {"from": "melena", "title": "associated", "to": "dizziness"}, {"from": "melena", "title": "associated", "to": "chest pain"}, {"from": "melena", "title": "associated", "to": "abdominal pain"}, {"from": "melena", "title": "associated", "to": "diarrhea"}, {"from": "melena", "title": "associated", "to": "tachycardia"}, {"from": "melena", "title": "associated", "to": "ondansetron"}, {"from": "melena", "title": "associated", "to": "morphine"}, {"from": "tylenol", "title": "associated", "to": "diarrhea"}, {"from": "tylenol", "title": "associated", "to": "tachycardia"}, {"from": "tylenol", "title": "associated", "to": "pantoprazole"}, {"from": "tylenol", "title": "associated", "to": "ondansetron"}, {"from": "tylenol", "title": "associated", "to": "morphine"}, {"from": "nausea and vomiting", "title": "associated", "to": "hematemesis"}, {"from": "nausea and vomiting", "title": "associated", "to": "lightheadedness"}, {"from": "nausea and vomiting", "title": "associated", "to": "dizziness"}, {"from": "nausea and vomiting", "title": "associated", "to": "chest pain"}, {"from": "nausea and vomiting", "title": "associated", "to": "shortness of breath"}, {"from": "nausea and vomiting", "title": "associated", "to": "abdominal pain"}, {"from": "nausea and vomiting", "title": "associated", "to": "diarrhea"}, {"from": "nausea and vomiting", "title": "associated", "to": "tachycardia"}, {"from": "hematemesis", "title": "associated", "to": "lightheadedness"}, {"from": "hematemesis", "title": "associated", "to": "dizziness"}, {"from": "hematemesis", "title": "associated", "to": "chest pain"}, {"from": "hematemesis", "title": "associated", "to": "abdominal pain"}, {"from": "hematemesis", "title": "associated", "to": "diarrhea"}, {"from": "hematemesis", "title": "associated", "to": "tachycardia"}, {"from": "hematemesis", "title": "associated", "to": "morphine"}, {"from": "lightheadedness", "title": "associated", "to": "dizziness"}, {"from": "lightheadedness", "title": "associated", "to": "chest pain"}, {"from": "lightheadedness", "title": "associated", "to": "shortness of breath"}, {"from": "lightheadedness", "title": "associated", "to": "abdominal pain"}, {"from": "lightheadedness", "title": "associated", "to": "diarrhea"}, {"from": "lightheadedness", "title": "associated", "to": "tachycardia"}, {"from": "dizziness", "title": "associated", "to": "chest pain"}, {"from": "dizziness", "title": "associated", "to": "shortness of breath"}, {"from": "dizziness", "title": "associated", "to": "abdominal pain"}, {"from": "dizziness", "title": "associated", "to": "diarrhea"}, {"from": "dizziness", "title": "associated", "to": "tachycardia"}, {"from": "chest pain", "title": "associated", "to": "shortness of breath"}, {"from": "chest pain", "title": "associated", "to": "abdominal pain"}, {"from": "chest pain", "title": "associated", "to": "diarrhea"}, {"from": "chest pain", "title": "associated", "to": "tachycardia"}, {"from": "abdominal pain", "title": "associated", "to": "diarrhea"}, {"from": "abdominal pain", "title": "associated", "to": "tachycardia"}, {"from": "diarrhea", "title": "associated", "to": "tachycardia"}, {"from": "diarrhea", "title": "associated", "to": "pantoprazole"}, {"from": "diarrhea", "title": "associated", "to": "ondansetron"}, {"from": "diarrhea", "title": "associated", "to": "morphine"}, {"from": "tachycardia", "title": "associated", "to": "pantoprazole"}, {"from": "tachycardia", "title": "associated", "to": "ondansetron"}, {"from": "tachycardia", "title": "associated", "to": "morphine"}, {"from": "pantoprazole", "title": "associated", "to": "ondansetron"}, {"from": "pantoprazole", "title": "associated", "to": "morphine"}, {"from": "ondansetron", "title": "associated", "to": "morphine"}, {"from": "laceration", "title": "associated", "to": "sternal  fracture"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
