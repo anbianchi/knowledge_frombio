@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "stage iv nonsmall  cell lung cancer", "label": "stage iv nonsmall  cell lung cancer", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "cad", "label": "cad", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "ckd", "label": "ckd", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "melena", "label": "melena", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "cough", "label": "cough", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "transfusion  dependent anemia", "label": "transfusion  dependent anemia", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lactate", "label": "lactate", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "levaquin", "label": "levaquin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "ceftriaxone", "label": "ceftriaxone", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "l lower lobe collapse", "label": "l lower lobe collapse", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "sinus tach", "label": "sinus tach", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "memory loss", "label": "memory loss", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "codeine", "label": "codeine", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dypsnea", "label": "dypsnea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "heartburn", "label": "heartburn", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dysphagia", "label": "dysphagia", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "lad", "label": "lad", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cp", "label": "cp", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "diaphoresis", "label": "diaphoresis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "nausea vomiting", "label": "nausea vomiting", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "lightheadedness", "label": "lightheadedness", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "dizziness", "label": "dizziness", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "pneumonia", "label": "pneumonia", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "lbbb", "label": "lbbb", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "plavix", "label": "plavix", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "aspirin", "label": "aspirin", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "stemi", "label": "stemi", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "svg", "label": "svg", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "proximal lad", "label": "proximal lad", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "deep  venous thrombosis", "label": "deep  venous thrombosis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "pulmonary embolism", "label": "pulmonary embolism", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "myalgias joint pains cough", "label": "myalgias joint pains cough", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "hemoptysis", "label": "hemoptysis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "black", "label": "black", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "fevers chills or rigors", "label": "fevers chills or rigors", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "dyspnea on", "label": "dyspnea on", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "paroxysmal nocturnal dyspnea", "label": "paroxysmal nocturnal dyspnea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "orthopnea", "label": "orthopnea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "ankle edema", "label": "ankle edema", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "palpitations syncope", "label": "palpitations syncope", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "presyncope", "label": "presyncope", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "woman", "label": "woman", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "stage iv lung adenocarcinoma", "label": "stage iv lung adenocarcinoma", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pemetrexed", "label": "pemetrexed", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cva", "label": "cva", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "fever", "label": "fever", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "acetaminophen", "label": "acetaminophen", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "sore throat", "label": "sore throat", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "nasal congestion", "label": "nasal congestion", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lll consolidation", "label": "lll consolidation", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nsclc  stage iv", "label": "nsclc  stage iv", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fever chills", "label": "fever chills", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "syncope", "label": "syncope", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "wbc", "label": "wbc", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "levofloxacin", "label": "levofloxacin", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "vancomycin", "label": "vancomycin", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "pna", "label": "pna", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "lung cancer", "label": "lung cancer", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fevers chills", "label": "fevers chills", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nausea vomiting abdominal pain diarrhea constipation  melena", "label": "nausea vomiting abdominal pain diarrhea constipation  melena", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hematochezia", "label": "hematochezia", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "orthopnea pnd", "label": "orthopnea pnd", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "lower  extremity edema", "label": "lower  extremity edema", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "urinary frequency urgency", "label": "urinary frequency urgency", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dysuria  lightheadedness gait unsteadiness", "label": "dysuria  lightheadedness gait unsteadiness", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "focal weakness vision", "label": "focal weakness vision", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "rash", "label": "rash", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "stage iv nonsmall  cell lung cancer", "title": "associated", "to": "transfusion  dependent anemia"}, {"from": "cad", "title": "associated", "to": "ckd"}, {"from": "cad", "title": "associated", "to": "melena"}, {"from": "cad", "title": "associated", "to": "transfusion  dependent anemia"}, {"from": "cad", "title": "associated", "to": "ceftriaxone"}, {"from": "cad", "title": "associated", "to": "codeine"}, {"from": "cad", "title": "associated", "to": "dysphagia"}, {"from": "cad", "title": "associated", "to": "lad"}, {"from": "cad", "title": "associated", "to": "cp"}, {"from": "cad", "title": "associated", "to": "pneumonia"}, {"from": "cad", "title": "associated", "to": "lbbb"}, {"from": "cad", "title": "associated", "to": "plavix"}, {"from": "cad", "title": "associated", "to": "aspirin"}, {"from": "cad", "title": "associated", "to": "stemi"}, {"from": "cad", "title": "associated", "to": "svg"}, {"from": "cad", "title": "associated", "to": "pulmonary embolism"}, {"from": "cad", "title": "associated", "to": "hemoptysis"}, {"from": "cad", "title": "associated", "to": "black"}, {"from": "cad", "title": "associated", "to": "presyncope"}, {"from": "ckd", "title": "associated", "to": "levaquin"}, {"from": "ckd", "title": "associated", "to": "ceftriaxone"}, {"from": "ckd", "title": "associated", "to": "codeine"}, {"from": "dyspnea", "title": "associated", "to": "melena"}, {"from": "dyspnea", "title": "associated", "to": "abdominal pain"}, {"from": "dyspnea", "title": "associated", "to": "cough"}, {"from": "dyspnea", "title": "associated", "to": "chest pain"}, {"from": "dyspnea", "title": "associated", "to": "memory loss"}, {"from": "dyspnea", "title": "associated", "to": "dypsnea"}, {"from": "dyspnea", "title": "associated", "to": "nausea"}, {"from": "dyspnea", "title": "associated", "to": "heartburn"}, {"from": "dyspnea", "title": "associated", "to": "dysphagia"}, {"from": "dyspnea", "title": "associated", "to": "diaphoresis"}, {"from": "dyspnea", "title": "associated", "to": "nausea vomiting"}, {"from": "dyspnea", "title": "associated", "to": "lightheadedness"}, {"from": "dyspnea", "title": "associated", "to": "dizziness"}, {"from": "dyspnea", "title": "associated", "to": "pulmonary embolism"}, {"from": "dyspnea", "title": "associated", "to": "myalgias joint pains cough"}, {"from": "dyspnea", "title": "associated", "to": "hemoptysis"}, {"from": "dyspnea", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "dyspnea", "title": "associated", "to": "orthopnea"}, {"from": "dyspnea", "title": "associated", "to": "ankle edema"}, {"from": "dyspnea", "title": "associated", "to": "palpitations syncope"}, {"from": "dyspnea", "title": "associated", "to": "presyncope"}, {"from": "melena", "title": "associated", "to": "abdominal pain"}, {"from": "melena", "title": "associated", "to": "cough"}, {"from": "melena", "title": "associated", "to": "chest pain"}, {"from": "melena", "title": "associated", "to": "transfusion  dependent anemia"}, {"from": "melena", "title": "associated", "to": "memory loss"}, {"from": "melena", "title": "associated", "to": "codeine"}, {"from": "melena", "title": "associated", "to": "dypsnea"}, {"from": "melena", "title": "associated", "to": "nausea"}, {"from": "melena", "title": "associated", "to": "heartburn"}, {"from": "melena", "title": "associated", "to": "dysphagia"}, {"from": "abdominal pain", "title": "associated", "to": "cough"}, {"from": "abdominal pain", "title": "associated", "to": "chest pain"}, {"from": "abdominal pain", "title": "associated", "to": "memory loss"}, {"from": "abdominal pain", "title": "associated", "to": "dypsnea"}, {"from": "abdominal pain", "title": "associated", "to": "nausea"}, {"from": "abdominal pain", "title": "associated", "to": "heartburn"}, {"from": "abdominal pain", "title": "associated", "to": "dysphagia"}, {"from": "cough", "title": "associated", "to": "chest pain"}, {"from": "cough", "title": "associated", "to": "memory loss"}, {"from": "cough", "title": "associated", "to": "dypsnea"}, {"from": "cough", "title": "associated", "to": "nausea"}, {"from": "cough", "title": "associated", "to": "heartburn"}, {"from": "cough", "title": "associated", "to": "dysphagia"}, {"from": "cough", "title": "associated", "to": "diaphoresis"}, {"from": "cough", "title": "associated", "to": "lightheadedness"}, {"from": "cough", "title": "associated", "to": "dizziness"}, {"from": "cough", "title": "associated", "to": "pneumonia"}, {"from": "cough", "title": "associated", "to": "myalgias joint pains cough"}, {"from": "cough", "title": "associated", "to": "hemoptysis"}, {"from": "cough", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "cough", "title": "associated", "to": "orthopnea"}, {"from": "cough", "title": "associated", "to": "palpitations syncope"}, {"from": "cough", "title": "associated", "to": "presyncope"}, {"from": "cough", "title": "associated", "to": "fever chills"}, {"from": "cough", "title": "associated", "to": "syncope"}, {"from": "cough", "title": "associated", "to": "fevers chills"}, {"from": "cough", "title": "associated", "to": "orthopnea pnd"}, {"from": "cough", "title": "associated", "to": "urinary frequency urgency"}, {"from": "cough", "title": "associated", "to": "dysuria  lightheadedness gait unsteadiness"}, {"from": "cough", "title": "associated", "to": "focal weakness vision"}, {"from": "cough", "title": "associated", "to": "headache"}, {"from": "cough", "title": "associated", "to": "rash"}, {"from": "chest pain", "title": "associated", "to": "memory loss"}, {"from": "chest pain", "title": "associated", "to": "dypsnea"}, {"from": "chest pain", "title": "associated", "to": "nausea"}, {"from": "chest pain", "title": "associated", "to": "heartburn"}, {"from": "chest pain", "title": "associated", "to": "dysphagia"}, {"from": "chest pain", "title": "associated", "to": "diaphoresis"}, {"from": "chest pain", "title": "associated", "to": "nausea vomiting"}, {"from": "chest pain", "title": "associated", "to": "lightheadedness"}, {"from": "chest pain", "title": "associated", "to": "dizziness"}, {"from": "chest pain", "title": "associated", "to": "pulmonary embolism"}, {"from": "chest pain", "title": "associated", "to": "hemoptysis"}, {"from": "chest pain", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "chest pain", "title": "associated", "to": "orthopnea"}, {"from": "chest pain", "title": "associated", "to": "ankle edema"}, {"from": "chest pain", "title": "associated", "to": "palpitations syncope"}, {"from": "chest pain", "title": "associated", "to": "presyncope"}, {"from": "chest pain", "title": "associated", "to": "shortness of breath"}, {"from": "chest pain", "title": "associated", "to": "fever chills"}, {"from": "chest pain", "title": "associated", "to": "syncope"}, {"from": "chest pain", "title": "associated", "to": "lung cancer"}, {"from": "chest pain", "title": "associated", "to": "fevers chills"}, {"from": "chest pain", "title": "associated", "to": "nausea vomiting abdominal pain diarrhea constipation  melena"}, {"from": "chest pain", "title": "associated", "to": "hematochezia"}, {"from": "chest pain", "title": "associated", "to": "orthopnea pnd"}, {"from": "chest pain", "title": "associated", "to": "lower  extremity edema"}, {"from": "chest pain", "title": "associated", "to": "urinary frequency urgency"}, {"from": "chest pain", "title": "associated", "to": "dysuria  lightheadedness gait unsteadiness"}, {"from": "chest pain", "title": "associated", "to": "headache"}, {"from": "chest pain", "title": "associated", "to": "rash"}, {"from": "transfusion  dependent anemia", "title": "associated", "to": "memory loss"}, {"from": "transfusion  dependent anemia", "title": "associated", "to": "codeine"}, {"from": "transfusion  dependent anemia", "title": "associated", "to": "dypsnea"}, {"from": "transfusion  dependent anemia", "title": "associated", "to": "dysphagia"}, {"from": "levaquin", "title": "associated", "to": "ceftriaxone"}, {"from": "levaquin", "title": "associated", "to": "codeine"}, {"from": "ceftriaxone", "title": "associated", "to": "codeine"}, {"from": "memory loss", "title": "associated", "to": "codeine"}, {"from": "memory loss", "title": "associated", "to": "dypsnea"}, {"from": "memory loss", "title": "associated", "to": "heartburn"}, {"from": "memory loss", "title": "associated", "to": "dysphagia"}, {"from": "codeine", "title": "associated", "to": "dysphagia"}, {"from": "dypsnea", "title": "associated", "to": "nausea"}, {"from": "dypsnea", "title": "associated", "to": "heartburn"}, {"from": "dypsnea", "title": "associated", "to": "dysphagia"}, {"from": "nausea", "title": "associated", "to": "heartburn"}, {"from": "nausea", "title": "associated", "to": "dysphagia"}, {"from": "heartburn", "title": "associated", "to": "dysphagia"}, {"from": "lad", "title": "associated", "to": "cp"}, {"from": "lad", "title": "associated", "to": "lbbb"}, {"from": "lad", "title": "associated", "to": "stemi"}, {"from": "lad", "title": "associated", "to": "svg"}, {"from": "lad", "title": "associated", "to": "black"}, {"from": "cp", "title": "associated", "to": "lbbb"}, {"from": "cp", "title": "associated", "to": "plavix"}, {"from": "cp", "title": "associated", "to": "aspirin"}, {"from": "cp", "title": "associated", "to": "stemi"}, {"from": "cp", "title": "associated", "to": "svg"}, {"from": "diaphoresis", "title": "associated", "to": "nausea vomiting"}, {"from": "diaphoresis", "title": "associated", "to": "lightheadedness"}, {"from": "diaphoresis", "title": "associated", "to": "dizziness"}, {"from": "diaphoresis", "title": "associated", "to": "myalgias joint pains cough"}, {"from": "diaphoresis", "title": "associated", "to": "hemoptysis"}, {"from": "diaphoresis", "title": "associated", "to": "fevers chills or rigors"}, {"from": "diaphoresis", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "diaphoresis", "title": "associated", "to": "orthopnea"}, {"from": "diaphoresis", "title": "associated", "to": "ankle edema"}, {"from": "diaphoresis", "title": "associated", "to": "palpitations syncope"}, {"from": "diaphoresis", "title": "associated", "to": "presyncope"}, {"from": "nausea vomiting", "title": "associated", "to": "lightheadedness"}, {"from": "nausea vomiting", "title": "associated", "to": "dizziness"}, {"from": "nausea vomiting", "title": "associated", "to": "palpitations syncope"}, {"from": "lightheadedness", "title": "associated", "to": "dizziness"}, {"from": "lightheadedness", "title": "associated", "to": "hemoptysis"}, {"from": "lightheadedness", "title": "associated", "to": "fevers chills or rigors"}, {"from": "lightheadedness", "title": "associated", "to": "palpitations syncope"}, {"from": "lightheadedness", "title": "associated", "to": "presyncope"}, {"from": "lightheadedness", "title": "associated", "to": "shortness of breath"}, {"from": "lightheadedness", "title": "associated", "to": "fever chills"}, {"from": "lightheadedness", "title": "associated", "to": "fevers chills"}, {"from": "lightheadedness", "title": "associated", "to": "nausea vomiting abdominal pain diarrhea constipation  melena"}, {"from": "lightheadedness", "title": "associated", "to": "dysuria  lightheadedness gait unsteadiness"}, {"from": "lightheadedness", "title": "associated", "to": "headache"}, {"from": "lightheadedness", "title": "associated", "to": "rash"}, {"from": "dizziness", "title": "associated", "to": "myalgias joint pains cough"}, {"from": "dizziness", "title": "associated", "to": "hemoptysis"}, {"from": "dizziness", "title": "associated", "to": "fevers chills or rigors"}, {"from": "dizziness", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "dizziness", "title": "associated", "to": "orthopnea"}, {"from": "dizziness", "title": "associated", "to": "palpitations syncope"}, {"from": "dizziness", "title": "associated", "to": "presyncope"}, {"from": "dizziness", "title": "associated", "to": "shortness of breath"}, {"from": "dizziness", "title": "associated", "to": "fever chills"}, {"from": "dizziness", "title": "associated", "to": "syncope"}, {"from": "dizziness", "title": "associated", "to": "fevers chills"}, {"from": "dizziness", "title": "associated", "to": "nausea vomiting abdominal pain diarrhea constipation  melena"}, {"from": "dizziness", "title": "associated", "to": "urinary frequency urgency"}, {"from": "dizziness", "title": "associated", "to": "dysuria  lightheadedness gait unsteadiness"}, {"from": "dizziness", "title": "associated", "to": "headache"}, {"from": "dizziness", "title": "associated", "to": "rash"}, {"from": "pneumonia", "title": "associated", "to": "pulmonary embolism"}, {"from": "pneumonia", "title": "associated", "to": "hemoptysis"}, {"from": "pneumonia", "title": "associated", "to": "black"}, {"from": "pneumonia", "title": "associated", "to": "orthopnea"}, {"from": "pneumonia", "title": "associated", "to": "presyncope"}, {"from": "lbbb", "title": "associated", "to": "plavix"}, {"from": "lbbb", "title": "associated", "to": "stemi"}, {"from": "lbbb", "title": "associated", "to": "svg"}, {"from": "plavix", "title": "associated", "to": "aspirin"}, {"from": "plavix", "title": "associated", "to": "stemi"}, {"from": "plavix", "title": "associated", "to": "svg"}, {"from": "aspirin", "title": "associated", "to": "pulmonary embolism"}, {"from": "aspirin", "title": "associated", "to": "hemoptysis"}, {"from": "aspirin", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "aspirin", "title": "associated", "to": "orthopnea"}, {"from": "aspirin", "title": "associated", "to": "presyncope"}, {"from": "stemi", "title": "associated", "to": "svg"}, {"from": "stemi", "title": "associated", "to": "black"}, {"from": "deep  venous thrombosis", "title": "associated", "to": "pulmonary embolism"}, {"from": "deep  venous thrombosis", "title": "associated", "to": "hemoptysis"}, {"from": "deep  venous thrombosis", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "deep  venous thrombosis", "title": "associated", "to": "presyncope"}, {"from": "pulmonary embolism", "title": "associated", "to": "hemoptysis"}, {"from": "pulmonary embolism", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "pulmonary embolism", "title": "associated", "to": "orthopnea"}, {"from": "pulmonary embolism", "title": "associated", "to": "presyncope"}, {"from": "myalgias joint pains cough", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "myalgias joint pains cough", "title": "associated", "to": "orthopnea"}, {"from": "myalgias joint pains cough", "title": "associated", "to": "palpitations syncope"}, {"from": "myalgias joint pains cough", "title": "associated", "to": "presyncope"}, {"from": "hemoptysis", "title": "associated", "to": "paroxysmal nocturnal dyspnea"}, {"from": "hemoptysis", "title": "associated", "to": "orthopnea"}, {"from": "hemoptysis", "title": "associated", "to": "ankle edema"}, {"from": "hemoptysis", "title": "associated", "to": "palpitations syncope"}, {"from": "hemoptysis", "title": "associated", "to": "presyncope"}, {"from": "fevers chills or rigors", "title": "associated", "to": "palpitations syncope"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "orthopnea"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "palpitations syncope"}, {"from": "paroxysmal nocturnal dyspnea", "title": "associated", "to": "presyncope"}, {"from": "orthopnea", "title": "associated", "to": "ankle edema"}, {"from": "orthopnea", "title": "associated", "to": "palpitations syncope"}, {"from": "orthopnea", "title": "associated", "to": "presyncope"}, {"from": "ankle edema", "title": "associated", "to": "palpitations syncope"}, {"from": "ankle edema", "title": "associated", "to": "presyncope"}, {"from": "palpitations syncope", "title": "associated", "to": "presyncope"}, {"from": "woman", "title": "associated", "to": "fever"}, {"from": "woman", "title": "associated", "to": "nasal congestion"}, {"from": "pemetrexed", "title": "associated", "to": "acetaminophen"}, {"from": "fever", "title": "associated", "to": "sore throat"}, {"from": "fever", "title": "associated", "to": "nasal congestion"}, {"from": "sore throat", "title": "associated", "to": "nasal congestion"}, {"from": "fever chills", "title": "associated", "to": "syncope"}, {"from": "fever chills", "title": "associated", "to": "fevers chills"}, {"from": "fever chills", "title": "associated", "to": "nausea vomiting abdominal pain diarrhea constipation  melena"}, {"from": "fever chills", "title": "associated", "to": "urinary frequency urgency"}, {"from": "fever chills", "title": "associated", "to": "dysuria  lightheadedness gait unsteadiness"}, {"from": "fever chills", "title": "associated", "to": "focal weakness vision"}, {"from": "fever chills", "title": "associated", "to": "headache"}, {"from": "fever chills", "title": "associated", "to": "rash"}, {"from": "syncope", "title": "associated", "to": "pna"}, {"from": "syncope", "title": "associated", "to": "lung cancer"}, {"from": "syncope", "title": "associated", "to": "fevers chills"}, {"from": "syncope", "title": "associated", "to": "hematochezia"}, {"from": "syncope", "title": "associated", "to": "orthopnea pnd"}, {"from": "syncope", "title": "associated", "to": "urinary frequency urgency"}, {"from": "syncope", "title": "associated", "to": "dysuria  lightheadedness gait unsteadiness"}, {"from": "syncope", "title": "associated", "to": "focal weakness vision"}, {"from": "syncope", "title": "associated", "to": "headache"}, {"from": "syncope", "title": "associated", "to": "rash"}, {"from": "levofloxacin", "title": "associated", "to": "vancomycin"}, {"from": "pna", "title": "associated", "to": "lung cancer"}, {"from": "pna", "title": "associated", "to": "hematochezia"}, {"from": "pna", "title": "associated", "to": "orthopnea pnd"}, {"from": "pna", "title": "associated", "to": "rash"}, {"from": "lung cancer", "title": "associated", "to": "hematochezia"}, {"from": "lung cancer", "title": "associated", "to": "orthopnea pnd"}, {"from": "lung cancer", "title": "associated", "to": "rash"}, {"from": "fevers chills", "title": "associated", "to": "nausea vomiting abdominal pain diarrhea constipation  melena"}, {"from": "fevers chills", "title": "associated", "to": "hematochezia"}, {"from": "fevers chills", "title": "associated", "to": "urinary frequency urgency"}, {"from": "fevers chills", "title": "associated", "to": "dysuria  lightheadedness gait unsteadiness"}, {"from": "fevers chills", "title": "associated", "to": "focal weakness vision"}, {"from": "fevers chills", "title": "associated", "to": "headache"}, {"from": "fevers chills", "title": "associated", "to": "rash"}, {"from": "nausea vomiting abdominal pain diarrhea constipation  melena", "title": "associated", "to": "urinary frequency urgency"}, {"from": "nausea vomiting abdominal pain diarrhea constipation  melena", "title": "associated", "to": "dysuria  lightheadedness gait unsteadiness"}, {"from": "nausea vomiting abdominal pain diarrhea constipation  melena", "title": "associated", "to": "headache"}, {"from": "hematochezia", "title": "associated", "to": "orthopnea pnd"}, {"from": "hematochezia", "title": "associated", "to": "urinary frequency urgency"}, {"from": "hematochezia", "title": "associated", "to": "focal weakness vision"}, {"from": "hematochezia", "title": "associated", "to": "rash"}, {"from": "orthopnea pnd", "title": "associated", "to": "urinary frequency urgency"}, {"from": "orthopnea pnd", "title": "associated", "to": "rash"}, {"from": "lower  extremity edema", "title": "associated", "to": "focal weakness vision"}, {"from": "lower  extremity edema", "title": "associated", "to": "rash"}, {"from": "urinary frequency urgency", "title": "associated", "to": "dysuria  lightheadedness gait unsteadiness"}, {"from": "urinary frequency urgency", "title": "associated", "to": "focal weakness vision"}, {"from": "urinary frequency urgency", "title": "associated", "to": "headache"}, {"from": "urinary frequency urgency", "title": "associated", "to": "rash"}, {"from": "dysuria  lightheadedness gait unsteadiness", "title": "associated", "to": "focal weakness vision"}, {"from": "dysuria  lightheadedness gait unsteadiness", "title": "associated", "to": "headache"}, {"from": "dysuria  lightheadedness gait unsteadiness", "title": "associated", "to": "rash"}, {"from": "focal weakness vision", "title": "associated", "to": "headache"}, {"from": "focal weakness vision", "title": "associated", "to": "rash"}, {"from": "headache", "title": "associated", "to": "rash"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

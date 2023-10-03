@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "woman", "label": "woman", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abdominal  pain", "label": "abdominal  pain", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "diverticular flare", "label": "diverticular flare", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abscess", "label": "abscess", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abscess in", "label": "abscess in", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "colon", "label": "colon", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "unasyn", "label": "unasyn", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "polyps", "label": "polyps", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "diverticulosis", "label": "diverticulosis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "f", "label": "f", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "htn", "label": "htn", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "ckd", "label": "ckd", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "diverticulitis", "label": "diverticulitis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "diverticular abscess", "label": "diverticular abscess", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "llq pain", "label": "llq pain", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "acute diverticulitis", "label": "acute diverticulitis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "colonic", "label": "colonic", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "colace", "label": "colace", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "miralax", "label": "miralax", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cipro", "label": "cipro", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "clindamycin", "label": "clindamycin", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "zofran", "label": "zofran", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "vertigo", "label": "vertigo", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "wbc", "label": "wbc", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "uti", "label": "uti", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "patients", "label": "patients", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cp", "label": "cp", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "langerhans", "label": "langerhans", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "langerhans cell histiocytoma eosinophilic  granuloma", "label": "langerhans cell histiocytoma eosinophilic  granuloma", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "woman", "title": "associated", "to": "diverticular flare"}, {"from": "woman", "title": "associated", "to": "unasyn"}, {"from": "abdominal  pain", "title": "associated", "to": "nausea"}, {"from": "abdominal  pain", "title": "associated", "to": "diverticular flare"}, {"from": "abdominal  pain", "title": "associated", "to": "diverticulosis"}, {"from": "patient", "title": "associated", "to": "patients"}, {"from": "nausea", "title": "associated", "to": "diverticular flare"}, {"from": "nausea", "title": "associated", "to": "constipation"}, {"from": "nausea", "title": "associated", "to": "vertigo"}, {"from": "diverticular flare", "title": "associated", "to": "abscess"}, {"from": "diverticular flare", "title": "associated", "to": "abscess in"}, {"from": "diverticular flare", "title": "associated", "to": "colon"}, {"from": "diverticular flare", "title": "associated", "to": "unasyn"}, {"from": "diverticular flare", "title": "associated", "to": "polyps"}, {"from": "diverticular flare", "title": "associated", "to": "diverticulosis"}, {"from": "abscess", "title": "associated", "to": "abscess in"}, {"from": "abscess", "title": "associated", "to": "colon"}, {"from": "abscess", "title": "associated", "to": "polyps"}, {"from": "abscess", "title": "associated", "to": "diverticulosis"}, {"from": "abscess in", "title": "associated", "to": "colon"}, {"from": "abscess in", "title": "associated", "to": "diverticulosis"}, {"from": "colon", "title": "associated", "to": "polyps"}, {"from": "colon", "title": "associated", "to": "diverticulosis"}, {"from": "polyps", "title": "associated", "to": "diverticulosis"}, {"from": "diverticulosis", "title": "associated", "to": "htn"}, {"from": "diverticulosis", "title": "associated", "to": "diverticulitis"}, {"from": "diverticulosis", "title": "associated", "to": "diverticular abscess"}, {"from": "diverticulosis", "title": "associated", "to": "constipation"}, {"from": "diverticulosis", "title": "associated", "to": "acute diverticulitis"}, {"from": "diverticulosis", "title": "associated", "to": "colonic"}, {"from": "diverticulosis", "title": "associated", "to": "vertigo"}, {"from": "diverticulosis", "title": "associated", "to": "langerhans"}, {"from": "diverticulosis", "title": "associated", "to": "langerhans cell histiocytoma eosinophilic  granuloma"}, {"from": "f", "title": "associated", "to": "ckd"}, {"from": "f", "title": "associated", "to": "patients"}, {"from": "f", "title": "associated", "to": "cp"}, {"from": "htn", "title": "associated", "to": "ckd"}, {"from": "htn", "title": "associated", "to": "diverticulitis"}, {"from": "htn", "title": "associated", "to": "constipation"}, {"from": "htn", "title": "associated", "to": "acute diverticulitis"}, {"from": "htn", "title": "associated", "to": "colonic"}, {"from": "htn", "title": "associated", "to": "vertigo"}, {"from": "htn", "title": "associated", "to": "uti"}, {"from": "htn", "title": "associated", "to": "cp"}, {"from": "htn", "title": "associated", "to": "langerhans"}, {"from": "ckd", "title": "associated", "to": "llq pain"}, {"from": "ckd", "title": "associated", "to": "colace"}, {"from": "ckd", "title": "associated", "to": "cipro"}, {"from": "ckd", "title": "associated", "to": "zofran"}, {"from": "ckd", "title": "associated", "to": "uti"}, {"from": "ckd", "title": "associated", "to": "patients"}, {"from": "ckd", "title": "associated", "to": "cp"}, {"from": "diverticulitis", "title": "associated", "to": "diverticular abscess"}, {"from": "diverticulitis", "title": "associated", "to": "constipation"}, {"from": "diverticulitis", "title": "associated", "to": "acute diverticulitis"}, {"from": "diverticulitis", "title": "associated", "to": "colonic"}, {"from": "diverticulitis", "title": "associated", "to": "vertigo"}, {"from": "diverticulitis", "title": "associated", "to": "uti"}, {"from": "diverticulitis", "title": "associated", "to": "langerhans"}, {"from": "diverticulitis", "title": "associated", "to": "langerhans cell histiocytoma eosinophilic  granuloma"}, {"from": "diverticular abscess", "title": "associated", "to": "constipation"}, {"from": "diverticular abscess", "title": "associated", "to": "acute diverticulitis"}, {"from": "diverticular abscess", "title": "associated", "to": "colonic"}, {"from": "diverticular abscess", "title": "associated", "to": "langerhans"}, {"from": "diverticular abscess", "title": "associated", "to": "langerhans cell histiocytoma eosinophilic  granuloma"}, {"from": "llq pain", "title": "associated", "to": "constipation"}, {"from": "llq pain", "title": "associated", "to": "acute diverticulitis"}, {"from": "llq pain", "title": "associated", "to": "cp"}, {"from": "constipation", "title": "associated", "to": "acute diverticulitis"}, {"from": "constipation", "title": "associated", "to": "colonic"}, {"from": "constipation", "title": "associated", "to": "vertigo"}, {"from": "acute diverticulitis", "title": "associated", "to": "colonic"}, {"from": "acute diverticulitis", "title": "associated", "to": "vertigo"}, {"from": "acute diverticulitis", "title": "associated", "to": "patients"}, {"from": "acute diverticulitis", "title": "associated", "to": "cp"}, {"from": "acute diverticulitis", "title": "associated", "to": "langerhans"}, {"from": "colonic", "title": "associated", "to": "vertigo"}, {"from": "colonic", "title": "associated", "to": "langerhans"}, {"from": "colonic", "title": "associated", "to": "langerhans cell histiocytoma eosinophilic  granuloma"}, {"from": "colace", "title": "associated", "to": "cipro"}, {"from": "colace", "title": "associated", "to": "clindamycin"}, {"from": "colace", "title": "associated", "to": "zofran"}, {"from": "colace", "title": "associated", "to": "cp"}, {"from": "cipro", "title": "associated", "to": "clindamycin"}, {"from": "cipro", "title": "associated", "to": "zofran"}, {"from": "cipro", "title": "associated", "to": "cp"}, {"from": "clindamycin", "title": "associated", "to": "zofran"}, {"from": "zofran", "title": "associated", "to": "cp"}, {"from": "vertigo", "title": "associated", "to": "langerhans"}, {"from": "uti", "title": "associated", "to": "cp"}, {"from": "patients", "title": "associated", "to": "cp"}, {"from": "langerhans", "title": "associated", "to": "langerhans cell histiocytoma eosinophilic  granuloma"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#AFEEEE", "font": {"color": "black"}, "id": "woman", "label": "woman", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "hypertension", "label": "hypertension", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "hyperlipidemia", "label": "hyperlipidemia", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "paramedian pontine infarct", "label": "paramedian pontine infarct", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "slowed speech", "label": "slowed speech", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "left facial droop", "label": "left facial droop", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "pt", "label": "pt", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "label": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "vertigo tinnitus", "label": "vertigo tinnitus", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "hearing difficulty", "label": "hearing difficulty", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "focal weakness numbness parasthesiae", "label": "focal weakness numbness parasthesiae", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "bladder incontinence or retention", "label": "bladder incontinence or retention", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "cough", "label": "cough", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "tightness palpitations", "label": "tightness palpitations", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "nausea vomiting", "label": "nausea vomiting", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "arthralgias", "label": "arthralgias", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}, {"color": "#AFEEEE", "font": {"color": "black"}, "id": "rash", "label": "rash", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "woman", "title": "associated", "to": "dysuria"}, {"from": "woman", "title": "associated", "to": "rash"}, {"from": "hypertension", "title": "associated", "to": "hyperlipidemia"}, {"from": "hypertension", "title": "associated", "to": "paramedian pontine infarct"}, {"from": "hypertension", "title": "associated", "to": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness"}, {"from": "hypertension", "title": "associated", "to": "vertigo tinnitus"}, {"from": "hypertension", "title": "associated", "to": "hearing difficulty"}, {"from": "hypertension", "title": "associated", "to": "chest pain"}, {"from": "hypertension", "title": "associated", "to": "diarrhea"}, {"from": "hypertension", "title": "associated", "to": "constipation"}, {"from": "hypertension", "title": "associated", "to": "abdominal pain"}, {"from": "hypertension", "title": "associated", "to": "dysuria"}, {"from": "hypertension", "title": "associated", "to": "arthralgias"}, {"from": "hypertension", "title": "associated", "to": "myalgias"}, {"from": "hypertension", "title": "associated", "to": "rash"}, {"from": "hyperlipidemia", "title": "associated", "to": "paramedian pontine infarct"}, {"from": "hyperlipidemia", "title": "associated", "to": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness"}, {"from": "hyperlipidemia", "title": "associated", "to": "vertigo tinnitus"}, {"from": "hyperlipidemia", "title": "associated", "to": "hearing difficulty"}, {"from": "hyperlipidemia", "title": "associated", "to": "diarrhea"}, {"from": "hyperlipidemia", "title": "associated", "to": "constipation"}, {"from": "hyperlipidemia", "title": "associated", "to": "dysuria"}, {"from": "hyperlipidemia", "title": "associated", "to": "arthralgias"}, {"from": "hyperlipidemia", "title": "associated", "to": "myalgias"}, {"from": "hyperlipidemia", "title": "associated", "to": "rash"}, {"from": "paramedian pontine infarct", "title": "associated", "to": "left facial droop"}, {"from": "paramedian pontine infarct", "title": "associated", "to": "bladder incontinence or retention"}, {"from": "paramedian pontine infarct", "title": "associated", "to": "dysuria"}, {"from": "paramedian pontine infarct", "title": "associated", "to": "arthralgias"}, {"from": "slowed speech", "title": "associated", "to": "left facial droop"}, {"from": "slowed speech", "title": "associated", "to": "focal weakness numbness parasthesiae"}, {"from": "left facial droop", "title": "associated", "to": "focal weakness numbness parasthesiae"}, {"from": "left facial droop", "title": "associated", "to": "arthralgias"}, {"from": "headache", "title": "associated", "to": "vertigo tinnitus"}, {"from": "headache", "title": "associated", "to": "hearing difficulty"}, {"from": "headache", "title": "associated", "to": "cough"}, {"from": "headache", "title": "associated", "to": "chest pain"}, {"from": "headache", "title": "associated", "to": "tightness palpitations"}, {"from": "headache", "title": "associated", "to": "nausea vomiting"}, {"from": "headache", "title": "associated", "to": "diarrhea"}, {"from": "headache", "title": "associated", "to": "constipation"}, {"from": "headache", "title": "associated", "to": "abdominal pain"}, {"from": "headache", "title": "associated", "to": "dysuria"}, {"from": "headache", "title": "associated", "to": "myalgias"}, {"from": "headache", "title": "associated", "to": "rash"}, {"from": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "title": "associated", "to": "vertigo tinnitus"}, {"from": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "title": "associated", "to": "hearing difficulty"}, {"from": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "title": "associated", "to": "focal weakness numbness parasthesiae"}, {"from": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "title": "associated", "to": "diarrhea"}, {"from": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "title": "associated", "to": "constipation"}, {"from": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "title": "associated", "to": "dysuria"}, {"from": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "title": "associated", "to": "arthralgias"}, {"from": "loss of vision blurred vision diplopia dysarthria dysphagia lightheadedness", "title": "associated", "to": "myalgias"}, {"from": "vertigo tinnitus", "title": "associated", "to": "hearing difficulty"}, {"from": "vertigo tinnitus", "title": "associated", "to": "focal weakness numbness parasthesiae"}, {"from": "vertigo tinnitus", "title": "associated", "to": "diarrhea"}, {"from": "vertigo tinnitus", "title": "associated", "to": "constipation"}, {"from": "vertigo tinnitus", "title": "associated", "to": "dysuria"}, {"from": "vertigo tinnitus", "title": "associated", "to": "arthralgias"}, {"from": "vertigo tinnitus", "title": "associated", "to": "myalgias"}, {"from": "vertigo tinnitus", "title": "associated", "to": "rash"}, {"from": "hearing difficulty", "title": "associated", "to": "focal weakness numbness parasthesiae"}, {"from": "hearing difficulty", "title": "associated", "to": "cough"}, {"from": "hearing difficulty", "title": "associated", "to": "chest pain"}, {"from": "hearing difficulty", "title": "associated", "to": "diarrhea"}, {"from": "hearing difficulty", "title": "associated", "to": "constipation"}, {"from": "hearing difficulty", "title": "associated", "to": "dysuria"}, {"from": "hearing difficulty", "title": "associated", "to": "arthralgias"}, {"from": "hearing difficulty", "title": "associated", "to": "myalgias"}, {"from": "hearing difficulty", "title": "associated", "to": "rash"}, {"from": "focal weakness numbness parasthesiae", "title": "associated", "to": "chest pain"}, {"from": "focal weakness numbness parasthesiae", "title": "associated", "to": "tightness palpitations"}, {"from": "focal weakness numbness parasthesiae", "title": "associated", "to": "diarrhea"}, {"from": "focal weakness numbness parasthesiae", "title": "associated", "to": "constipation"}, {"from": "focal weakness numbness parasthesiae", "title": "associated", "to": "dysuria"}, {"from": "focal weakness numbness parasthesiae", "title": "associated", "to": "arthralgias"}, {"from": "focal weakness numbness parasthesiae", "title": "associated", "to": "myalgias"}, {"from": "focal weakness numbness parasthesiae", "title": "associated", "to": "rash"}, {"from": "bladder incontinence or retention", "title": "associated", "to": "chest pain"}, {"from": "bladder incontinence or retention", "title": "associated", "to": "diarrhea"}, {"from": "bladder incontinence or retention", "title": "associated", "to": "constipation"}, {"from": "bladder incontinence or retention", "title": "associated", "to": "dysuria"}, {"from": "bladder incontinence or retention", "title": "associated", "to": "arthralgias"}, {"from": "cough", "title": "associated", "to": "chest pain"}, {"from": "cough", "title": "associated", "to": "diarrhea"}, {"from": "cough", "title": "associated", "to": "constipation"}, {"from": "cough", "title": "associated", "to": "abdominal pain"}, {"from": "cough", "title": "associated", "to": "dysuria"}, {"from": "cough", "title": "associated", "to": "arthralgias"}, {"from": "cough", "title": "associated", "to": "myalgias"}, {"from": "cough", "title": "associated", "to": "rash"}, {"from": "shortness of breath", "title": "associated", "to": "chest pain"}, {"from": "shortness of breath", "title": "associated", "to": "constipation"}, {"from": "chest pain", "title": "associated", "to": "tightness palpitations"}, {"from": "chest pain", "title": "associated", "to": "nausea vomiting"}, {"from": "chest pain", "title": "associated", "to": "diarrhea"}, {"from": "chest pain", "title": "associated", "to": "constipation"}, {"from": "chest pain", "title": "associated", "to": "abdominal pain"}, {"from": "chest pain", "title": "associated", "to": "dysuria"}, {"from": "chest pain", "title": "associated", "to": "arthralgias"}, {"from": "chest pain", "title": "associated", "to": "myalgias"}, {"from": "chest pain", "title": "associated", "to": "rash"}, {"from": "tightness palpitations", "title": "associated", "to": "nausea vomiting"}, {"from": "tightness palpitations", "title": "associated", "to": "diarrhea"}, {"from": "tightness palpitations", "title": "associated", "to": "constipation"}, {"from": "tightness palpitations", "title": "associated", "to": "abdominal pain"}, {"from": "tightness palpitations", "title": "associated", "to": "dysuria"}, {"from": "tightness palpitations", "title": "associated", "to": "myalgias"}, {"from": "nausea vomiting", "title": "associated", "to": "diarrhea"}, {"from": "nausea vomiting", "title": "associated", "to": "constipation"}, {"from": "nausea vomiting", "title": "associated", "to": "abdominal pain"}, {"from": "nausea vomiting", "title": "associated", "to": "dysuria"}, {"from": "nausea vomiting", "title": "associated", "to": "rash"}, {"from": "diarrhea", "title": "associated", "to": "constipation"}, {"from": "diarrhea", "title": "associated", "to": "abdominal pain"}, {"from": "diarrhea", "title": "associated", "to": "dysuria"}, {"from": "diarrhea", "title": "associated", "to": "arthralgias"}, {"from": "diarrhea", "title": "associated", "to": "myalgias"}, {"from": "diarrhea", "title": "associated", "to": "rash"}, {"from": "constipation", "title": "associated", "to": "abdominal pain"}, {"from": "constipation", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "arthralgias"}, {"from": "constipation", "title": "associated", "to": "myalgias"}, {"from": "constipation", "title": "associated", "to": "rash"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "arthralgias"}, {"from": "abdominal pain", "title": "associated", "to": "myalgias"}, {"from": "abdominal pain", "title": "associated", "to": "rash"}, {"from": "dysuria", "title": "associated", "to": "arthralgias"}, {"from": "dysuria", "title": "associated", "to": "myalgias"}, {"from": "dysuria", "title": "associated", "to": "rash"}, {"from": "arthralgias", "title": "associated", "to": "myalgias"}, {"from": "arthralgias", "title": "associated", "to": "rash"}, {"from": "myalgias", "title": "associated", "to": "rash"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

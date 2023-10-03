@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#E6E6FA", "font": {"color": "black"}, "id": "man", "label": "man", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "ischemic cardiomyopathy", "label": "ischemic cardiomyopathy", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "htn a fib", "label": "htn a fib", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "coumadin", "label": "coumadin", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "ho", "label": "ho", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "gastritis", "label": "gastritis", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "anemia", "label": "anemia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "asa", "label": "asa", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "omeprazole", "label": "omeprazole", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hapto", "label": "hapto", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "torsemide", "label": "torsemide", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pt", "label": "pt", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "muscle spasms cramps  bilateral", "label": "muscle spasms cramps  bilateral", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "muscle cramps", "label": "muscle cramps", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "melena", "label": "melena", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abdominal pain nausea", "label": "abdominal pain nausea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "constipation diarrhea", "label": "constipation diarrhea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cp", "label": "cp", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "cough", "label": "cough", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "fevers chills", "label": "fevers chills", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hematuria", "label": "hematuria", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "edema", "label": "edema", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "ischemic cardiomyopathy", "title": "associated", "to": "htn a fib"}, {"from": "ischemic cardiomyopathy", "title": "associated", "to": "coumadin"}, {"from": "ischemic cardiomyopathy", "title": "associated", "to": "gastritis"}, {"from": "ischemic cardiomyopathy", "title": "associated", "to": "anemia"}, {"from": "ischemic cardiomyopathy", "title": "associated", "to": "torsemide"}, {"from": "ischemic cardiomyopathy", "title": "associated", "to": "muscle spasms cramps  bilateral"}, {"from": "ischemic cardiomyopathy", "title": "associated", "to": "muscle cramps"}, {"from": "ischemic cardiomyopathy", "title": "associated", "to": "constipation diarrhea"}, {"from": "ischemic cardiomyopathy", "title": "associated", "to": "dysuria"}, {"from": "ischemic cardiomyopathy", "title": "associated", "to": "hematuria"}, {"from": "htn a fib", "title": "associated", "to": "coumadin"}, {"from": "htn a fib", "title": "associated", "to": "gastritis"}, {"from": "htn a fib", "title": "associated", "to": "anemia"}, {"from": "htn a fib", "title": "associated", "to": "hapto"}, {"from": "htn a fib", "title": "associated", "to": "torsemide"}, {"from": "htn a fib", "title": "associated", "to": "constipation diarrhea"}, {"from": "htn a fib", "title": "associated", "to": "cp"}, {"from": "htn a fib", "title": "associated", "to": "dysuria"}, {"from": "htn a fib", "title": "associated", "to": "hematuria"}, {"from": "coumadin", "title": "associated", "to": "ho"}, {"from": "coumadin", "title": "associated", "to": "gastritis"}, {"from": "coumadin", "title": "associated", "to": "anemia"}, {"from": "coumadin", "title": "associated", "to": "asa"}, {"from": "coumadin", "title": "associated", "to": "omeprazole"}, {"from": "coumadin", "title": "associated", "to": "hapto"}, {"from": "coumadin", "title": "associated", "to": "torsemide"}, {"from": "coumadin", "title": "associated", "to": "pt"}, {"from": "coumadin", "title": "associated", "to": "melena"}, {"from": "coumadin", "title": "associated", "to": "constipation diarrhea"}, {"from": "coumadin", "title": "associated", "to": "cp"}, {"from": "coumadin", "title": "associated", "to": "dysuria"}, {"from": "coumadin", "title": "associated", "to": "hematuria"}, {"from": "ho", "title": "associated", "to": "asa"}, {"from": "ho", "title": "associated", "to": "hapto"}, {"from": "ho", "title": "associated", "to": "pt"}, {"from": "ho", "title": "associated", "to": "cp"}, {"from": "gastritis", "title": "associated", "to": "anemia"}, {"from": "gastritis", "title": "associated", "to": "muscle spasms cramps  bilateral"}, {"from": "gastritis", "title": "associated", "to": "muscle cramps"}, {"from": "gastritis", "title": "associated", "to": "melena"}, {"from": "gastritis", "title": "associated", "to": "abdominal pain nausea"}, {"from": "gastritis", "title": "associated", "to": "constipation diarrhea"}, {"from": "gastritis", "title": "associated", "to": "dysuria"}, {"from": "gastritis", "title": "associated", "to": "hematuria"}, {"from": "anemia", "title": "associated", "to": "asa"}, {"from": "anemia", "title": "associated", "to": "hapto"}, {"from": "anemia", "title": "associated", "to": "muscle spasms cramps  bilateral"}, {"from": "anemia", "title": "associated", "to": "muscle cramps"}, {"from": "anemia", "title": "associated", "to": "melena"}, {"from": "anemia", "title": "associated", "to": "constipation diarrhea"}, {"from": "anemia", "title": "associated", "to": "cp"}, {"from": "anemia", "title": "associated", "to": "fevers chills"}, {"from": "anemia", "title": "associated", "to": "dysuria"}, {"from": "anemia", "title": "associated", "to": "hematuria"}, {"from": "asa", "title": "associated", "to": "hapto"}, {"from": "asa", "title": "associated", "to": "torsemide"}, {"from": "asa", "title": "associated", "to": "melena"}, {"from": "asa", "title": "associated", "to": "cp"}, {"from": "asa", "title": "associated", "to": "hematuria"}, {"from": "omeprazole", "title": "associated", "to": "hapto"}, {"from": "omeprazole", "title": "associated", "to": "torsemide"}, {"from": "omeprazole", "title": "associated", "to": "constipation diarrhea"}, {"from": "hapto", "title": "associated", "to": "torsemide"}, {"from": "hapto", "title": "associated", "to": "pt"}, {"from": "hapto", "title": "associated", "to": "melena"}, {"from": "hapto", "title": "associated", "to": "cp"}, {"from": "hapto", "title": "associated", "to": "hematuria"}, {"from": "torsemide", "title": "associated", "to": "constipation diarrhea"}, {"from": "torsemide", "title": "associated", "to": "hematuria"}, {"from": "pt", "title": "associated", "to": "cp"}, {"from": "muscle spasms cramps  bilateral", "title": "associated", "to": "muscle cramps"}, {"from": "muscle spasms cramps  bilateral", "title": "associated", "to": "melena"}, {"from": "muscle spasms cramps  bilateral", "title": "associated", "to": "abdominal pain nausea"}, {"from": "muscle spasms cramps  bilateral", "title": "associated", "to": "constipation diarrhea"}, {"from": "muscle spasms cramps  bilateral", "title": "associated", "to": "fevers chills"}, {"from": "muscle spasms cramps  bilateral", "title": "associated", "to": "dysuria"}, {"from": "muscle spasms cramps  bilateral", "title": "associated", "to": "hematuria"}, {"from": "muscle spasms cramps  bilateral", "title": "associated", "to": "edema"}, {"from": "muscle cramps", "title": "associated", "to": "melena"}, {"from": "muscle cramps", "title": "associated", "to": "abdominal pain nausea"}, {"from": "muscle cramps", "title": "associated", "to": "constipation diarrhea"}, {"from": "muscle cramps", "title": "associated", "to": "fevers chills"}, {"from": "muscle cramps", "title": "associated", "to": "dysuria"}, {"from": "muscle cramps", "title": "associated", "to": "hematuria"}, {"from": "melena", "title": "associated", "to": "abdominal pain nausea"}, {"from": "melena", "title": "associated", "to": "constipation diarrhea"}, {"from": "melena", "title": "associated", "to": "cp"}, {"from": "melena", "title": "associated", "to": "cough"}, {"from": "melena", "title": "associated", "to": "fevers chills"}, {"from": "melena", "title": "associated", "to": "dysuria"}, {"from": "melena", "title": "associated", "to": "hematuria"}, {"from": "melena", "title": "associated", "to": "edema"}, {"from": "abdominal pain nausea", "title": "associated", "to": "constipation diarrhea"}, {"from": "abdominal pain nausea", "title": "associated", "to": "cough"}, {"from": "abdominal pain nausea", "title": "associated", "to": "fevers chills"}, {"from": "abdominal pain nausea", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain nausea", "title": "associated", "to": "hematuria"}, {"from": "constipation diarrhea", "title": "associated", "to": "cough"}, {"from": "constipation diarrhea", "title": "associated", "to": "fevers chills"}, {"from": "constipation diarrhea", "title": "associated", "to": "dysuria"}, {"from": "constipation diarrhea", "title": "associated", "to": "hematuria"}, {"from": "cp", "title": "associated", "to": "hematuria"}, {"from": "cough", "title": "associated", "to": "fevers chills"}, {"from": "cough", "title": "associated", "to": "dysuria"}, {"from": "cough", "title": "associated", "to": "hematuria"}, {"from": "fevers chills", "title": "associated", "to": "dysuria"}, {"from": "fevers chills", "title": "associated", "to": "hematuria"}, {"from": "dysuria", "title": "associated", "to": "hematuria"}, {"from": "hematuria", "title": "associated", "to": "edema"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

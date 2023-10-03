@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FFC0CB", "font": {"color": "black"}, "id": "sarcoidosis sleep apnea", "label": "sarcoidosis sleep apnea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dementia", "label": "dementia", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "confusion", "label": "confusion", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "headache palpitations", "label": "headache palpitations", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "urinestool incontinence", "label": "urinestool incontinence", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "rigors", "label": "rigors", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "systemic sarcoidosis", "label": "systemic sarcoidosis", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "feverrigors", "label": "feverrigors", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "feversrigors", "label": "feversrigors", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "bronchitis influenza pneumonia", "label": "bronchitis influenza pneumonia", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "toxic metabolic", "label": "toxic metabolic", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "encephalopathy", "label": "encephalopathy", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fevers", "label": "fevers", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "systemic problems", "label": "systemic problems", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "wbc", "label": "wbc", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nitrite", "label": "nitrite", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "acute intracranial injury", "label": "acute intracranial injury", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "prednisone", "label": "prednisone", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "thining of", "label": "thining of", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hpi", "label": "hpi", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "sinus tenderness", "label": "sinus tenderness", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "rhinorrhea", "label": "rhinorrhea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "congestion", "label": "congestion", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "cough", "label": "cough", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nausea vomiting", "label": "nausea vomiting", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "arthralgias", "label": "arthralgias", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "sarcoidosis sleep apnea", "title": "associated", "to": "dementia"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "urinestool incontinence"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "systemic sarcoidosis"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "feversrigors"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "bronchitis influenza pneumonia"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "encephalopathy"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "systemic problems"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "nitrite"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "prednisone"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "rhinorrhea"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "diarrhea"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "constipation"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "dysuria"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "arthralgias"}, {"from": "sarcoidosis sleep apnea", "title": "associated", "to": "myalgias"}, {"from": "dementia", "title": "associated", "to": "confusion"}, {"from": "dementia", "title": "associated", "to": "urinestool incontinence"}, {"from": "dementia", "title": "associated", "to": "systemic sarcoidosis"}, {"from": "dementia", "title": "associated", "to": "feversrigors"}, {"from": "dementia", "title": "associated", "to": "bronchitis influenza pneumonia"}, {"from": "dementia", "title": "associated", "to": "encephalopathy"}, {"from": "dementia", "title": "associated", "to": "fevers"}, {"from": "dementia", "title": "associated", "to": "systemic problems"}, {"from": "dementia", "title": "associated", "to": "nitrite"}, {"from": "dementia", "title": "associated", "to": "prednisone"}, {"from": "dementia", "title": "associated", "to": "rhinorrhea"}, {"from": "dementia", "title": "associated", "to": "diarrhea"}, {"from": "dementia", "title": "associated", "to": "constipation"}, {"from": "dementia", "title": "associated", "to": "dysuria"}, {"from": "dementia", "title": "associated", "to": "arthralgias"}, {"from": "dementia", "title": "associated", "to": "myalgias"}, {"from": "confusion", "title": "associated", "to": "rigors"}, {"from": "confusion", "title": "associated", "to": "feverrigors"}, {"from": "confusion", "title": "associated", "to": "feversrigors"}, {"from": "confusion", "title": "associated", "to": "toxic metabolic"}, {"from": "confusion", "title": "associated", "to": "fevers"}, {"from": "confusion", "title": "associated", "to": "systemic problems"}, {"from": "confusion", "title": "associated", "to": "headache"}, {"from": "confusion", "title": "associated", "to": "rhinorrhea"}, {"from": "confusion", "title": "associated", "to": "congestion"}, {"from": "confusion", "title": "associated", "to": "cough"}, {"from": "confusion", "title": "associated", "to": "nausea vomiting"}, {"from": "confusion", "title": "associated", "to": "diarrhea"}, {"from": "confusion", "title": "associated", "to": "constipation"}, {"from": "confusion", "title": "associated", "to": "abdominal pain"}, {"from": "confusion", "title": "associated", "to": "dysuria"}, {"from": "confusion", "title": "associated", "to": "myalgias"}, {"from": "chest pain", "title": "associated", "to": "headache palpitations"}, {"from": "chest pain", "title": "associated", "to": "rigors"}, {"from": "chest pain", "title": "associated", "to": "encephalopathy"}, {"from": "chest pain", "title": "associated", "to": "fevers"}, {"from": "chest pain", "title": "associated", "to": "systemic problems"}, {"from": "chest pain", "title": "associated", "to": "nitrite"}, {"from": "chest pain", "title": "associated", "to": "headache"}, {"from": "chest pain", "title": "associated", "to": "sinus tenderness"}, {"from": "chest pain", "title": "associated", "to": "rhinorrhea"}, {"from": "chest pain", "title": "associated", "to": "cough"}, {"from": "chest pain", "title": "associated", "to": "shortness of breath"}, {"from": "chest pain", "title": "associated", "to": "nausea vomiting"}, {"from": "chest pain", "title": "associated", "to": "diarrhea"}, {"from": "chest pain", "title": "associated", "to": "constipation"}, {"from": "chest pain", "title": "associated", "to": "abdominal pain"}, {"from": "chest pain", "title": "associated", "to": "dysuria"}, {"from": "chest pain", "title": "associated", "to": "arthralgias"}, {"from": "chest pain", "title": "associated", "to": "myalgias"}, {"from": "headache palpitations", "title": "associated", "to": "headache"}, {"from": "headache palpitations", "title": "associated", "to": "rhinorrhea"}, {"from": "headache palpitations", "title": "associated", "to": "nausea vomiting"}, {"from": "headache palpitations", "title": "associated", "to": "diarrhea"}, {"from": "headache palpitations", "title": "associated", "to": "constipation"}, {"from": "headache palpitations", "title": "associated", "to": "abdominal pain"}, {"from": "headache palpitations", "title": "associated", "to": "dysuria"}, {"from": "headache palpitations", "title": "associated", "to": "myalgias"}, {"from": "urinestool incontinence", "title": "associated", "to": "systemic sarcoidosis"}, {"from": "urinestool incontinence", "title": "associated", "to": "toxic metabolic"}, {"from": "urinestool incontinence", "title": "associated", "to": "encephalopathy"}, {"from": "urinestool incontinence", "title": "associated", "to": "systemic problems"}, {"from": "urinestool incontinence", "title": "associated", "to": "nitrite"}, {"from": "urinestool incontinence", "title": "associated", "to": "prednisone"}, {"from": "urinestool incontinence", "title": "associated", "to": "rhinorrhea"}, {"from": "urinestool incontinence", "title": "associated", "to": "diarrhea"}, {"from": "urinestool incontinence", "title": "associated", "to": "constipation"}, {"from": "urinestool incontinence", "title": "associated", "to": "dysuria"}, {"from": "urinestool incontinence", "title": "associated", "to": "arthralgias"}, {"from": "urinestool incontinence", "title": "associated", "to": "myalgias"}, {"from": "rigors", "title": "associated", "to": "feverrigors"}, {"from": "rigors", "title": "associated", "to": "feversrigors"}, {"from": "rigors", "title": "associated", "to": "toxic metabolic"}, {"from": "rigors", "title": "associated", "to": "encephalopathy"}, {"from": "rigors", "title": "associated", "to": "fevers"}, {"from": "rigors", "title": "associated", "to": "systemic problems"}, {"from": "rigors", "title": "associated", "to": "headache"}, {"from": "rigors", "title": "associated", "to": "sinus tenderness"}, {"from": "rigors", "title": "associated", "to": "rhinorrhea"}, {"from": "rigors", "title": "associated", "to": "congestion"}, {"from": "rigors", "title": "associated", "to": "cough"}, {"from": "rigors", "title": "associated", "to": "nausea vomiting"}, {"from": "rigors", "title": "associated", "to": "diarrhea"}, {"from": "rigors", "title": "associated", "to": "constipation"}, {"from": "rigors", "title": "associated", "to": "abdominal pain"}, {"from": "rigors", "title": "associated", "to": "dysuria"}, {"from": "rigors", "title": "associated", "to": "arthralgias"}, {"from": "rigors", "title": "associated", "to": "myalgias"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "feversrigors"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "bronchitis influenza pneumonia"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "encephalopathy"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "fevers"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "systemic problems"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "nitrite"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "prednisone"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "rhinorrhea"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "diarrhea"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "constipation"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "dysuria"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "arthralgias"}, {"from": "systemic sarcoidosis", "title": "associated", "to": "myalgias"}, {"from": "feverrigors", "title": "associated", "to": "feversrigors"}, {"from": "feverrigors", "title": "associated", "to": "bronchitis influenza pneumonia"}, {"from": "feverrigors", "title": "associated", "to": "toxic metabolic"}, {"from": "feverrigors", "title": "associated", "to": "encephalopathy"}, {"from": "feverrigors", "title": "associated", "to": "fevers"}, {"from": "feverrigors", "title": "associated", "to": "systemic problems"}, {"from": "feverrigors", "title": "associated", "to": "rhinorrhea"}, {"from": "feverrigors", "title": "associated", "to": "congestion"}, {"from": "feverrigors", "title": "associated", "to": "diarrhea"}, {"from": "feverrigors", "title": "associated", "to": "constipation"}, {"from": "feversrigors", "title": "associated", "to": "bronchitis influenza pneumonia"}, {"from": "feversrigors", "title": "associated", "to": "toxic metabolic"}, {"from": "feversrigors", "title": "associated", "to": "encephalopathy"}, {"from": "feversrigors", "title": "associated", "to": "fevers"}, {"from": "feversrigors", "title": "associated", "to": "systemic problems"}, {"from": "feversrigors", "title": "associated", "to": "hpi"}, {"from": "feversrigors", "title": "associated", "to": "rhinorrhea"}, {"from": "feversrigors", "title": "associated", "to": "congestion"}, {"from": "feversrigors", "title": "associated", "to": "nausea vomiting"}, {"from": "feversrigors", "title": "associated", "to": "diarrhea"}, {"from": "feversrigors", "title": "associated", "to": "constipation"}, {"from": "feversrigors", "title": "associated", "to": "abdominal pain"}, {"from": "feversrigors", "title": "associated", "to": "dysuria"}, {"from": "feversrigors", "title": "associated", "to": "arthralgias"}, {"from": "feversrigors", "title": "associated", "to": "myalgias"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "encephalopathy"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "fevers"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "systemic problems"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "nitrite"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "rhinorrhea"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "diarrhea"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "constipation"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "dysuria"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "arthralgias"}, {"from": "bronchitis influenza pneumonia", "title": "associated", "to": "myalgias"}, {"from": "toxic metabolic", "title": "associated", "to": "encephalopathy"}, {"from": "toxic metabolic", "title": "associated", "to": "fevers"}, {"from": "toxic metabolic", "title": "associated", "to": "systemic problems"}, {"from": "toxic metabolic", "title": "associated", "to": "nitrite"}, {"from": "toxic metabolic", "title": "associated", "to": "rhinorrhea"}, {"from": "toxic metabolic", "title": "associated", "to": "diarrhea"}, {"from": "encephalopathy", "title": "associated", "to": "fevers"}, {"from": "encephalopathy", "title": "associated", "to": "systemic problems"}, {"from": "encephalopathy", "title": "associated", "to": "nitrite"}, {"from": "encephalopathy", "title": "associated", "to": "prednisone"}, {"from": "encephalopathy", "title": "associated", "to": "sinus tenderness"}, {"from": "encephalopathy", "title": "associated", "to": "rhinorrhea"}, {"from": "encephalopathy", "title": "associated", "to": "diarrhea"}, {"from": "encephalopathy", "title": "associated", "to": "constipation"}, {"from": "encephalopathy", "title": "associated", "to": "abdominal pain"}, {"from": "encephalopathy", "title": "associated", "to": "dysuria"}, {"from": "encephalopathy", "title": "associated", "to": "arthralgias"}, {"from": "encephalopathy", "title": "associated", "to": "myalgias"}, {"from": "fevers", "title": "associated", "to": "systemic problems"}, {"from": "fevers", "title": "associated", "to": "rhinorrhea"}, {"from": "fevers", "title": "associated", "to": "congestion"}, {"from": "fevers", "title": "associated", "to": "cough"}, {"from": "fevers", "title": "associated", "to": "nausea vomiting"}, {"from": "fevers", "title": "associated", "to": "diarrhea"}, {"from": "fevers", "title": "associated", "to": "constipation"}, {"from": "fevers", "title": "associated", "to": "abdominal pain"}, {"from": "fevers", "title": "associated", "to": "dysuria"}, {"from": "fevers", "title": "associated", "to": "arthralgias"}, {"from": "fevers", "title": "associated", "to": "myalgias"}, {"from": "systemic problems", "title": "associated", "to": "nitrite"}, {"from": "systemic problems", "title": "associated", "to": "sinus tenderness"}, {"from": "systemic problems", "title": "associated", "to": "rhinorrhea"}, {"from": "systemic problems", "title": "associated", "to": "congestion"}, {"from": "systemic problems", "title": "associated", "to": "diarrhea"}, {"from": "systemic problems", "title": "associated", "to": "constipation"}, {"from": "systemic problems", "title": "associated", "to": "abdominal pain"}, {"from": "systemic problems", "title": "associated", "to": "dysuria"}, {"from": "systemic problems", "title": "associated", "to": "arthralgias"}, {"from": "systemic problems", "title": "associated", "to": "myalgias"}, {"from": "nitrite", "title": "associated", "to": "prednisone"}, {"from": "nitrite", "title": "associated", "to": "rhinorrhea"}, {"from": "nitrite", "title": "associated", "to": "diarrhea"}, {"from": "nitrite", "title": "associated", "to": "constipation"}, {"from": "nitrite", "title": "associated", "to": "dysuria"}, {"from": "nitrite", "title": "associated", "to": "arthralgias"}, {"from": "nitrite", "title": "associated", "to": "myalgias"}, {"from": "prednisone", "title": "associated", "to": "rhinorrhea"}, {"from": "prednisone", "title": "associated", "to": "diarrhea"}, {"from": "prednisone", "title": "associated", "to": "constipation"}, {"from": "prednisone", "title": "associated", "to": "arthralgias"}, {"from": "headache", "title": "associated", "to": "rhinorrhea"}, {"from": "headache", "title": "associated", "to": "congestion"}, {"from": "headache", "title": "associated", "to": "cough"}, {"from": "headache", "title": "associated", "to": "nausea vomiting"}, {"from": "headache", "title": "associated", "to": "diarrhea"}, {"from": "headache", "title": "associated", "to": "constipation"}, {"from": "headache", "title": "associated", "to": "abdominal pain"}, {"from": "headache", "title": "associated", "to": "dysuria"}, {"from": "headache", "title": "associated", "to": "myalgias"}, {"from": "sinus tenderness", "title": "associated", "to": "rhinorrhea"}, {"from": "sinus tenderness", "title": "associated", "to": "diarrhea"}, {"from": "sinus tenderness", "title": "associated", "to": "constipation"}, {"from": "sinus tenderness", "title": "associated", "to": "abdominal pain"}, {"from": "sinus tenderness", "title": "associated", "to": "arthralgias"}, {"from": "sinus tenderness", "title": "associated", "to": "myalgias"}, {"from": "rhinorrhea", "title": "associated", "to": "congestion"}, {"from": "rhinorrhea", "title": "associated", "to": "cough"}, {"from": "rhinorrhea", "title": "associated", "to": "nausea vomiting"}, {"from": "rhinorrhea", "title": "associated", "to": "diarrhea"}, {"from": "rhinorrhea", "title": "associated", "to": "constipation"}, {"from": "rhinorrhea", "title": "associated", "to": "abdominal pain"}, {"from": "rhinorrhea", "title": "associated", "to": "dysuria"}, {"from": "rhinorrhea", "title": "associated", "to": "arthralgias"}, {"from": "rhinorrhea", "title": "associated", "to": "myalgias"}, {"from": "congestion", "title": "associated", "to": "cough"}, {"from": "congestion", "title": "associated", "to": "constipation"}, {"from": "cough", "title": "associated", "to": "diarrhea"}, {"from": "cough", "title": "associated", "to": "constipation"}, {"from": "cough", "title": "associated", "to": "abdominal pain"}, {"from": "cough", "title": "associated", "to": "dysuria"}, {"from": "cough", "title": "associated", "to": "arthralgias"}, {"from": "cough", "title": "associated", "to": "myalgias"}, {"from": "shortness of breath", "title": "associated", "to": "constipation"}, {"from": "nausea vomiting", "title": "associated", "to": "diarrhea"}, {"from": "nausea vomiting", "title": "associated", "to": "constipation"}, {"from": "nausea vomiting", "title": "associated", "to": "abdominal pain"}, {"from": "nausea vomiting", "title": "associated", "to": "dysuria"}, {"from": "diarrhea", "title": "associated", "to": "constipation"}, {"from": "diarrhea", "title": "associated", "to": "abdominal pain"}, {"from": "diarrhea", "title": "associated", "to": "dysuria"}, {"from": "diarrhea", "title": "associated", "to": "arthralgias"}, {"from": "diarrhea", "title": "associated", "to": "myalgias"}, {"from": "constipation", "title": "associated", "to": "abdominal pain"}, {"from": "constipation", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "arthralgias"}, {"from": "constipation", "title": "associated", "to": "myalgias"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "arthralgias"}, {"from": "abdominal pain", "title": "associated", "to": "myalgias"}, {"from": "dysuria", "title": "associated", "to": "arthralgias"}, {"from": "dysuria", "title": "associated", "to": "myalgias"}, {"from": "arthralgias", "title": "associated", "to": "myalgias"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

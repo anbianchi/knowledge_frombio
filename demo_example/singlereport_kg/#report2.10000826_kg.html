@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FFDAB9", "font": {"color": "black"}, "id": "alcoholic hepatitis", "label": "alcoholic hepatitis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "ascites", "label": "ascites", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "fevers", "label": "fevers", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "leukocytosis", "label": "leukocytosis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "hepatitis", "label": "hepatitis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "abdominal distention", "label": "abdominal distention", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "fever", "label": "fever", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "sodium", "label": "sodium", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "alcohol", "label": "alcohol", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "ativan", "label": "ativan", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "morphine", "label": "morphine", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "tylenol", "label": "tylenol", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "ondansetron", "label": "ondansetron", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "lorazeman", "label": "lorazeman", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "ceftriaxone", "label": "ceftriaxone", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "sbp", "label": "sbp", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "encephalopathic", "label": "encephalopathic", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cough", "label": "cough", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "dysuria  diarrhea", "label": "dysuria  diarrhea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "rash", "label": "rash", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "chills", "label": "chills", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "sinus tenderness", "label": "sinus tenderness", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "rhinorrhea", "label": "rhinorrhea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "congestion", "label": "congestion", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "chest pain or tightness palpitations", "label": "chest pain or tightness palpitations", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cough shortness of breath", "label": "cough shortness of breath", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "wheezes", "label": "wheezes", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "nausea  vomiting", "label": "nausea  vomiting", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "diarrhea constipation", "label": "diarrhea constipation", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "arthralgias", "label": "arthralgias", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "rashes", "label": "rashes", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "skin breakdown", "label": "skin breakdown", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "numbnesstingling in", "label": "numbnesstingling in", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "depression", "label": "depression", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "anxiety", "label": "anxiety", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "alcoholic hepatitis", "title": "associated", "to": "leukocytosis"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "hepatitis"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "alcohol"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "encephalopathic"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "rash"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "rhinorrhea"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "diarrhea constipation"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "dysuria"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "arthralgias"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "myalgias"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "rashes"}, {"from": "alcoholic hepatitis", "title": "associated", "to": "depression"}, {"from": "ascites", "title": "associated", "to": "fevers"}, {"from": "ascites", "title": "associated", "to": "leukocytosis"}, {"from": "ascites", "title": "associated", "to": "abdominal distention"}, {"from": "ascites", "title": "associated", "to": "alcohol"}, {"from": "ascites", "title": "associated", "to": "encephalopathic"}, {"from": "ascites", "title": "associated", "to": "rash"}, {"from": "ascites", "title": "associated", "to": "sinus tenderness"}, {"from": "ascites", "title": "associated", "to": "rhinorrhea"}, {"from": "ascites", "title": "associated", "to": "congestion"}, {"from": "ascites", "title": "associated", "to": "skin breakdown"}, {"from": "fevers", "title": "associated", "to": "leukocytosis"}, {"from": "fevers", "title": "associated", "to": "abdominal distention"}, {"from": "fevers", "title": "associated", "to": "fever"}, {"from": "fevers", "title": "associated", "to": "nausea"}, {"from": "fevers", "title": "associated", "to": "encephalopathic"}, {"from": "fevers", "title": "associated", "to": "cough"}, {"from": "fevers", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "fevers", "title": "associated", "to": "rash"}, {"from": "fevers", "title": "associated", "to": "chills"}, {"from": "fevers", "title": "associated", "to": "rhinorrhea"}, {"from": "fevers", "title": "associated", "to": "congestion"}, {"from": "fevers", "title": "associated", "to": "nausea  vomiting"}, {"from": "fevers", "title": "associated", "to": "diarrhea constipation"}, {"from": "fevers", "title": "associated", "to": "dysuria"}, {"from": "fevers", "title": "associated", "to": "arthralgias"}, {"from": "fevers", "title": "associated", "to": "myalgias"}, {"from": "fevers", "title": "associated", "to": "rashes"}, {"from": "fevers", "title": "associated", "to": "skin breakdown"}, {"from": "leukocytosis", "title": "associated", "to": "hepatitis"}, {"from": "leukocytosis", "title": "associated", "to": "abdominal distention"}, {"from": "leukocytosis", "title": "associated", "to": "fever"}, {"from": "leukocytosis", "title": "associated", "to": "ativan"}, {"from": "leukocytosis", "title": "associated", "to": "morphine"}, {"from": "leukocytosis", "title": "associated", "to": "tylenol"}, {"from": "leukocytosis", "title": "associated", "to": "ondansetron"}, {"from": "leukocytosis", "title": "associated", "to": "lorazeman"}, {"from": "leukocytosis", "title": "associated", "to": "ceftriaxone"}, {"from": "leukocytosis", "title": "associated", "to": "sbp"}, {"from": "leukocytosis", "title": "associated", "to": "encephalopathic"}, {"from": "leukocytosis", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "leukocytosis", "title": "associated", "to": "rash"}, {"from": "leukocytosis", "title": "associated", "to": "chills"}, {"from": "leukocytosis", "title": "associated", "to": "sinus tenderness"}, {"from": "leukocytosis", "title": "associated", "to": "rhinorrhea"}, {"from": "leukocytosis", "title": "associated", "to": "diarrhea constipation"}, {"from": "leukocytosis", "title": "associated", "to": "dysuria"}, {"from": "leukocytosis", "title": "associated", "to": "arthralgias"}, {"from": "leukocytosis", "title": "associated", "to": "myalgias"}, {"from": "leukocytosis", "title": "associated", "to": "rashes"}, {"from": "leukocytosis", "title": "associated", "to": "skin breakdown"}, {"from": "hepatitis", "title": "associated", "to": "alcohol"}, {"from": "hepatitis", "title": "associated", "to": "encephalopathic"}, {"from": "hepatitis", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "hepatitis", "title": "associated", "to": "rash"}, {"from": "hepatitis", "title": "associated", "to": "rhinorrhea"}, {"from": "hepatitis", "title": "associated", "to": "diarrhea constipation"}, {"from": "hepatitis", "title": "associated", "to": "dysuria"}, {"from": "hepatitis", "title": "associated", "to": "arthralgias"}, {"from": "hepatitis", "title": "associated", "to": "myalgias"}, {"from": "hepatitis", "title": "associated", "to": "rashes"}, {"from": "hepatitis", "title": "associated", "to": "depression"}, {"from": "abdominal distention", "title": "associated", "to": "fever"}, {"from": "abdominal distention", "title": "associated", "to": "nausea"}, {"from": "abdominal distention", "title": "associated", "to": "encephalopathic"}, {"from": "abdominal distention", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "abdominal distention", "title": "associated", "to": "rash"}, {"from": "abdominal distention", "title": "associated", "to": "chills"}, {"from": "abdominal distention", "title": "associated", "to": "sinus tenderness"}, {"from": "abdominal distention", "title": "associated", "to": "rhinorrhea"}, {"from": "abdominal distention", "title": "associated", "to": "diarrhea constipation"}, {"from": "abdominal distention", "title": "associated", "to": "dysuria"}, {"from": "abdominal distention", "title": "associated", "to": "arthralgias"}, {"from": "abdominal distention", "title": "associated", "to": "rashes"}, {"from": "abdominal distention", "title": "associated", "to": "skin breakdown"}, {"from": "fever", "title": "associated", "to": "alcohol"}, {"from": "fever", "title": "associated", "to": "nausea"}, {"from": "fever", "title": "associated", "to": "encephalopathic"}, {"from": "fever", "title": "associated", "to": "cough"}, {"from": "fever", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "fever", "title": "associated", "to": "rash"}, {"from": "fever", "title": "associated", "to": "chills"}, {"from": "fever", "title": "associated", "to": "headache"}, {"from": "fever", "title": "associated", "to": "sinus tenderness"}, {"from": "fever", "title": "associated", "to": "rhinorrhea"}, {"from": "fever", "title": "associated", "to": "congestion"}, {"from": "fever", "title": "associated", "to": "diarrhea constipation"}, {"from": "fever", "title": "associated", "to": "dysuria"}, {"from": "fever", "title": "associated", "to": "myalgias"}, {"from": "fever", "title": "associated", "to": "rashes"}, {"from": "fever", "title": "associated", "to": "skin breakdown"}, {"from": "alcohol", "title": "associated", "to": "lorazeman"}, {"from": "alcohol", "title": "associated", "to": "encephalopathic"}, {"from": "alcohol", "title": "associated", "to": "cough"}, {"from": "alcohol", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "alcohol", "title": "associated", "to": "rash"}, {"from": "alcohol", "title": "associated", "to": "rhinorrhea"}, {"from": "alcohol", "title": "associated", "to": "congestion"}, {"from": "alcohol", "title": "associated", "to": "diarrhea constipation"}, {"from": "alcohol", "title": "associated", "to": "dysuria"}, {"from": "alcohol", "title": "associated", "to": "arthralgias"}, {"from": "alcohol", "title": "associated", "to": "myalgias"}, {"from": "alcohol", "title": "associated", "to": "depression"}, {"from": "alcohol", "title": "associated", "to": "anxiety"}, {"from": "ativan", "title": "associated", "to": "morphine"}, {"from": "ativan", "title": "associated", "to": "tylenol"}, {"from": "ativan", "title": "associated", "to": "ondansetron"}, {"from": "ativan", "title": "associated", "to": "lorazeman"}, {"from": "ativan", "title": "associated", "to": "ceftriaxone"}, {"from": "ativan", "title": "associated", "to": "sbp"}, {"from": "ativan", "title": "associated", "to": "encephalopathic"}, {"from": "ativan", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "ativan", "title": "associated", "to": "rhinorrhea"}, {"from": "ativan", "title": "associated", "to": "diarrhea constipation"}, {"from": "ativan", "title": "associated", "to": "arthralgias"}, {"from": "ativan", "title": "associated", "to": "skin breakdown"}, {"from": "morphine", "title": "associated", "to": "tylenol"}, {"from": "morphine", "title": "associated", "to": "ondansetron"}, {"from": "morphine", "title": "associated", "to": "lorazeman"}, {"from": "morphine", "title": "associated", "to": "ceftriaxone"}, {"from": "morphine", "title": "associated", "to": "rhinorrhea"}, {"from": "morphine", "title": "associated", "to": "diarrhea constipation"}, {"from": "morphine", "title": "associated", "to": "skin breakdown"}, {"from": "tylenol", "title": "associated", "to": "ondansetron"}, {"from": "tylenol", "title": "associated", "to": "lorazeman"}, {"from": "tylenol", "title": "associated", "to": "ceftriaxone"}, {"from": "ondansetron", "title": "associated", "to": "lorazeman"}, {"from": "ondansetron", "title": "associated", "to": "ceftriaxone"}, {"from": "ondansetron", "title": "associated", "to": "encephalopathic"}, {"from": "ondansetron", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "ondansetron", "title": "associated", "to": "rhinorrhea"}, {"from": "ondansetron", "title": "associated", "to": "diarrhea constipation"}, {"from": "ondansetron", "title": "associated", "to": "dysuria"}, {"from": "ondansetron", "title": "associated", "to": "arthralgias"}, {"from": "ondansetron", "title": "associated", "to": "myalgias"}, {"from": "nausea", "title": "associated", "to": "cough"}, {"from": "nausea", "title": "associated", "to": "rash"}, {"from": "nausea", "title": "associated", "to": "chills"}, {"from": "nausea", "title": "associated", "to": "headache"}, {"from": "nausea", "title": "associated", "to": "rhinorrhea"}, {"from": "nausea", "title": "associated", "to": "congestion"}, {"from": "nausea", "title": "associated", "to": "nausea  vomiting"}, {"from": "nausea", "title": "associated", "to": "diarrhea constipation"}, {"from": "nausea", "title": "associated", "to": "dysuria"}, {"from": "nausea", "title": "associated", "to": "myalgias"}, {"from": "lorazeman", "title": "associated", "to": "ceftriaxone"}, {"from": "lorazeman", "title": "associated", "to": "encephalopathic"}, {"from": "lorazeman", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "lorazeman", "title": "associated", "to": "rash"}, {"from": "lorazeman", "title": "associated", "to": "rhinorrhea"}, {"from": "lorazeman", "title": "associated", "to": "diarrhea constipation"}, {"from": "lorazeman", "title": "associated", "to": "dysuria"}, {"from": "lorazeman", "title": "associated", "to": "arthralgias"}, {"from": "ceftriaxone", "title": "associated", "to": "encephalopathic"}, {"from": "ceftriaxone", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "ceftriaxone", "title": "associated", "to": "rhinorrhea"}, {"from": "ceftriaxone", "title": "associated", "to": "diarrhea constipation"}, {"from": "ceftriaxone", "title": "associated", "to": "arthralgias"}, {"from": "encephalopathic", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "encephalopathic", "title": "associated", "to": "rash"}, {"from": "encephalopathic", "title": "associated", "to": "sinus tenderness"}, {"from": "encephalopathic", "title": "associated", "to": "rhinorrhea"}, {"from": "encephalopathic", "title": "associated", "to": "diarrhea constipation"}, {"from": "encephalopathic", "title": "associated", "to": "dysuria"}, {"from": "encephalopathic", "title": "associated", "to": "arthralgias"}, {"from": "encephalopathic", "title": "associated", "to": "myalgias"}, {"from": "encephalopathic", "title": "associated", "to": "rashes"}, {"from": "encephalopathic", "title": "associated", "to": "skin breakdown"}, {"from": "encephalopathic", "title": "associated", "to": "depression"}, {"from": "cough", "title": "associated", "to": "dysuria  diarrhea"}, {"from": "cough", "title": "associated", "to": "rash"}, {"from": "cough", "title": "associated", "to": "chills"}, {"from": "cough", "title": "associated", "to": "headache"}, {"from": "cough", "title": "associated", "to": "rhinorrhea"}, {"from": "cough", "title": "associated", "to": "congestion"}, {"from": "cough", "title": "associated", "to": "cough shortness of breath"}, {"from": "cough", "title": "associated", "to": "diarrhea constipation"}, {"from": "cough", "title": "associated", "to": "dysuria"}, {"from": "cough", "title": "associated", "to": "arthralgias"}, {"from": "cough", "title": "associated", "to": "myalgias"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "rash"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "chills"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "headache"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "rhinorrhea"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "chest pain or tightness palpitations"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "cough shortness of breath"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "nausea  vomiting"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "diarrhea constipation"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "dysuria"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "arthralgias"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "myalgias"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "rashes"}, {"from": "dysuria  diarrhea", "title": "associated", "to": "depression"}, {"from": "rash", "title": "associated", "to": "chills"}, {"from": "rash", "title": "associated", "to": "headache"}, {"from": "rash", "title": "associated", "to": "sinus tenderness"}, {"from": "rash", "title": "associated", "to": "rhinorrhea"}, {"from": "rash", "title": "associated", "to": "congestion"}, {"from": "rash", "title": "associated", "to": "nausea  vomiting"}, {"from": "rash", "title": "associated", "to": "diarrhea constipation"}, {"from": "rash", "title": "associated", "to": "dysuria"}, {"from": "rash", "title": "associated", "to": "arthralgias"}, {"from": "rash", "title": "associated", "to": "myalgias"}, {"from": "rash", "title": "associated", "to": "rashes"}, {"from": "rash", "title": "associated", "to": "skin breakdown"}, {"from": "rash", "title": "associated", "to": "depression"}, {"from": "chills", "title": "associated", "to": "headache"}, {"from": "chills", "title": "associated", "to": "sinus tenderness"}, {"from": "chills", "title": "associated", "to": "rhinorrhea"}, {"from": "chills", "title": "associated", "to": "chest pain or tightness palpitations"}, {"from": "chills", "title": "associated", "to": "cough shortness of breath"}, {"from": "chills", "title": "associated", "to": "nausea  vomiting"}, {"from": "chills", "title": "associated", "to": "diarrhea constipation"}, {"from": "chills", "title": "associated", "to": "dysuria"}, {"from": "chills", "title": "associated", "to": "arthralgias"}, {"from": "chills", "title": "associated", "to": "myalgias"}, {"from": "chills", "title": "associated", "to": "rashes"}, {"from": "headache", "title": "associated", "to": "rhinorrhea"}, {"from": "headache", "title": "associated", "to": "congestion"}, {"from": "headache", "title": "associated", "to": "nausea  vomiting"}, {"from": "headache", "title": "associated", "to": "diarrhea constipation"}, {"from": "headache", "title": "associated", "to": "dysuria"}, {"from": "headache", "title": "associated", "to": "myalgias"}, {"from": "sinus tenderness", "title": "associated", "to": "rhinorrhea"}, {"from": "sinus tenderness", "title": "associated", "to": "chest pain or tightness palpitations"}, {"from": "sinus tenderness", "title": "associated", "to": "cough shortness of breath"}, {"from": "sinus tenderness", "title": "associated", "to": "diarrhea constipation"}, {"from": "sinus tenderness", "title": "associated", "to": "arthralgias"}, {"from": "sinus tenderness", "title": "associated", "to": "myalgias"}, {"from": "sinus tenderness", "title": "associated", "to": "rashes"}, {"from": "sinus tenderness", "title": "associated", "to": "skin breakdown"}, {"from": "rhinorrhea", "title": "associated", "to": "congestion"}, {"from": "rhinorrhea", "title": "associated", "to": "chest pain or tightness palpitations"}, {"from": "rhinorrhea", "title": "associated", "to": "cough shortness of breath"}, {"from": "rhinorrhea", "title": "associated", "to": "nausea  vomiting"}, {"from": "rhinorrhea", "title": "associated", "to": "diarrhea constipation"}, {"from": "rhinorrhea", "title": "associated", "to": "dysuria"}, {"from": "rhinorrhea", "title": "associated", "to": "arthralgias"}, {"from": "rhinorrhea", "title": "associated", "to": "myalgias"}, {"from": "rhinorrhea", "title": "associated", "to": "rashes"}, {"from": "rhinorrhea", "title": "associated", "to": "skin breakdown"}, {"from": "rhinorrhea", "title": "associated", "to": "depression"}, {"from": "congestion", "title": "associated", "to": "rashes"}, {"from": "congestion", "title": "associated", "to": "skin breakdown"}, {"from": "chest pain or tightness palpitations", "title": "associated", "to": "cough shortness of breath"}, {"from": "chest pain or tightness palpitations", "title": "associated", "to": "diarrhea constipation"}, {"from": "chest pain or tightness palpitations", "title": "associated", "to": "myalgias"}, {"from": "cough shortness of breath", "title": "associated", "to": "diarrhea constipation"}, {"from": "cough shortness of breath", "title": "associated", "to": "dysuria"}, {"from": "cough shortness of breath", "title": "associated", "to": "arthralgias"}, {"from": "cough shortness of breath", "title": "associated", "to": "myalgias"}, {"from": "nausea  vomiting", "title": "associated", "to": "diarrhea constipation"}, {"from": "nausea  vomiting", "title": "associated", "to": "dysuria"}, {"from": "diarrhea constipation", "title": "associated", "to": "dysuria"}, {"from": "diarrhea constipation", "title": "associated", "to": "arthralgias"}, {"from": "diarrhea constipation", "title": "associated", "to": "myalgias"}, {"from": "diarrhea constipation", "title": "associated", "to": "rashes"}, {"from": "diarrhea constipation", "title": "associated", "to": "depression"}, {"from": "dysuria", "title": "associated", "to": "arthralgias"}, {"from": "dysuria", "title": "associated", "to": "myalgias"}, {"from": "dysuria", "title": "associated", "to": "rashes"}, {"from": "dysuria", "title": "associated", "to": "depression"}, {"from": "arthralgias", "title": "associated", "to": "myalgias"}, {"from": "arthralgias", "title": "associated", "to": "rashes"}, {"from": "arthralgias", "title": "associated", "to": "skin breakdown"}, {"from": "arthralgias", "title": "associated", "to": "depression"}, {"from": "myalgias", "title": "associated", "to": "rashes"}, {"from": "myalgias", "title": "associated", "to": "depression"}, {"from": "rashes", "title": "associated", "to": "skin breakdown"}, {"from": "rashes", "title": "associated", "to": "depression"}, {"from": "depression", "title": "associated", "to": "anxiety"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "red", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "woman", "label": "woman", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "uterine  fibroids", "label": "uterine  fibroids", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "carcinoid tumor", "label": "carcinoid tumor", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abdominal pain nausea", "label": "abdominal pain nausea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "cramping abdominal  pain", "label": "cramping abdominal  pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "small bowel obstruction", "label": "small bowel obstruction", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "depression", "label": "depression", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "hyperlipidemia hysterectomy b12 deficiency back  pain", "label": "hyperlipidemia hysterectomy b12 deficiency back  pain", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "carcinoid", "label": "carcinoid", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cervical djd", "label": "cervical djd", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "hyperlipidemia", "label": "hyperlipidemia", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "osteoarthritis", "label": "osteoarthritis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "sbo", "label": "sbo", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "nausea vomiting  weakness", "label": "nausea vomiting  weakness", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "hematochezia", "label": "hematochezia", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "wbc", "label": "wbc", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "cancer", "label": "cancer", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "metastatic cancer", "label": "metastatic cancer", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "shortness of  breath", "label": "shortness of  breath", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abdominal  pain", "label": "abdominal  pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "failure to thrive", "label": "failure to thrive", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lung and liver  metastases", "label": "lung and liver  metastases", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest  pain", "label": "chest  pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chronic nonproductive cough", "label": "chronic nonproductive cough", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "right lower extremity edema", "label": "right lower extremity edema", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lower extremity venous", "label": "lower extremity venous", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "edema", "label": "edema", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "orthopnea", "label": "orthopnea", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "leukocytosis", "label": "leukocytosis", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "epithelial  cells", "label": "epithelial  cells", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pulmonary embolus", "label": "pulmonary embolus", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "pleural effusion", "label": "pleural effusion", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "sinus tachycardia", "label": "sinus tachycardia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "ceftriaxoneazithromycin", "label": "ceftriaxoneazithromycin", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "pneumonia", "label": "pneumonia", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "f", "label": "f", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nausea vomiting", "label": "nausea vomiting", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "vomiting", "label": "vomiting", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "chronic  nonproductive cough", "label": "chronic  nonproductive cough", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "constipated", "label": "constipated", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "lower extremity edema", "label": "lower extremity edema", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "liver", "label": "liver", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "ibuprofen", "label": "ibuprofen", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "pna", "label": "pna", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "metastatic diseae", "label": "metastatic diseae", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "vanc", "label": "vanc", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "cefepime", "label": "cefepime", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nauseous", "label": "nauseous", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "headache vision", "label": "headache vision", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "rhinorrhea  congestion", "label": "rhinorrhea  congestion", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "sore throat", "label": "sore throat", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "brbpr", "label": "brbpr", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "melena", "label": "melena", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hematuria", "label": "hematuria", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "uterine  fibroids", "title": "associated", "to": "carcinoid tumor"}, {"from": "uterine  fibroids", "title": "associated", "to": "diarrhea"}, {"from": "uterine  fibroids", "title": "associated", "to": "small bowel obstruction"}, {"from": "carcinoid tumor", "title": "associated", "to": "diarrhea"}, {"from": "carcinoid tumor", "title": "associated", "to": "small bowel obstruction"}, {"from": "abdominal pain nausea", "title": "associated", "to": "cramping abdominal  pain"}, {"from": "abdominal pain nausea", "title": "associated", "to": "nausea"}, {"from": "abdominal pain nausea", "title": "associated", "to": "diarrhea"}, {"from": "cramping abdominal  pain", "title": "associated", "to": "nausea"}, {"from": "cramping abdominal  pain", "title": "associated", "to": "diarrhea"}, {"from": "nausea", "title": "associated", "to": "diarrhea"}, {"from": "diarrhea", "title": "associated", "to": "small bowel obstruction"}, {"from": "depression", "title": "associated", "to": "hyperlipidemia"}, {"from": "depression", "title": "associated", "to": "osteoarthritis"}, {"from": "depression", "title": "associated", "to": "hematochezia"}, {"from": "depression", "title": "associated", "to": "myalgias"}, {"from": "depression", "title": "associated", "to": "cancer"}, {"from": "hyperlipidemia hysterectomy b12 deficiency back  pain", "title": "associated", "to": "hyperlipidemia"}, {"from": "hyperlipidemia hysterectomy b12 deficiency back  pain", "title": "associated", "to": "osteoarthritis"}, {"from": "hyperlipidemia hysterectomy b12 deficiency back  pain", "title": "associated", "to": "hematochezia"}, {"from": "hyperlipidemia hysterectomy b12 deficiency back  pain", "title": "associated", "to": "myalgias"}, {"from": "carcinoid", "title": "associated", "to": "cervical djd"}, {"from": "carcinoid", "title": "associated", "to": "osteoarthritis"}, {"from": "carcinoid", "title": "associated", "to": "hematochezia"}, {"from": "carcinoid", "title": "associated", "to": "cancer"}, {"from": "cervical djd", "title": "associated", "to": "osteoarthritis"}, {"from": "cervical djd", "title": "associated", "to": "hematochezia"}, {"from": "cervical djd", "title": "associated", "to": "cancer"}, {"from": "hyperlipidemia", "title": "associated", "to": "osteoarthritis"}, {"from": "hyperlipidemia", "title": "associated", "to": "hematochezia"}, {"from": "hyperlipidemia", "title": "associated", "to": "myalgias"}, {"from": "hyperlipidemia", "title": "associated", "to": "cancer"}, {"from": "osteoarthritis", "title": "associated", "to": "hematochezia"}, {"from": "osteoarthritis", "title": "associated", "to": "myalgias"}, {"from": "osteoarthritis", "title": "associated", "to": "cancer"}, {"from": "hematochezia", "title": "associated", "to": "myalgias"}, {"from": "hematochezia", "title": "associated", "to": "cancer"}, {"from": "hematochezia", "title": "associated", "to": "metastatic cancer"}, {"from": "hematochezia", "title": "associated", "to": "vomiting"}, {"from": "hematochezia", "title": "associated", "to": "abdominal pain"}, {"from": "hematochezia", "title": "associated", "to": "chronic  nonproductive cough"}, {"from": "hematochezia", "title": "associated", "to": "constipated"}, {"from": "hematochezia", "title": "associated", "to": "liver"}, {"from": "hematochezia", "title": "associated", "to": "pna"}, {"from": "hematochezia", "title": "associated", "to": "metastatic diseae"}, {"from": "hematochezia", "title": "associated", "to": "pneumonia"}, {"from": "hematochezia", "title": "associated", "to": "headache vision"}, {"from": "hematochezia", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "hematochezia", "title": "associated", "to": "sore throat"}, {"from": "hematochezia", "title": "associated", "to": "melena"}, {"from": "hematochezia", "title": "associated", "to": "dysuria"}, {"from": "hematochezia", "title": "associated", "to": "hematuria"}, {"from": "myalgias", "title": "associated", "to": "cancer"}, {"from": "cancer", "title": "associated", "to": "metastatic cancer"}, {"from": "cancer", "title": "associated", "to": "lung and liver  metastases"}, {"from": "cancer", "title": "associated", "to": "chest  pain"}, {"from": "cancer", "title": "associated", "to": "chronic nonproductive cough"}, {"from": "cancer", "title": "associated", "to": "lower extremity venous"}, {"from": "cancer", "title": "associated", "to": "orthopnea"}, {"from": "cancer", "title": "associated", "to": "leukocytosis"}, {"from": "cancer", "title": "associated", "to": "epithelial  cells"}, {"from": "cancer", "title": "associated", "to": "pulmonary embolus"}, {"from": "cancer", "title": "associated", "to": "pneumonia"}, {"from": "cancer", "title": "associated", "to": "chest pain"}, {"from": "cancer", "title": "associated", "to": "chronic  nonproductive cough"}, {"from": "cancer", "title": "associated", "to": "constipated"}, {"from": "cancer", "title": "associated", "to": "liver"}, {"from": "cancer", "title": "associated", "to": "pna"}, {"from": "cancer", "title": "associated", "to": "metastatic diseae"}, {"from": "cancer", "title": "associated", "to": "headache vision"}, {"from": "cancer", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "cancer", "title": "associated", "to": "sore throat"}, {"from": "cancer", "title": "associated", "to": "melena"}, {"from": "cancer", "title": "associated", "to": "dysuria"}, {"from": "cancer", "title": "associated", "to": "hematuria"}, {"from": "metastatic cancer", "title": "associated", "to": "failure to thrive"}, {"from": "metastatic cancer", "title": "associated", "to": "lung and liver  metastases"}, {"from": "metastatic cancer", "title": "associated", "to": "chronic nonproductive cough"}, {"from": "metastatic cancer", "title": "associated", "to": "leukocytosis"}, {"from": "metastatic cancer", "title": "associated", "to": "pulmonary embolus"}, {"from": "metastatic cancer", "title": "associated", "to": "sinus tachycardia"}, {"from": "metastatic cancer", "title": "associated", "to": "chronic  nonproductive cough"}, {"from": "metastatic cancer", "title": "associated", "to": "metastatic diseae"}, {"from": "shortness of  breath", "title": "associated", "to": "shortness of breath"}, {"from": "shortness of  breath", "title": "associated", "to": "chest  pain"}, {"from": "shortness of  breath", "title": "associated", "to": "chest pain"}, {"from": "abdominal  pain", "title": "associated", "to": "chest  pain"}, {"from": "abdominal  pain", "title": "associated", "to": "chronic nonproductive cough"}, {"from": "abdominal  pain", "title": "associated", "to": "orthopnea"}, {"from": "abdominal  pain", "title": "associated", "to": "sinus tachycardia"}, {"from": "abdominal  pain", "title": "associated", "to": "chest pain"}, {"from": "lung and liver  metastases", "title": "associated", "to": "pulmonary embolus"}, {"from": "shortness of breath", "title": "associated", "to": "chest  pain"}, {"from": "shortness of breath", "title": "associated", "to": "chest pain"}, {"from": "chest  pain", "title": "associated", "to": "chronic nonproductive cough"}, {"from": "chest  pain", "title": "associated", "to": "orthopnea"}, {"from": "chest  pain", "title": "associated", "to": "pulmonary embolus"}, {"from": "chest  pain", "title": "associated", "to": "sinus tachycardia"}, {"from": "chest  pain", "title": "associated", "to": "chest pain"}, {"from": "chronic nonproductive cough", "title": "associated", "to": "right lower extremity edema"}, {"from": "chronic nonproductive cough", "title": "associated", "to": "lower extremity venous"}, {"from": "chronic nonproductive cough", "title": "associated", "to": "orthopnea"}, {"from": "chronic nonproductive cough", "title": "associated", "to": "leukocytosis"}, {"from": "chronic nonproductive cough", "title": "associated", "to": "pulmonary embolus"}, {"from": "chronic nonproductive cough", "title": "associated", "to": "sinus tachycardia"}, {"from": "chronic nonproductive cough", "title": "associated", "to": "chest pain"}, {"from": "right lower extremity edema", "title": "associated", "to": "lower extremity venous"}, {"from": "right lower extremity edema", "title": "associated", "to": "edema"}, {"from": "right lower extremity edema", "title": "associated", "to": "leukocytosis"}, {"from": "right lower extremity edema", "title": "associated", "to": "epithelial  cells"}, {"from": "lower extremity venous", "title": "associated", "to": "leukocytosis"}, {"from": "lower extremity venous", "title": "associated", "to": "epithelial  cells"}, {"from": "lower extremity venous", "title": "associated", "to": "pulmonary embolus"}, {"from": "edema", "title": "associated", "to": "leukocytosis"}, {"from": "orthopnea", "title": "associated", "to": "leukocytosis"}, {"from": "orthopnea", "title": "associated", "to": "pulmonary embolus"}, {"from": "orthopnea", "title": "associated", "to": "sinus tachycardia"}, {"from": "orthopnea", "title": "associated", "to": "pneumonia"}, {"from": "orthopnea", "title": "associated", "to": "chest pain"}, {"from": "leukocytosis", "title": "associated", "to": "epithelial  cells"}, {"from": "leukocytosis", "title": "associated", "to": "pulmonary embolus"}, {"from": "leukocytosis", "title": "associated", "to": "pleural effusion"}, {"from": "leukocytosis", "title": "associated", "to": "sinus tachycardia"}, {"from": "leukocytosis", "title": "associated", "to": "ceftriaxoneazithromycin"}, {"from": "leukocytosis", "title": "associated", "to": "pneumonia"}, {"from": "pulmonary embolus", "title": "associated", "to": "pleural effusion"}, {"from": "pulmonary embolus", "title": "associated", "to": "sinus tachycardia"}, {"from": "pulmonary embolus", "title": "associated", "to": "pneumonia"}, {"from": "pulmonary embolus", "title": "associated", "to": "chest pain"}, {"from": "pleural effusion", "title": "associated", "to": "pneumonia"}, {"from": "sinus tachycardia", "title": "associated", "to": "chest pain"}, {"from": "pneumonia", "title": "associated", "to": "liver"}, {"from": "pneumonia", "title": "associated", "to": "pna"}, {"from": "pneumonia", "title": "associated", "to": "headache vision"}, {"from": "pneumonia", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "pneumonia", "title": "associated", "to": "sore throat"}, {"from": "pneumonia", "title": "associated", "to": "melena"}, {"from": "pneumonia", "title": "associated", "to": "hematuria"}, {"from": "f", "title": "associated", "to": "brbpr"}, {"from": "nausea vomiting", "title": "associated", "to": "vomiting"}, {"from": "nausea vomiting", "title": "associated", "to": "abdominal pain"}, {"from": "nausea vomiting", "title": "associated", "to": "constipated"}, {"from": "nausea vomiting", "title": "associated", "to": "nauseous"}, {"from": "nausea vomiting", "title": "associated", "to": "headache vision"}, {"from": "nausea vomiting", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "nausea vomiting", "title": "associated", "to": "sore throat"}, {"from": "nausea vomiting", "title": "associated", "to": "melena"}, {"from": "nausea vomiting", "title": "associated", "to": "dysuria"}, {"from": "nausea vomiting", "title": "associated", "to": "hematuria"}, {"from": "vomiting", "title": "associated", "to": "abdominal pain"}, {"from": "vomiting", "title": "associated", "to": "constipated"}, {"from": "vomiting", "title": "associated", "to": "nauseous"}, {"from": "vomiting", "title": "associated", "to": "headache vision"}, {"from": "vomiting", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "vomiting", "title": "associated", "to": "sore throat"}, {"from": "vomiting", "title": "associated", "to": "melena"}, {"from": "vomiting", "title": "associated", "to": "dysuria"}, {"from": "vomiting", "title": "associated", "to": "hematuria"}, {"from": "abdominal pain", "title": "associated", "to": "chronic  nonproductive cough"}, {"from": "abdominal pain", "title": "associated", "to": "constipated"}, {"from": "abdominal pain", "title": "associated", "to": "lower extremity edema"}, {"from": "abdominal pain", "title": "associated", "to": "nauseous"}, {"from": "abdominal pain", "title": "associated", "to": "headache vision"}, {"from": "abdominal pain", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "abdominal pain", "title": "associated", "to": "sore throat"}, {"from": "abdominal pain", "title": "associated", "to": "melena"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "hematuria"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "constipated"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "lower extremity edema"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "ibuprofen"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "metastatic diseae"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "headache vision"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "sore throat"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "melena"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "dysuria"}, {"from": "chronic  nonproductive cough", "title": "associated", "to": "hematuria"}, {"from": "constipated", "title": "associated", "to": "ibuprofen"}, {"from": "constipated", "title": "associated", "to": "metastatic diseae"}, {"from": "constipated", "title": "associated", "to": "cefepime"}, {"from": "constipated", "title": "associated", "to": "nauseous"}, {"from": "constipated", "title": "associated", "to": "headache vision"}, {"from": "constipated", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "constipated", "title": "associated", "to": "sore throat"}, {"from": "constipated", "title": "associated", "to": "melena"}, {"from": "constipated", "title": "associated", "to": "dysuria"}, {"from": "constipated", "title": "associated", "to": "hematuria"}, {"from": "lower extremity edema", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "ibuprofen", "title": "associated", "to": "vanc"}, {"from": "ibuprofen", "title": "associated", "to": "cefepime"}, {"from": "ibuprofen", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "pna", "title": "associated", "to": "metastatic diseae"}, {"from": "pna", "title": "associated", "to": "brbpr"}, {"from": "pna", "title": "associated", "to": "melena"}, {"from": "pna", "title": "associated", "to": "hematuria"}, {"from": "metastatic diseae", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "metastatic diseae", "title": "associated", "to": "dysuria"}, {"from": "metastatic diseae", "title": "associated", "to": "hematuria"}, {"from": "vanc", "title": "associated", "to": "cefepime"}, {"from": "cefepime", "title": "associated", "to": "hematuria"}, {"from": "nauseous", "title": "associated", "to": "headache vision"}, {"from": "nauseous", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "nauseous", "title": "associated", "to": "sore throat"}, {"from": "nauseous", "title": "associated", "to": "melena"}, {"from": "nauseous", "title": "associated", "to": "dysuria"}, {"from": "nauseous", "title": "associated", "to": "hematuria"}, {"from": "headache vision", "title": "associated", "to": "rhinorrhea  congestion"}, {"from": "headache vision", "title": "associated", "to": "sore throat"}, {"from": "headache vision", "title": "associated", "to": "melena"}, {"from": "headache vision", "title": "associated", "to": "dysuria"}, {"from": "headache vision", "title": "associated", "to": "hematuria"}, {"from": "rhinorrhea  congestion", "title": "associated", "to": "sore throat"}, {"from": "rhinorrhea  congestion", "title": "associated", "to": "brbpr"}, {"from": "rhinorrhea  congestion", "title": "associated", "to": "melena"}, {"from": "rhinorrhea  congestion", "title": "associated", "to": "dysuria"}, {"from": "rhinorrhea  congestion", "title": "associated", "to": "hematuria"}, {"from": "sore throat", "title": "associated", "to": "melena"}, {"from": "sore throat", "title": "associated", "to": "dysuria"}, {"from": "sore throat", "title": "associated", "to": "hematuria"}, {"from": "melena", "title": "associated", "to": "dysuria"}, {"from": "melena", "title": "associated", "to": "hematuria"}, {"from": "dysuria", "title": "associated", "to": "hematuria"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

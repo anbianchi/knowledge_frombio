@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#F4A460", "font": {"color": "black"}, "id": "metastatic pancreatic cancer", "label": "metastatic pancreatic cancer", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "gemcitabine", "label": "gemcitabine", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "woman", "label": "woman", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "epigastric abdominal pain", "label": "epigastric abdominal pain", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "deaf", "label": "deaf", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "nausea", "label": "nausea", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "olanzapine", "label": "olanzapine", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "lipase", "label": "lipase", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "tumor", "label": "tumor", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "pancreatitis", "label": "pancreatitis", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "celiac  axis", "label": "celiac  axis", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "na", "label": "na", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "hco3", "label": "hco3", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "alt", "label": "alt", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "ast", "label": "ast", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "alp", "label": "alp", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "alb", "label": "alb", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "morphine", "label": "morphine", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "epigastric pain", "label": "epigastric pain", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "oxycodone", "label": "oxycodone", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "tramadol", "label": "tramadol", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "poor appetite", "label": "poor appetite", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "dysphagia", "label": "dysphagia", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "odynophagia", "label": "odynophagia", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "utri symptoms", "label": "utri symptoms", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "sob cough", "label": "sob cough", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "chest pian", "label": "chest pian", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "joint pains", "label": "joint pains", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "rashes", "label": "rashes", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "leg swelling", "label": "leg swelling", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "metastatic pancreatic cancer", "title": "associated", "to": "gemcitabine"}, {"from": "metastatic pancreatic cancer", "title": "associated", "to": "tumor"}, {"from": "metastatic pancreatic cancer", "title": "associated", "to": "pancreatitis"}, {"from": "metastatic pancreatic cancer", "title": "associated", "to": "celiac  axis"}, {"from": "gemcitabine", "title": "associated", "to": "olanzapine"}, {"from": "gemcitabine", "title": "associated", "to": "morphine"}, {"from": "gemcitabine", "title": "associated", "to": "oxycodone"}, {"from": "woman", "title": "associated", "to": "deaf"}, {"from": "woman", "title": "associated", "to": "tumor"}, {"from": "woman", "title": "associated", "to": "pancreatitis"}, {"from": "woman", "title": "associated", "to": "celiac  axis"}, {"from": "woman", "title": "associated", "to": "na"}, {"from": "woman", "title": "associated", "to": "hco3"}, {"from": "woman", "title": "associated", "to": "alp"}, {"from": "woman", "title": "associated", "to": "alb"}, {"from": "woman", "title": "associated", "to": "dysphagia"}, {"from": "woman", "title": "associated", "to": "odynophagia"}, {"from": "woman", "title": "associated", "to": "dysuria"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "nausea"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "olanzapine"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "pancreatitis"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "celiac  axis"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "epigastric pain"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "abdominal pain"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "dysphagia"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "odynophagia"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "sob cough"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "diarrhea"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "joint pains"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "rashes"}, {"from": "epigastric abdominal pain", "title": "associated", "to": "leg swelling"}, {"from": "deaf", "title": "associated", "to": "pancreatitis"}, {"from": "deaf", "title": "associated", "to": "dysphagia"}, {"from": "deaf", "title": "associated", "to": "odynophagia"}, {"from": "deaf", "title": "associated", "to": "dysuria"}, {"from": "nausea", "title": "associated", "to": "epigastric pain"}, {"from": "nausea", "title": "associated", "to": "abdominal pain"}, {"from": "nausea", "title": "associated", "to": "poor appetite"}, {"from": "nausea", "title": "associated", "to": "dysphagia"}, {"from": "nausea", "title": "associated", "to": "sob cough"}, {"from": "nausea", "title": "associated", "to": "dysuria"}, {"from": "nausea", "title": "associated", "to": "diarrhea"}, {"from": "nausea", "title": "associated", "to": "leg swelling"}, {"from": "olanzapine", "title": "associated", "to": "celiac  axis"}, {"from": "olanzapine", "title": "associated", "to": "hco3"}, {"from": "olanzapine", "title": "associated", "to": "alp"}, {"from": "olanzapine", "title": "associated", "to": "alb"}, {"from": "olanzapine", "title": "associated", "to": "morphine"}, {"from": "olanzapine", "title": "associated", "to": "oxycodone"}, {"from": "olanzapine", "title": "associated", "to": "tramadol"}, {"from": "olanzapine", "title": "associated", "to": "dysphagia"}, {"from": "olanzapine", "title": "associated", "to": "diarrhea"}, {"from": "lipase", "title": "associated", "to": "hco3"}, {"from": "lipase", "title": "associated", "to": "alp"}, {"from": "lipase", "title": "associated", "to": "alb"}, {"from": "tumor", "title": "associated", "to": "pancreatitis"}, {"from": "tumor", "title": "associated", "to": "celiac  axis"}, {"from": "tumor", "title": "associated", "to": "na"}, {"from": "tumor", "title": "associated", "to": "alt"}, {"from": "tumor", "title": "associated", "to": "alp"}, {"from": "tumor", "title": "associated", "to": "alb"}, {"from": "tumor", "title": "associated", "to": "dysphagia"}, {"from": "tumor", "title": "associated", "to": "odynophagia"}, {"from": "tumor", "title": "associated", "to": "utri symptoms"}, {"from": "tumor", "title": "associated", "to": "chest pian"}, {"from": "pancreatitis", "title": "associated", "to": "celiac  axis"}, {"from": "pancreatitis", "title": "associated", "to": "alp"}, {"from": "pancreatitis", "title": "associated", "to": "alb"}, {"from": "pancreatitis", "title": "associated", "to": "epigastric pain"}, {"from": "pancreatitis", "title": "associated", "to": "abdominal pain"}, {"from": "pancreatitis", "title": "associated", "to": "dysphagia"}, {"from": "pancreatitis", "title": "associated", "to": "odynophagia"}, {"from": "pancreatitis", "title": "associated", "to": "utri symptoms"}, {"from": "pancreatitis", "title": "associated", "to": "dysuria"}, {"from": "pancreatitis", "title": "associated", "to": "diarrhea"}, {"from": "pancreatitis", "title": "associated", "to": "joint pains"}, {"from": "pancreatitis", "title": "associated", "to": "rashes"}, {"from": "pancreatitis", "title": "associated", "to": "leg swelling"}, {"from": "celiac  axis", "title": "associated", "to": "hco3"}, {"from": "celiac  axis", "title": "associated", "to": "alp"}, {"from": "celiac  axis", "title": "associated", "to": "alb"}, {"from": "celiac  axis", "title": "associated", "to": "epigastric pain"}, {"from": "celiac  axis", "title": "associated", "to": "abdominal pain"}, {"from": "celiac  axis", "title": "associated", "to": "dysphagia"}, {"from": "celiac  axis", "title": "associated", "to": "odynophagia"}, {"from": "celiac  axis", "title": "associated", "to": "utri symptoms"}, {"from": "celiac  axis", "title": "associated", "to": "dysuria"}, {"from": "celiac  axis", "title": "associated", "to": "diarrhea"}, {"from": "celiac  axis", "title": "associated", "to": "joint pains"}, {"from": "celiac  axis", "title": "associated", "to": "rashes"}, {"from": "celiac  axis", "title": "associated", "to": "leg swelling"}, {"from": "na", "title": "associated", "to": "hco3"}, {"from": "na", "title": "associated", "to": "alt"}, {"from": "na", "title": "associated", "to": "alp"}, {"from": "na", "title": "associated", "to": "alb"}, {"from": "hco3", "title": "associated", "to": "alt"}, {"from": "hco3", "title": "associated", "to": "ast"}, {"from": "hco3", "title": "associated", "to": "alp"}, {"from": "hco3", "title": "associated", "to": "alb"}, {"from": "hco3", "title": "associated", "to": "morphine"}, {"from": "hco3", "title": "associated", "to": "dysphagia"}, {"from": "hco3", "title": "associated", "to": "odynophagia"}, {"from": "hco3", "title": "associated", "to": "utri symptoms"}, {"from": "hco3", "title": "associated", "to": "diarrhea"}, {"from": "alt", "title": "associated", "to": "ast"}, {"from": "alt", "title": "associated", "to": "alp"}, {"from": "alt", "title": "associated", "to": "alb"}, {"from": "alt", "title": "associated", "to": "morphine"}, {"from": "alt", "title": "associated", "to": "utri symptoms"}, {"from": "alt", "title": "associated", "to": "chest pian"}, {"from": "ast", "title": "associated", "to": "alp"}, {"from": "ast", "title": "associated", "to": "alb"}, {"from": "ast", "title": "associated", "to": "morphine"}, {"from": "ast", "title": "associated", "to": "utri symptoms"}, {"from": "ast", "title": "associated", "to": "chest pian"}, {"from": "alp", "title": "associated", "to": "alb"}, {"from": "alp", "title": "associated", "to": "morphine"}, {"from": "alp", "title": "associated", "to": "tramadol"}, {"from": "alp", "title": "associated", "to": "dysphagia"}, {"from": "alp", "title": "associated", "to": "utri symptoms"}, {"from": "alp", "title": "associated", "to": "sob cough"}, {"from": "alp", "title": "associated", "to": "chest pian"}, {"from": "alp", "title": "associated", "to": "diarrhea"}, {"from": "alb", "title": "associated", "to": "morphine"}, {"from": "alb", "title": "associated", "to": "tramadol"}, {"from": "alb", "title": "associated", "to": "dysphagia"}, {"from": "alb", "title": "associated", "to": "utri symptoms"}, {"from": "alb", "title": "associated", "to": "sob cough"}, {"from": "alb", "title": "associated", "to": "chest pian"}, {"from": "alb", "title": "associated", "to": "diarrhea"}, {"from": "morphine", "title": "associated", "to": "oxycodone"}, {"from": "morphine", "title": "associated", "to": "tramadol"}, {"from": "morphine", "title": "associated", "to": "utri symptoms"}, {"from": "morphine", "title": "associated", "to": "chest pian"}, {"from": "morphine", "title": "associated", "to": "diarrhea"}, {"from": "epigastric pain", "title": "associated", "to": "abdominal pain"}, {"from": "epigastric pain", "title": "associated", "to": "poor appetite"}, {"from": "epigastric pain", "title": "associated", "to": "dysphagia"}, {"from": "epigastric pain", "title": "associated", "to": "odynophagia"}, {"from": "epigastric pain", "title": "associated", "to": "sob cough"}, {"from": "epigastric pain", "title": "associated", "to": "dysuria"}, {"from": "epigastric pain", "title": "associated", "to": "diarrhea"}, {"from": "epigastric pain", "title": "associated", "to": "joint pains"}, {"from": "epigastric pain", "title": "associated", "to": "rashes"}, {"from": "epigastric pain", "title": "associated", "to": "leg swelling"}, {"from": "oxycodone", "title": "associated", "to": "tramadol"}, {"from": "oxycodone", "title": "associated", "to": "diarrhea"}, {"from": "tramadol", "title": "associated", "to": "diarrhea"}, {"from": "abdominal pain", "title": "associated", "to": "dysphagia"}, {"from": "abdominal pain", "title": "associated", "to": "odynophagia"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "diarrhea"}, {"from": "abdominal pain", "title": "associated", "to": "joint pains"}, {"from": "abdominal pain", "title": "associated", "to": "rashes"}, {"from": "abdominal pain", "title": "associated", "to": "leg swelling"}, {"from": "poor appetite", "title": "associated", "to": "sob cough"}, {"from": "poor appetite", "title": "associated", "to": "dysuria"}, {"from": "poor appetite", "title": "associated", "to": "diarrhea"}, {"from": "dysphagia", "title": "associated", "to": "odynophagia"}, {"from": "dysphagia", "title": "associated", "to": "sob cough"}, {"from": "dysphagia", "title": "associated", "to": "dysuria"}, {"from": "dysphagia", "title": "associated", "to": "diarrhea"}, {"from": "dysphagia", "title": "associated", "to": "joint pains"}, {"from": "dysphagia", "title": "associated", "to": "rashes"}, {"from": "dysphagia", "title": "associated", "to": "leg swelling"}, {"from": "odynophagia", "title": "associated", "to": "dysuria"}, {"from": "odynophagia", "title": "associated", "to": "diarrhea"}, {"from": "odynophagia", "title": "associated", "to": "joint pains"}, {"from": "odynophagia", "title": "associated", "to": "rashes"}, {"from": "odynophagia", "title": "associated", "to": "leg swelling"}, {"from": "utri symptoms", "title": "associated", "to": "chest pian"}, {"from": "utri symptoms", "title": "associated", "to": "diarrhea"}, {"from": "sob cough", "title": "associated", "to": "dysuria"}, {"from": "sob cough", "title": "associated", "to": "diarrhea"}, {"from": "sob cough", "title": "associated", "to": "leg swelling"}, {"from": "dysuria", "title": "associated", "to": "diarrhea"}, {"from": "dysuria", "title": "associated", "to": "joint pains"}, {"from": "dysuria", "title": "associated", "to": "rashes"}, {"from": "dysuria", "title": "associated", "to": "leg swelling"}, {"from": "diarrhea", "title": "associated", "to": "joint pains"}, {"from": "diarrhea", "title": "associated", "to": "rashes"}, {"from": "diarrhea", "title": "associated", "to": "leg swelling"}, {"from": "joint pains", "title": "associated", "to": "rashes"}, {"from": "joint pains", "title": "associated", "to": "leg swelling"}, {"from": "rashes", "title": "associated", "to": "leg swelling"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FFC0CB", "font": {"color": "black"}, "id": "gentleman", "label": "gentleman", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "cad", "label": "cad", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "cardiac arrest", "label": "cardiac arrest", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "icd dilated  cardiomyopathy", "label": "icd dilated  cardiomyopathy", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "atrial  tachycardiafibrillation", "label": "atrial  tachycardiafibrillation", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "rectal cancer", "label": "rectal cancer", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "stroke", "label": "stroke", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "right hand dysthesia", "label": "right hand dysthesia", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fatigue", "label": "fatigue", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "hematemesis", "label": "hematemesis", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "chest pain  palpitations", "label": "chest pain  palpitations", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "orthopnea", "label": "orthopnea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nocturiax", "label": "nocturiax", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "chronic leg swelliung", "label": "chronic leg swelliung", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "gi bleed  angiectasia in the duodenum", "label": "gi bleed  angiectasia in the duodenum", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "68", "label": "68", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dry cough", "label": "dry cough", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "febrile  illness", "label": "febrile  illness", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "fever chills", "label": "fever chills", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "sinus  tenderness rhinorrhea or congestion", "label": "sinus  tenderness rhinorrhea or congestion", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "chest pain or  tightness palpitations", "label": "chest pain or  tightness palpitations", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "nausea vomiting", "label": "nausea vomiting", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "arthralgias", "label": "arthralgias", "shape": "dot"}, {"color": "#FFC0CB", "font": {"color": "black"}, "id": "myalgias", "label": "myalgias", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "gentleman", "title": "associated", "to": "stroke"}, {"from": "cad", "title": "associated", "to": "icd dilated  cardiomyopathy"}, {"from": "cad", "title": "associated", "to": "rectal cancer"}, {"from": "cad", "title": "associated", "to": "stroke"}, {"from": "cad", "title": "associated", "to": "right hand dysthesia"}, {"from": "cad", "title": "associated", "to": "nocturiax"}, {"from": "cad", "title": "associated", "to": "chronic leg swelliung"}, {"from": "cad", "title": "associated", "to": "gi bleed  angiectasia in the duodenum"}, {"from": "cad", "title": "associated", "to": "diarrhea"}, {"from": "cad", "title": "associated", "to": "dysuria"}, {"from": "cardiac arrest", "title": "associated", "to": "hematemesis"}, {"from": "cardiac arrest", "title": "associated", "to": "febrile  illness"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "atrial  tachycardiafibrillation"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "rectal cancer"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "stroke"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "right hand dysthesia"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "dyspnea"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "hematemesis"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "orthopnea"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "nocturiax"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "chronic leg swelliung"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "gi bleed  angiectasia in the duodenum"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "dry cough"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "febrile  illness"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "diarrhea"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "constipation"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "dysuria"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "arthralgias"}, {"from": "icd dilated  cardiomyopathy", "title": "associated", "to": "myalgias"}, {"from": "atrial  tachycardiafibrillation", "title": "associated", "to": "rectal cancer"}, {"from": "atrial  tachycardiafibrillation", "title": "associated", "to": "right hand dysthesia"}, {"from": "atrial  tachycardiafibrillation", "title": "associated", "to": "gi bleed  angiectasia in the duodenum"}, {"from": "atrial  tachycardiafibrillation", "title": "associated", "to": "diarrhea"}, {"from": "atrial  tachycardiafibrillation", "title": "associated", "to": "constipation"}, {"from": "atrial  tachycardiafibrillation", "title": "associated", "to": "arthralgias"}, {"from": "rectal cancer", "title": "associated", "to": "right hand dysthesia"}, {"from": "rectal cancer", "title": "associated", "to": "dyspnea"}, {"from": "rectal cancer", "title": "associated", "to": "hematemesis"}, {"from": "rectal cancer", "title": "associated", "to": "orthopnea"}, {"from": "rectal cancer", "title": "associated", "to": "nocturiax"}, {"from": "rectal cancer", "title": "associated", "to": "chronic leg swelliung"}, {"from": "rectal cancer", "title": "associated", "to": "gi bleed  angiectasia in the duodenum"}, {"from": "rectal cancer", "title": "associated", "to": "dry cough"}, {"from": "rectal cancer", "title": "associated", "to": "diarrhea"}, {"from": "rectal cancer", "title": "associated", "to": "constipation"}, {"from": "rectal cancer", "title": "associated", "to": "abdominal pain"}, {"from": "rectal cancer", "title": "associated", "to": "dysuria"}, {"from": "rectal cancer", "title": "associated", "to": "arthralgias"}, {"from": "rectal cancer", "title": "associated", "to": "myalgias"}, {"from": "stroke", "title": "associated", "to": "orthopnea"}, {"from": "stroke", "title": "associated", "to": "nocturiax"}, {"from": "stroke", "title": "associated", "to": "dry cough"}, {"from": "stroke", "title": "associated", "to": "headache"}, {"from": "stroke", "title": "associated", "to": "dysuria"}, {"from": "stroke", "title": "associated", "to": "myalgias"}, {"from": "right hand dysthesia", "title": "associated", "to": "dyspnea"}, {"from": "right hand dysthesia", "title": "associated", "to": "orthopnea"}, {"from": "right hand dysthesia", "title": "associated", "to": "chronic leg swelliung"}, {"from": "right hand dysthesia", "title": "associated", "to": "gi bleed  angiectasia in the duodenum"}, {"from": "right hand dysthesia", "title": "associated", "to": "dry cough"}, {"from": "right hand dysthesia", "title": "associated", "to": "diarrhea"}, {"from": "right hand dysthesia", "title": "associated", "to": "constipation"}, {"from": "right hand dysthesia", "title": "associated", "to": "dysuria"}, {"from": "right hand dysthesia", "title": "associated", "to": "arthralgias"}, {"from": "right hand dysthesia", "title": "associated", "to": "myalgias"}, {"from": "fatigue", "title": "associated", "to": "dyspnea"}, {"from": "fatigue", "title": "associated", "to": "hematemesis"}, {"from": "fatigue", "title": "associated", "to": "chest pain  palpitations"}, {"from": "fatigue", "title": "associated", "to": "nocturiax"}, {"from": "fatigue", "title": "associated", "to": "dry cough"}, {"from": "fatigue", "title": "associated", "to": "fever chills"}, {"from": "fatigue", "title": "associated", "to": "headache"}, {"from": "fatigue", "title": "associated", "to": "nausea vomiting"}, {"from": "fatigue", "title": "associated", "to": "diarrhea"}, {"from": "fatigue", "title": "associated", "to": "constipation"}, {"from": "fatigue", "title": "associated", "to": "abdominal pain"}, {"from": "fatigue", "title": "associated", "to": "dysuria"}, {"from": "fatigue", "title": "associated", "to": "myalgias"}, {"from": "dyspnea", "title": "associated", "to": "hematemesis"}, {"from": "dyspnea", "title": "associated", "to": "chest pain  palpitations"}, {"from": "dyspnea", "title": "associated", "to": "orthopnea"}, {"from": "dyspnea", "title": "associated", "to": "nocturiax"}, {"from": "dyspnea", "title": "associated", "to": "chronic leg swelliung"}, {"from": "dyspnea", "title": "associated", "to": "dry cough"}, {"from": "dyspnea", "title": "associated", "to": "fever chills"}, {"from": "dyspnea", "title": "associated", "to": "headache"}, {"from": "dyspnea", "title": "associated", "to": "sinus  tenderness rhinorrhea or congestion"}, {"from": "dyspnea", "title": "associated", "to": "chest pain or  tightness palpitations"}, {"from": "dyspnea", "title": "associated", "to": "nausea vomiting"}, {"from": "dyspnea", "title": "associated", "to": "diarrhea"}, {"from": "dyspnea", "title": "associated", "to": "constipation"}, {"from": "dyspnea", "title": "associated", "to": "abdominal pain"}, {"from": "dyspnea", "title": "associated", "to": "dysuria"}, {"from": "dyspnea", "title": "associated", "to": "arthralgias"}, {"from": "dyspnea", "title": "associated", "to": "myalgias"}, {"from": "hematemesis", "title": "associated", "to": "orthopnea"}, {"from": "hematemesis", "title": "associated", "to": "nocturiax"}, {"from": "hematemesis", "title": "associated", "to": "gi bleed  angiectasia in the duodenum"}, {"from": "hematemesis", "title": "associated", "to": "dry cough"}, {"from": "hematemesis", "title": "associated", "to": "febrile  illness"}, {"from": "hematemesis", "title": "associated", "to": "fever chills"}, {"from": "hematemesis", "title": "associated", "to": "headache"}, {"from": "hematemesis", "title": "associated", "to": "nausea vomiting"}, {"from": "hematemesis", "title": "associated", "to": "diarrhea"}, {"from": "hematemesis", "title": "associated", "to": "constipation"}, {"from": "hematemesis", "title": "associated", "to": "abdominal pain"}, {"from": "hematemesis", "title": "associated", "to": "dysuria"}, {"from": "hematemesis", "title": "associated", "to": "arthralgias"}, {"from": "hematemesis", "title": "associated", "to": "myalgias"}, {"from": "chest pain  palpitations", "title": "associated", "to": "dry cough"}, {"from": "chest pain  palpitations", "title": "associated", "to": "fever chills"}, {"from": "chest pain  palpitations", "title": "associated", "to": "headache"}, {"from": "chest pain  palpitations", "title": "associated", "to": "sinus  tenderness rhinorrhea or congestion"}, {"from": "chest pain  palpitations", "title": "associated", "to": "chest pain or  tightness palpitations"}, {"from": "chest pain  palpitations", "title": "associated", "to": "nausea vomiting"}, {"from": "chest pain  palpitations", "title": "associated", "to": "diarrhea"}, {"from": "chest pain  palpitations", "title": "associated", "to": "constipation"}, {"from": "chest pain  palpitations", "title": "associated", "to": "abdominal pain"}, {"from": "chest pain  palpitations", "title": "associated", "to": "dysuria"}, {"from": "chest pain  palpitations", "title": "associated", "to": "myalgias"}, {"from": "orthopnea", "title": "associated", "to": "nocturiax"}, {"from": "orthopnea", "title": "associated", "to": "chronic leg swelliung"}, {"from": "orthopnea", "title": "associated", "to": "dry cough"}, {"from": "orthopnea", "title": "associated", "to": "headache"}, {"from": "orthopnea", "title": "associated", "to": "diarrhea"}, {"from": "orthopnea", "title": "associated", "to": "constipation"}, {"from": "orthopnea", "title": "associated", "to": "abdominal pain"}, {"from": "orthopnea", "title": "associated", "to": "dysuria"}, {"from": "orthopnea", "title": "associated", "to": "arthralgias"}, {"from": "orthopnea", "title": "associated", "to": "myalgias"}, {"from": "nocturiax", "title": "associated", "to": "chronic leg swelliung"}, {"from": "nocturiax", "title": "associated", "to": "dry cough"}, {"from": "nocturiax", "title": "associated", "to": "fever chills"}, {"from": "nocturiax", "title": "associated", "to": "headache"}, {"from": "nocturiax", "title": "associated", "to": "nausea vomiting"}, {"from": "nocturiax", "title": "associated", "to": "diarrhea"}, {"from": "nocturiax", "title": "associated", "to": "constipation"}, {"from": "nocturiax", "title": "associated", "to": "abdominal pain"}, {"from": "nocturiax", "title": "associated", "to": "dysuria"}, {"from": "nocturiax", "title": "associated", "to": "arthralgias"}, {"from": "nocturiax", "title": "associated", "to": "myalgias"}, {"from": "chronic leg swelliung", "title": "associated", "to": "gi bleed  angiectasia in the duodenum"}, {"from": "chronic leg swelliung", "title": "associated", "to": "dry cough"}, {"from": "chronic leg swelliung", "title": "associated", "to": "diarrhea"}, {"from": "chronic leg swelliung", "title": "associated", "to": "constipation"}, {"from": "chronic leg swelliung", "title": "associated", "to": "dysuria"}, {"from": "chronic leg swelliung", "title": "associated", "to": "arthralgias"}, {"from": "chronic leg swelliung", "title": "associated", "to": "myalgias"}, {"from": "gi bleed  angiectasia in the duodenum", "title": "associated", "to": "febrile  illness"}, {"from": "gi bleed  angiectasia in the duodenum", "title": "associated", "to": "diarrhea"}, {"from": "gi bleed  angiectasia in the duodenum", "title": "associated", "to": "arthralgias"}, {"from": "dry cough", "title": "associated", "to": "fever chills"}, {"from": "dry cough", "title": "associated", "to": "headache"}, {"from": "dry cough", "title": "associated", "to": "chest pain or  tightness palpitations"}, {"from": "dry cough", "title": "associated", "to": "nausea vomiting"}, {"from": "dry cough", "title": "associated", "to": "diarrhea"}, {"from": "dry cough", "title": "associated", "to": "constipation"}, {"from": "dry cough", "title": "associated", "to": "abdominal pain"}, {"from": "dry cough", "title": "associated", "to": "dysuria"}, {"from": "dry cough", "title": "associated", "to": "arthralgias"}, {"from": "dry cough", "title": "associated", "to": "myalgias"}, {"from": "febrile  illness", "title": "associated", "to": "fever chills"}, {"from": "febrile  illness", "title": "associated", "to": "diarrhea"}, {"from": "febrile  illness", "title": "associated", "to": "constipation"}, {"from": "fever chills", "title": "associated", "to": "headache"}, {"from": "fever chills", "title": "associated", "to": "chest pain or  tightness palpitations"}, {"from": "fever chills", "title": "associated", "to": "nausea vomiting"}, {"from": "fever chills", "title": "associated", "to": "diarrhea"}, {"from": "fever chills", "title": "associated", "to": "constipation"}, {"from": "fever chills", "title": "associated", "to": "abdominal pain"}, {"from": "fever chills", "title": "associated", "to": "dysuria"}, {"from": "fever chills", "title": "associated", "to": "arthralgias"}, {"from": "fever chills", "title": "associated", "to": "myalgias"}, {"from": "headache", "title": "associated", "to": "nausea vomiting"}, {"from": "headache", "title": "associated", "to": "diarrhea"}, {"from": "headache", "title": "associated", "to": "constipation"}, {"from": "headache", "title": "associated", "to": "abdominal pain"}, {"from": "headache", "title": "associated", "to": "dysuria"}, {"from": "headache", "title": "associated", "to": "myalgias"}, {"from": "sinus  tenderness rhinorrhea or congestion", "title": "associated", "to": "chest pain or  tightness palpitations"}, {"from": "sinus  tenderness rhinorrhea or congestion", "title": "associated", "to": "abdominal pain"}, {"from": "chest pain or  tightness palpitations", "title": "associated", "to": "diarrhea"}, {"from": "chest pain or  tightness palpitations", "title": "associated", "to": "constipation"}, {"from": "chest pain or  tightness palpitations", "title": "associated", "to": "abdominal pain"}, {"from": "chest pain or  tightness palpitations", "title": "associated", "to": "myalgias"}, {"from": "nausea vomiting", "title": "associated", "to": "diarrhea"}, {"from": "nausea vomiting", "title": "associated", "to": "constipation"}, {"from": "nausea vomiting", "title": "associated", "to": "abdominal pain"}, {"from": "nausea vomiting", "title": "associated", "to": "dysuria"}, {"from": "diarrhea", "title": "associated", "to": "constipation"}, {"from": "diarrhea", "title": "associated", "to": "abdominal pain"}, {"from": "diarrhea", "title": "associated", "to": "dysuria"}, {"from": "diarrhea", "title": "associated", "to": "arthralgias"}, {"from": "diarrhea", "title": "associated", "to": "myalgias"}, {"from": "constipation", "title": "associated", "to": "abdominal pain"}, {"from": "constipation", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "arthralgias"}, {"from": "constipation", "title": "associated", "to": "myalgias"}, {"from": "abdominal pain", "title": "associated", "to": "dysuria"}, {"from": "abdominal pain", "title": "associated", "to": "arthralgias"}, {"from": "abdominal pain", "title": "associated", "to": "myalgias"}, {"from": "dysuria", "title": "associated", "to": "arthralgias"}, {"from": "dysuria", "title": "associated", "to": "myalgias"}, {"from": "arthralgias", "title": "associated", "to": "myalgias"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

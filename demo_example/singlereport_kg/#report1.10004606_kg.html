@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "gi bleed", "label": "gi bleed", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "gallstone pancreatitis", "label": "gallstone pancreatitis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "seizures", "label": "seizures", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "pancreatitis", "label": "pancreatitis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abd pain", "label": "abd pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "polyuria", "label": "polyuria", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "lg", "label": "lg", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "leuk", "label": "leuk", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "wbc", "label": "wbc", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "colonic diverticulosis", "label": "colonic diverticulosis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "diverticulitis", "label": "diverticulitis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "intrahepatic  biliary dilation", "label": "intrahepatic  biliary dilation", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "morphine sulfate", "label": "morphine sulfate", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "esomeprazole sodium", "label": "esomeprazole sodium", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "ceftriaxone", "label": "ceftriaxone", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "atorvastatin", "label": "atorvastatin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "labetalol", "label": "labetalol", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "levetiracetam", "label": "levetiracetam", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "ondansetron", "label": "ondansetron", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "uti", "label": "uti", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "fevers", "label": "fevers", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "weakness", "label": "weakness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "e coli", "label": "e coli", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "ciprofloxacin", "label": "ciprofloxacin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hh", "label": "hh", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "h pylori", "label": "h pylori", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hgb", "label": "hgb", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "gi bleed", "title": "associated", "to": "gallstone pancreatitis"}, {"from": "gi bleed", "title": "associated", "to": "seizures"}, {"from": "gi bleed", "title": "associated", "to": "pancreatitis"}, {"from": "gi bleed", "title": "associated", "to": "dysuria"}, {"from": "gi bleed", "title": "associated", "to": "polyuria"}, {"from": "gi bleed", "title": "associated", "to": "colonic diverticulosis"}, {"from": "gi bleed", "title": "associated", "to": "diverticulitis"}, {"from": "gi bleed", "title": "associated", "to": "intrahepatic  biliary dilation"}, {"from": "gi bleed", "title": "associated", "to": "ceftriaxone"}, {"from": "gi bleed", "title": "associated", "to": "labetalol"}, {"from": "gi bleed", "title": "associated", "to": "ondansetron"}, {"from": "gi bleed", "title": "associated", "to": "abdominal pain"}, {"from": "gi bleed", "title": "associated", "to": "fevers"}, {"from": "gi bleed", "title": "associated", "to": "chest pain"}, {"from": "gi bleed", "title": "associated", "to": "h pylori"}, {"from": "gallstone pancreatitis", "title": "associated", "to": "seizures"}, {"from": "gallstone pancreatitis", "title": "associated", "to": "pancreatitis"}, {"from": "gallstone pancreatitis", "title": "associated", "to": "dysuria"}, {"from": "gallstone pancreatitis", "title": "associated", "to": "polyuria"}, {"from": "gallstone pancreatitis", "title": "associated", "to": "colonic diverticulosis"}, {"from": "gallstone pancreatitis", "title": "associated", "to": "diverticulitis"}, {"from": "gallstone pancreatitis", "title": "associated", "to": "intrahepatic  biliary dilation"}, {"from": "gallstone pancreatitis", "title": "associated", "to": "abdominal pain"}, {"from": "gallstone pancreatitis", "title": "associated", "to": "h pylori"}, {"from": "seizures", "title": "associated", "to": "pancreatitis"}, {"from": "seizures", "title": "associated", "to": "dysuria"}, {"from": "seizures", "title": "associated", "to": "polyuria"}, {"from": "seizures", "title": "associated", "to": "colonic diverticulosis"}, {"from": "seizures", "title": "associated", "to": "diverticulitis"}, {"from": "seizures", "title": "associated", "to": "intrahepatic  biliary dilation"}, {"from": "seizures", "title": "associated", "to": "abdominal pain"}, {"from": "seizures", "title": "associated", "to": "fevers"}, {"from": "seizures", "title": "associated", "to": "chest pain"}, {"from": "seizures", "title": "associated", "to": "weakness"}, {"from": "pancreatitis", "title": "associated", "to": "dysuria"}, {"from": "pancreatitis", "title": "associated", "to": "polyuria"}, {"from": "pancreatitis", "title": "associated", "to": "colonic diverticulosis"}, {"from": "pancreatitis", "title": "associated", "to": "diverticulitis"}, {"from": "pancreatitis", "title": "associated", "to": "intrahepatic  biliary dilation"}, {"from": "pancreatitis", "title": "associated", "to": "ceftriaxone"}, {"from": "pancreatitis", "title": "associated", "to": "labetalol"}, {"from": "pancreatitis", "title": "associated", "to": "ondansetron"}, {"from": "pancreatitis", "title": "associated", "to": "abdominal pain"}, {"from": "pancreatitis", "title": "associated", "to": "fevers"}, {"from": "pancreatitis", "title": "associated", "to": "chest pain"}, {"from": "pancreatitis", "title": "associated", "to": "weakness"}, {"from": "pancreatitis", "title": "associated", "to": "h pylori"}, {"from": "abd pain", "title": "associated", "to": "dysuria"}, {"from": "abd pain", "title": "associated", "to": "abdominal pain"}, {"from": "abd pain", "title": "associated", "to": "chest pain"}, {"from": "dysuria", "title": "associated", "to": "polyuria"}, {"from": "dysuria", "title": "associated", "to": "colonic diverticulosis"}, {"from": "dysuria", "title": "associated", "to": "diverticulitis"}, {"from": "dysuria", "title": "associated", "to": "ondansetron"}, {"from": "dysuria", "title": "associated", "to": "abdominal pain"}, {"from": "dysuria", "title": "associated", "to": "fevers"}, {"from": "dysuria", "title": "associated", "to": "chest pain"}, {"from": "dysuria", "title": "associated", "to": "weakness"}, {"from": "dysuria", "title": "associated", "to": "h pylori"}, {"from": "polyuria", "title": "associated", "to": "colonic diverticulosis"}, {"from": "polyuria", "title": "associated", "to": "diverticulitis"}, {"from": "polyuria", "title": "associated", "to": "abdominal pain"}, {"from": "polyuria", "title": "associated", "to": "uti"}, {"from": "polyuria", "title": "associated", "to": "fevers"}, {"from": "polyuria", "title": "associated", "to": "chest pain"}, {"from": "polyuria", "title": "associated", "to": "h pylori"}, {"from": "lg", "title": "associated", "to": "leuk"}, {"from": "lg", "title": "associated", "to": "ceftriaxone"}, {"from": "lg", "title": "associated", "to": "labetalol"}, {"from": "lg", "title": "associated", "to": "uti"}, {"from": "lg", "title": "associated", "to": "hh"}, {"from": "leuk", "title": "associated", "to": "ceftriaxone"}, {"from": "leuk", "title": "associated", "to": "labetalol"}, {"from": "leuk", "title": "associated", "to": "uti"}, {"from": "leuk", "title": "associated", "to": "hgb"}, {"from": "wbc", "title": "associated", "to": "hgb"}, {"from": "colonic diverticulosis", "title": "associated", "to": "diverticulitis"}, {"from": "colonic diverticulosis", "title": "associated", "to": "h pylori"}, {"from": "diverticulitis", "title": "associated", "to": "intrahepatic  biliary dilation"}, {"from": "diverticulitis", "title": "associated", "to": "esomeprazole sodium"}, {"from": "diverticulitis", "title": "associated", "to": "ceftriaxone"}, {"from": "diverticulitis", "title": "associated", "to": "labetalol"}, {"from": "diverticulitis", "title": "associated", "to": "ondansetron"}, {"from": "diverticulitis", "title": "associated", "to": "abdominal pain"}, {"from": "diverticulitis", "title": "associated", "to": "uti"}, {"from": "diverticulitis", "title": "associated", "to": "fevers"}, {"from": "diverticulitis", "title": "associated", "to": "chest pain"}, {"from": "diverticulitis", "title": "associated", "to": "e coli"}, {"from": "diverticulitis", "title": "associated", "to": "h pylori"}, {"from": "morphine sulfate", "title": "associated", "to": "esomeprazole sodium"}, {"from": "morphine sulfate", "title": "associated", "to": "ceftriaxone"}, {"from": "morphine sulfate", "title": "associated", "to": "atorvastatin"}, {"from": "morphine sulfate", "title": "associated", "to": "labetalol"}, {"from": "morphine sulfate", "title": "associated", "to": "levetiracetam"}, {"from": "morphine sulfate", "title": "associated", "to": "ondansetron"}, {"from": "morphine sulfate", "title": "associated", "to": "ciprofloxacin"}, {"from": "esomeprazole sodium", "title": "associated", "to": "ceftriaxone"}, {"from": "esomeprazole sodium", "title": "associated", "to": "atorvastatin"}, {"from": "esomeprazole sodium", "title": "associated", "to": "labetalol"}, {"from": "esomeprazole sodium", "title": "associated", "to": "levetiracetam"}, {"from": "esomeprazole sodium", "title": "associated", "to": "ondansetron"}, {"from": "esomeprazole sodium", "title": "associated", "to": "ciprofloxacin"}, {"from": "ceftriaxone", "title": "associated", "to": "atorvastatin"}, {"from": "ceftriaxone", "title": "associated", "to": "labetalol"}, {"from": "ceftriaxone", "title": "associated", "to": "levetiracetam"}, {"from": "ceftriaxone", "title": "associated", "to": "ondansetron"}, {"from": "ceftriaxone", "title": "associated", "to": "e coli"}, {"from": "ceftriaxone", "title": "associated", "to": "ciprofloxacin"}, {"from": "atorvastatin", "title": "associated", "to": "labetalol"}, {"from": "atorvastatin", "title": "associated", "to": "levetiracetam"}, {"from": "atorvastatin", "title": "associated", "to": "ondansetron"}, {"from": "atorvastatin", "title": "associated", "to": "ciprofloxacin"}, {"from": "labetalol", "title": "associated", "to": "levetiracetam"}, {"from": "labetalol", "title": "associated", "to": "ondansetron"}, {"from": "labetalol", "title": "associated", "to": "ciprofloxacin"}, {"from": "labetalol", "title": "associated", "to": "h pylori"}, {"from": "levetiracetam", "title": "associated", "to": "ondansetron"}, {"from": "levetiracetam", "title": "associated", "to": "ciprofloxacin"}, {"from": "ondansetron", "title": "associated", "to": "ciprofloxacin"}, {"from": "abdominal pain", "title": "associated", "to": "fevers"}, {"from": "abdominal pain", "title": "associated", "to": "chest pain"}, {"from": "abdominal pain", "title": "associated", "to": "weakness"}, {"from": "uti", "title": "associated", "to": "hh"}, {"from": "fevers", "title": "associated", "to": "chest pain"}, {"from": "fevers", "title": "associated", "to": "weakness"}, {"from": "chest pain", "title": "associated", "to": "shortness of breath"}, {"from": "chest pain", "title": "associated", "to": "weakness"}, {"from": "e coli", "title": "associated", "to": "h pylori"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

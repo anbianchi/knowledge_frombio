@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#90EE90", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "woman", "label": "woman", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "niddm", "label": "niddm", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "glipizide", "label": "glipizide", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "pericarditis", "label": "pericarditis", "shape": "dot"}, {"color": "red", "font": {"color": "black"}, "id": "htn", "label": "htn", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hyperlipidemia  nephrolithiasis", "label": "hyperlipidemia  nephrolithiasis", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "weakness", "label": "weakness", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hypoglycemia", "label": "hypoglycemia", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "metformin", "label": "metformin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "diabetes mellitus", "label": "diabetes mellitus", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "fatigue", "label": "fatigue", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "glucose", "label": "glucose", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "cough", "label": "cough", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dysuria frequency", "label": "dysuria frequency", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "cp sob", "label": "cp sob", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "leg swelling", "label": "leg swelling", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "blurry vision", "label": "blurry vision", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "headache", "label": "headache", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "indomethacin", "label": "indomethacin", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "gout", "label": "gout", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "hh  cr", "label": "hh  cr", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "dextrose", "label": "dextrose", "shape": "dot"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "gout flare", "label": "gout flare", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "htn hl  dm ii cb", "label": "htn hl  dm ii cb", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "peripheral neuropathy", "label": "peripheral neuropathy", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "lightheadedness", "label": "lightheadedness", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "bilateral hand numbness", "label": "bilateral hand numbness", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "tingling left retroorbital headaches", "label": "tingling left retroorbital headaches", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "visual blurring", "label": "visual blurring", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "syncopal episode", "label": "syncopal episode", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "woman", "title": "associated", "to": "niddm"}, {"from": "woman", "title": "associated", "to": "dysuria frequency"}, {"from": "woman", "title": "associated", "to": "gout flare"}, {"from": "niddm", "title": "associated", "to": "htn"}, {"from": "niddm", "title": "associated", "to": "cp sob"}, {"from": "niddm", "title": "associated", "to": "gout flare"}, {"from": "glipizide", "title": "associated", "to": "hyperlipidemia  nephrolithiasis"}, {"from": "glipizide", "title": "associated", "to": "hypoglycemia"}, {"from": "glipizide", "title": "associated", "to": "metformin"}, {"from": "glipizide", "title": "associated", "to": "diarrhea"}, {"from": "glipizide", "title": "associated", "to": "dysuria frequency"}, {"from": "glipizide", "title": "associated", "to": "indomethacin"}, {"from": "glipizide", "title": "associated", "to": "dextrose"}, {"from": "pericarditis", "title": "associated", "to": "htn"}, {"from": "pericarditis", "title": "associated", "to": "hyperlipidemia  nephrolithiasis"}, {"from": "pericarditis", "title": "associated", "to": "hypoglycemia"}, {"from": "pericarditis", "title": "associated", "to": "diarrhea"}, {"from": "pericarditis", "title": "associated", "to": "dysuria frequency"}, {"from": "pericarditis", "title": "associated", "to": "leg swelling"}, {"from": "pericarditis", "title": "associated", "to": "blurry vision"}, {"from": "pericarditis", "title": "associated", "to": "gout"}, {"from": "pericarditis", "title": "associated", "to": "gout flare"}, {"from": "pericarditis", "title": "associated", "to": "peripheral neuropathy"}, {"from": "pericarditis", "title": "associated", "to": "visual blurring"}, {"from": "pericarditis", "title": "associated", "to": "syncopal episode"}, {"from": "htn", "title": "associated", "to": "hyperlipidemia  nephrolithiasis"}, {"from": "htn", "title": "associated", "to": "hypoglycemia"}, {"from": "htn", "title": "associated", "to": "metformin"}, {"from": "htn", "title": "associated", "to": "diabetes mellitus"}, {"from": "htn", "title": "associated", "to": "diarrhea"}, {"from": "htn", "title": "associated", "to": "dysuria frequency"}, {"from": "htn", "title": "associated", "to": "cp sob"}, {"from": "htn", "title": "associated", "to": "leg swelling"}, {"from": "htn", "title": "associated", "to": "gout"}, {"from": "htn", "title": "associated", "to": "hh  cr"}, {"from": "htn", "title": "associated", "to": "gout flare"}, {"from": "htn", "title": "associated", "to": "htn hl  dm ii cb"}, {"from": "htn", "title": "associated", "to": "peripheral neuropathy"}, {"from": "htn", "title": "associated", "to": "bilateral hand numbness"}, {"from": "hyperlipidemia  nephrolithiasis", "title": "associated", "to": "hypoglycemia"}, {"from": "hyperlipidemia  nephrolithiasis", "title": "associated", "to": "diabetes mellitus"}, {"from": "hyperlipidemia  nephrolithiasis", "title": "associated", "to": "diarrhea"}, {"from": "hyperlipidemia  nephrolithiasis", "title": "associated", "to": "dysuria frequency"}, {"from": "hyperlipidemia  nephrolithiasis", "title": "associated", "to": "leg swelling"}, {"from": "hyperlipidemia  nephrolithiasis", "title": "associated", "to": "blurry vision"}, {"from": "hyperlipidemia  nephrolithiasis", "title": "associated", "to": "gout"}, {"from": "hyperlipidemia  nephrolithiasis", "title": "associated", "to": "gout flare"}, {"from": "weakness", "title": "associated", "to": "fatigue"}, {"from": "weakness", "title": "associated", "to": "cough"}, {"from": "weakness", "title": "associated", "to": "diarrhea"}, {"from": "weakness", "title": "associated", "to": "dysuria frequency"}, {"from": "weakness", "title": "associated", "to": "leg swelling"}, {"from": "weakness", "title": "associated", "to": "blurry vision"}, {"from": "weakness", "title": "associated", "to": "headache"}, {"from": "weakness", "title": "associated", "to": "gout flare"}, {"from": "hypoglycemia", "title": "associated", "to": "metformin"}, {"from": "hypoglycemia", "title": "associated", "to": "diabetes mellitus"}, {"from": "hypoglycemia", "title": "associated", "to": "diarrhea"}, {"from": "hypoglycemia", "title": "associated", "to": "dysuria frequency"}, {"from": "hypoglycemia", "title": "associated", "to": "leg swelling"}, {"from": "hypoglycemia", "title": "associated", "to": "blurry vision"}, {"from": "hypoglycemia", "title": "associated", "to": "indomethacin"}, {"from": "hypoglycemia", "title": "associated", "to": "gout"}, {"from": "hypoglycemia", "title": "associated", "to": "gout flare"}, {"from": "metformin", "title": "associated", "to": "diarrhea"}, {"from": "metformin", "title": "associated", "to": "dysuria frequency"}, {"from": "metformin", "title": "associated", "to": "indomethacin"}, {"from": "metformin", "title": "associated", "to": "gout flare"}, {"from": "diabetes mellitus", "title": "associated", "to": "diarrhea"}, {"from": "diabetes mellitus", "title": "associated", "to": "dysuria frequency"}, {"from": "diabetes mellitus", "title": "associated", "to": "leg swelling"}, {"from": "diabetes mellitus", "title": "associated", "to": "gout"}, {"from": "diabetes mellitus", "title": "associated", "to": "gout flare"}, {"from": "fatigue", "title": "associated", "to": "cough"}, {"from": "fatigue", "title": "associated", "to": "diarrhea"}, {"from": "fatigue", "title": "associated", "to": "dysuria frequency"}, {"from": "fatigue", "title": "associated", "to": "leg swelling"}, {"from": "fatigue", "title": "associated", "to": "blurry vision"}, {"from": "fatigue", "title": "associated", "to": "headache"}, {"from": "fatigue", "title": "associated", "to": "gout flare"}, {"from": "cough", "title": "associated", "to": "diarrhea"}, {"from": "cough", "title": "associated", "to": "dysuria frequency"}, {"from": "cough", "title": "associated", "to": "cp sob"}, {"from": "cough", "title": "associated", "to": "leg swelling"}, {"from": "cough", "title": "associated", "to": "blurry vision"}, {"from": "cough", "title": "associated", "to": "headache"}, {"from": "cough", "title": "associated", "to": "gout flare"}, {"from": "diarrhea", "title": "associated", "to": "dysuria frequency"}, {"from": "diarrhea", "title": "associated", "to": "leg swelling"}, {"from": "diarrhea", "title": "associated", "to": "blurry vision"}, {"from": "diarrhea", "title": "associated", "to": "headache"}, {"from": "diarrhea", "title": "associated", "to": "indomethacin"}, {"from": "diarrhea", "title": "associated", "to": "gout"}, {"from": "diarrhea", "title": "associated", "to": "gout flare"}, {"from": "dysuria frequency", "title": "associated", "to": "leg swelling"}, {"from": "dysuria frequency", "title": "associated", "to": "blurry vision"}, {"from": "dysuria frequency", "title": "associated", "to": "headache"}, {"from": "dysuria frequency", "title": "associated", "to": "gout"}, {"from": "dysuria frequency", "title": "associated", "to": "gout flare"}, {"from": "leg swelling", "title": "associated", "to": "blurry vision"}, {"from": "leg swelling", "title": "associated", "to": "headache"}, {"from": "leg swelling", "title": "associated", "to": "gout"}, {"from": "leg swelling", "title": "associated", "to": "gout flare"}, {"from": "blurry vision", "title": "associated", "to": "headache"}, {"from": "blurry vision", "title": "associated", "to": "gout flare"}, {"from": "headache", "title": "associated", "to": "gout flare"}, {"from": "indomethacin", "title": "associated", "to": "gout flare"}, {"from": "gout", "title": "associated", "to": "gout flare"}, {"from": "peripheral neuropathy", "title": "associated", "to": "bilateral hand numbness"}, {"from": "lightheadedness", "title": "associated", "to": "bilateral hand numbness"}, {"from": "lightheadedness", "title": "associated", "to": "tingling left retroorbital headaches"}, {"from": "lightheadedness", "title": "associated", "to": "syncopal episode"}, {"from": "bilateral hand numbness", "title": "associated", "to": "tingling left retroorbital headaches"}, {"from": "bilateral hand numbness", "title": "associated", "to": "visual blurring"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

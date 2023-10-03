@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FFDAB9", "font": {"color": "black"}, "id": "htn", "label": "htn", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "hld", "label": "hld", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cva", "label": "cva", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cad", "label": "cad", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "aspirin", "label": "aspirin", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "plavix", "label": "plavix", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "diabetes", "label": "diabetes", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "substernal chest tightness", "label": "substernal chest tightness", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "sob", "label": "sob", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "chest tightness", "label": "chest tightness", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "angina", "label": "angina", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cp", "label": "cp", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "diaphoreses", "label": "diaphoreses", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "abdominal discomfort", "label": "abdominal discomfort", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "precordial", "label": "precordial", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "asa", "label": "asa", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "acs", "label": "acs", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "htn emergency", "label": "htn emergency", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "orthopnea", "label": "orthopnea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "doe", "label": "doe", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "edema", "label": "edema", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "emesis", "label": "emesis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "diaphoresis", "label": "diaphoresis", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "chest pain", "label": "chest pain", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "diarrhea", "label": "diarrhea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "constipation", "label": "constipation", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "dysuria", "label": "dysuria", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "focal weaknessnumbness", "label": "focal weaknessnumbness", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "l  leg tingling", "label": "l  leg tingling", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "plt", "label": "plt", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "pulmonary edema", "label": "pulmonary edema", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "pleural  effusions", "label": "pleural  effusions", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "consolidation", "label": "consolidation", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "cardiomegaly", "label": "cardiomegaly", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "carvedilol", "label": "carvedilol", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "lasix", "label": "lasix", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "systolic heart", "label": "systolic heart", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "chf", "label": "chf", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "dyspneachest  tightness", "label": "dyspneachest  tightness", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "wheezing", "label": "wheezing", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "copdasthma", "label": "copdasthma", "shape": "dot"}, {"color": "#FFDAB9", "font": {"color": "black"}, "id": "reactive airway disease", "label": "reactive airway disease", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "htn", "title": "associated", "to": "cad"}, {"from": "htn", "title": "associated", "to": "aspirin"}, {"from": "htn", "title": "associated", "to": "plavix"}, {"from": "htn", "title": "associated", "to": "diabetes"}, {"from": "htn", "title": "associated", "to": "chest tightness"}, {"from": "htn", "title": "associated", "to": "angina"}, {"from": "htn", "title": "associated", "to": "cp"}, {"from": "htn", "title": "associated", "to": "asa"}, {"from": "htn", "title": "associated", "to": "htn emergency"}, {"from": "htn", "title": "associated", "to": "orthopnea"}, {"from": "htn", "title": "associated", "to": "diaphoresis"}, {"from": "htn", "title": "associated", "to": "chest pain"}, {"from": "htn", "title": "associated", "to": "diarrhea"}, {"from": "htn", "title": "associated", "to": "constipation"}, {"from": "htn", "title": "associated", "to": "dysuria"}, {"from": "htn", "title": "associated", "to": "l  leg tingling"}, {"from": "htn", "title": "associated", "to": "pulmonary edema"}, {"from": "htn", "title": "associated", "to": "lasix"}, {"from": "htn", "title": "associated", "to": "dyspnea"}, {"from": "htn", "title": "associated", "to": "chf"}, {"from": "htn", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "htn", "title": "associated", "to": "copdasthma"}, {"from": "htn", "title": "associated", "to": "reactive airway disease"}, {"from": "hld", "title": "associated", "to": "cva"}, {"from": "hld", "title": "associated", "to": "cad"}, {"from": "hld", "title": "associated", "to": "cp"}, {"from": "hld", "title": "associated", "to": "asa"}, {"from": "hld", "title": "associated", "to": "acs"}, {"from": "hld", "title": "associated", "to": "htn emergency"}, {"from": "hld", "title": "associated", "to": "doe"}, {"from": "cva", "title": "associated", "to": "cad"}, {"from": "cva", "title": "associated", "to": "plavix"}, {"from": "cva", "title": "associated", "to": "cp"}, {"from": "cva", "title": "associated", "to": "asa"}, {"from": "cva", "title": "associated", "to": "acs"}, {"from": "cva", "title": "associated", "to": "doe"}, {"from": "cad", "title": "associated", "to": "aspirin"}, {"from": "cad", "title": "associated", "to": "plavix"}, {"from": "cad", "title": "associated", "to": "angina"}, {"from": "cad", "title": "associated", "to": "cp"}, {"from": "cad", "title": "associated", "to": "precordial"}, {"from": "cad", "title": "associated", "to": "asa"}, {"from": "cad", "title": "associated", "to": "acs"}, {"from": "cad", "title": "associated", "to": "htn emergency"}, {"from": "cad", "title": "associated", "to": "doe"}, {"from": "cad", "title": "associated", "to": "diarrhea"}, {"from": "cad", "title": "associated", "to": "dysuria"}, {"from": "cad", "title": "associated", "to": "pulmonary edema"}, {"from": "cad", "title": "associated", "to": "consolidation"}, {"from": "cad", "title": "associated", "to": "lasix"}, {"from": "cad", "title": "associated", "to": "chf"}, {"from": "cad", "title": "associated", "to": "copdasthma"}, {"from": "cad", "title": "associated", "to": "reactive airway disease"}, {"from": "aspirin", "title": "associated", "to": "plavix"}, {"from": "aspirin", "title": "associated", "to": "angina"}, {"from": "aspirin", "title": "associated", "to": "cp"}, {"from": "aspirin", "title": "associated", "to": "asa"}, {"from": "aspirin", "title": "associated", "to": "htn emergency"}, {"from": "aspirin", "title": "associated", "to": "orthopnea"}, {"from": "aspirin", "title": "associated", "to": "diarrhea"}, {"from": "aspirin", "title": "associated", "to": "constipation"}, {"from": "aspirin", "title": "associated", "to": "dysuria"}, {"from": "aspirin", "title": "associated", "to": "pulmonary edema"}, {"from": "aspirin", "title": "associated", "to": "carvedilol"}, {"from": "aspirin", "title": "associated", "to": "lasix"}, {"from": "aspirin", "title": "associated", "to": "copdasthma"}, {"from": "aspirin", "title": "associated", "to": "reactive airway disease"}, {"from": "plavix", "title": "associated", "to": "angina"}, {"from": "plavix", "title": "associated", "to": "cp"}, {"from": "plavix", "title": "associated", "to": "asa"}, {"from": "plavix", "title": "associated", "to": "acs"}, {"from": "plavix", "title": "associated", "to": "htn emergency"}, {"from": "plavix", "title": "associated", "to": "doe"}, {"from": "plavix", "title": "associated", "to": "diarrhea"}, {"from": "plavix", "title": "associated", "to": "carvedilol"}, {"from": "plavix", "title": "associated", "to": "lasix"}, {"from": "diabetes", "title": "associated", "to": "angina"}, {"from": "diabetes", "title": "associated", "to": "htn emergency"}, {"from": "diabetes", "title": "associated", "to": "orthopnea"}, {"from": "diabetes", "title": "associated", "to": "diarrhea"}, {"from": "diabetes", "title": "associated", "to": "constipation"}, {"from": "diabetes", "title": "associated", "to": "dysuria"}, {"from": "diabetes", "title": "associated", "to": "copdasthma"}, {"from": "diabetes", "title": "associated", "to": "reactive airway disease"}, {"from": "shortness of breath", "title": "associated", "to": "substernal chest tightness"}, {"from": "shortness of breath", "title": "associated", "to": "chest tightness"}, {"from": "shortness of breath", "title": "associated", "to": "abdominal discomfort"}, {"from": "shortness of breath", "title": "associated", "to": "chest pain"}, {"from": "shortness of breath", "title": "associated", "to": "constipation"}, {"from": "shortness of breath", "title": "associated", "to": "dyspnea"}, {"from": "shortness of breath", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "substernal chest tightness", "title": "associated", "to": "chest tightness"}, {"from": "substernal chest tightness", "title": "associated", "to": "angina"}, {"from": "substernal chest tightness", "title": "associated", "to": "diaphoreses"}, {"from": "substernal chest tightness", "title": "associated", "to": "abdominal discomfort"}, {"from": "substernal chest tightness", "title": "associated", "to": "htn emergency"}, {"from": "substernal chest tightness", "title": "associated", "to": "orthopnea"}, {"from": "substernal chest tightness", "title": "associated", "to": "diaphoresis"}, {"from": "substernal chest tightness", "title": "associated", "to": "chest pain"}, {"from": "substernal chest tightness", "title": "associated", "to": "diarrhea"}, {"from": "substernal chest tightness", "title": "associated", "to": "constipation"}, {"from": "substernal chest tightness", "title": "associated", "to": "dysuria"}, {"from": "substernal chest tightness", "title": "associated", "to": "focal weaknessnumbness"}, {"from": "substernal chest tightness", "title": "associated", "to": "l  leg tingling"}, {"from": "substernal chest tightness", "title": "associated", "to": "pulmonary edema"}, {"from": "substernal chest tightness", "title": "associated", "to": "cardiomegaly"}, {"from": "substernal chest tightness", "title": "associated", "to": "dyspnea"}, {"from": "substernal chest tightness", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "substernal chest tightness", "title": "associated", "to": "reactive airway disease"}, {"from": "sob", "title": "associated", "to": "chest tightness"}, {"from": "sob", "title": "associated", "to": "angina"}, {"from": "sob", "title": "associated", "to": "diaphoreses"}, {"from": "sob", "title": "associated", "to": "htn emergency"}, {"from": "sob", "title": "associated", "to": "doe"}, {"from": "sob", "title": "associated", "to": "edema"}, {"from": "sob", "title": "associated", "to": "emesis"}, {"from": "sob", "title": "associated", "to": "diaphoresis"}, {"from": "sob", "title": "associated", "to": "constipation"}, {"from": "sob", "title": "associated", "to": "pulmonary edema"}, {"from": "sob", "title": "associated", "to": "consolidation"}, {"from": "sob", "title": "associated", "to": "dyspnea"}, {"from": "sob", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "sob", "title": "associated", "to": "wheezing"}, {"from": "chest tightness", "title": "associated", "to": "angina"}, {"from": "chest tightness", "title": "associated", "to": "diaphoreses"}, {"from": "chest tightness", "title": "associated", "to": "abdominal discomfort"}, {"from": "chest tightness", "title": "associated", "to": "htn emergency"}, {"from": "chest tightness", "title": "associated", "to": "orthopnea"}, {"from": "chest tightness", "title": "associated", "to": "emesis"}, {"from": "chest tightness", "title": "associated", "to": "diaphoresis"}, {"from": "chest tightness", "title": "associated", "to": "chest pain"}, {"from": "chest tightness", "title": "associated", "to": "diarrhea"}, {"from": "chest tightness", "title": "associated", "to": "constipation"}, {"from": "chest tightness", "title": "associated", "to": "dysuria"}, {"from": "chest tightness", "title": "associated", "to": "focal weaknessnumbness"}, {"from": "chest tightness", "title": "associated", "to": "l  leg tingling"}, {"from": "chest tightness", "title": "associated", "to": "pulmonary edema"}, {"from": "chest tightness", "title": "associated", "to": "cardiomegaly"}, {"from": "chest tightness", "title": "associated", "to": "dyspnea"}, {"from": "chest tightness", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "chest tightness", "title": "associated", "to": "wheezing"}, {"from": "chest tightness", "title": "associated", "to": "reactive airway disease"}, {"from": "angina", "title": "associated", "to": "cp"}, {"from": "angina", "title": "associated", "to": "diaphoreses"}, {"from": "angina", "title": "associated", "to": "abdominal discomfort"}, {"from": "angina", "title": "associated", "to": "asa"}, {"from": "angina", "title": "associated", "to": "htn emergency"}, {"from": "angina", "title": "associated", "to": "orthopnea"}, {"from": "angina", "title": "associated", "to": "edema"}, {"from": "angina", "title": "associated", "to": "emesis"}, {"from": "angina", "title": "associated", "to": "diaphoresis"}, {"from": "angina", "title": "associated", "to": "chest pain"}, {"from": "angina", "title": "associated", "to": "diarrhea"}, {"from": "angina", "title": "associated", "to": "constipation"}, {"from": "angina", "title": "associated", "to": "dysuria"}, {"from": "angina", "title": "associated", "to": "l  leg tingling"}, {"from": "angina", "title": "associated", "to": "pulmonary edema"}, {"from": "angina", "title": "associated", "to": "cardiomegaly"}, {"from": "angina", "title": "associated", "to": "lasix"}, {"from": "angina", "title": "associated", "to": "dyspnea"}, {"from": "angina", "title": "associated", "to": "chf"}, {"from": "angina", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "angina", "title": "associated", "to": "wheezing"}, {"from": "angina", "title": "associated", "to": "copdasthma"}, {"from": "angina", "title": "associated", "to": "reactive airway disease"}, {"from": "cp", "title": "associated", "to": "asa"}, {"from": "cp", "title": "associated", "to": "acs"}, {"from": "cp", "title": "associated", "to": "htn emergency"}, {"from": "cp", "title": "associated", "to": "doe"}, {"from": "cp", "title": "associated", "to": "consolidation"}, {"from": "cp", "title": "associated", "to": "lasix"}, {"from": "diaphoreses", "title": "associated", "to": "abdominal discomfort"}, {"from": "diaphoreses", "title": "associated", "to": "htn emergency"}, {"from": "diaphoreses", "title": "associated", "to": "orthopnea"}, {"from": "diaphoreses", "title": "associated", "to": "edema"}, {"from": "diaphoreses", "title": "associated", "to": "emesis"}, {"from": "diaphoreses", "title": "associated", "to": "diaphoresis"}, {"from": "diaphoreses", "title": "associated", "to": "chest pain"}, {"from": "diaphoreses", "title": "associated", "to": "diarrhea"}, {"from": "diaphoreses", "title": "associated", "to": "constipation"}, {"from": "diaphoreses", "title": "associated", "to": "dysuria"}, {"from": "diaphoreses", "title": "associated", "to": "focal weaknessnumbness"}, {"from": "diaphoreses", "title": "associated", "to": "l  leg tingling"}, {"from": "diaphoreses", "title": "associated", "to": "dyspnea"}, {"from": "diaphoreses", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "diaphoreses", "title": "associated", "to": "wheezing"}, {"from": "abdominal discomfort", "title": "associated", "to": "emesis"}, {"from": "abdominal discomfort", "title": "associated", "to": "diaphoresis"}, {"from": "abdominal discomfort", "title": "associated", "to": "chest pain"}, {"from": "abdominal discomfort", "title": "associated", "to": "diarrhea"}, {"from": "abdominal discomfort", "title": "associated", "to": "constipation"}, {"from": "abdominal discomfort", "title": "associated", "to": "dysuria"}, {"from": "abdominal discomfort", "title": "associated", "to": "l  leg tingling"}, {"from": "abdominal discomfort", "title": "associated", "to": "dyspnea"}, {"from": "abdominal discomfort", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "asa", "title": "associated", "to": "acs"}, {"from": "asa", "title": "associated", "to": "htn emergency"}, {"from": "asa", "title": "associated", "to": "doe"}, {"from": "asa", "title": "associated", "to": "diarrhea"}, {"from": "asa", "title": "associated", "to": "lasix"}, {"from": "acs", "title": "associated", "to": "htn emergency"}, {"from": "acs", "title": "associated", "to": "doe"}, {"from": "acs", "title": "associated", "to": "consolidation"}, {"from": "acs", "title": "associated", "to": "lasix"}, {"from": "htn emergency", "title": "associated", "to": "orthopnea"}, {"from": "htn emergency", "title": "associated", "to": "doe"}, {"from": "htn emergency", "title": "associated", "to": "emesis"}, {"from": "htn emergency", "title": "associated", "to": "diaphoresis"}, {"from": "htn emergency", "title": "associated", "to": "chest pain"}, {"from": "htn emergency", "title": "associated", "to": "diarrhea"}, {"from": "htn emergency", "title": "associated", "to": "constipation"}, {"from": "htn emergency", "title": "associated", "to": "dysuria"}, {"from": "htn emergency", "title": "associated", "to": "l  leg tingling"}, {"from": "htn emergency", "title": "associated", "to": "pulmonary edema"}, {"from": "htn emergency", "title": "associated", "to": "consolidation"}, {"from": "htn emergency", "title": "associated", "to": "cardiomegaly"}, {"from": "htn emergency", "title": "associated", "to": "lasix"}, {"from": "htn emergency", "title": "associated", "to": "dyspnea"}, {"from": "htn emergency", "title": "associated", "to": "chf"}, {"from": "htn emergency", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "htn emergency", "title": "associated", "to": "copdasthma"}, {"from": "htn emergency", "title": "associated", "to": "reactive airway disease"}, {"from": "orthopnea", "title": "associated", "to": "emesis"}, {"from": "orthopnea", "title": "associated", "to": "diaphoresis"}, {"from": "orthopnea", "title": "associated", "to": "chest pain"}, {"from": "orthopnea", "title": "associated", "to": "diarrhea"}, {"from": "orthopnea", "title": "associated", "to": "constipation"}, {"from": "orthopnea", "title": "associated", "to": "dysuria"}, {"from": "orthopnea", "title": "associated", "to": "l  leg tingling"}, {"from": "orthopnea", "title": "associated", "to": "pulmonary edema"}, {"from": "orthopnea", "title": "associated", "to": "cardiomegaly"}, {"from": "orthopnea", "title": "associated", "to": "dyspnea"}, {"from": "orthopnea", "title": "associated", "to": "chf"}, {"from": "orthopnea", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "orthopnea", "title": "associated", "to": "copdasthma"}, {"from": "orthopnea", "title": "associated", "to": "reactive airway disease"}, {"from": "doe", "title": "associated", "to": "emesis"}, {"from": "doe", "title": "associated", "to": "lasix"}, {"from": "edema", "title": "associated", "to": "emesis"}, {"from": "edema", "title": "associated", "to": "diaphoresis"}, {"from": "edema", "title": "associated", "to": "pulmonary edema"}, {"from": "edema", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "edema", "title": "associated", "to": "wheezing"}, {"from": "emesis", "title": "associated", "to": "diaphoresis"}, {"from": "emesis", "title": "associated", "to": "chest pain"}, {"from": "emesis", "title": "associated", "to": "diarrhea"}, {"from": "emesis", "title": "associated", "to": "constipation"}, {"from": "emesis", "title": "associated", "to": "dysuria"}, {"from": "emesis", "title": "associated", "to": "dyspnea"}, {"from": "emesis", "title": "associated", "to": "wheezing"}, {"from": "diaphoresis", "title": "associated", "to": "chest pain"}, {"from": "diaphoresis", "title": "associated", "to": "diarrhea"}, {"from": "diaphoresis", "title": "associated", "to": "constipation"}, {"from": "diaphoresis", "title": "associated", "to": "dysuria"}, {"from": "diaphoresis", "title": "associated", "to": "focal weaknessnumbness"}, {"from": "diaphoresis", "title": "associated", "to": "l  leg tingling"}, {"from": "diaphoresis", "title": "associated", "to": "pulmonary edema"}, {"from": "diaphoresis", "title": "associated", "to": "dyspnea"}, {"from": "diaphoresis", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "diaphoresis", "title": "associated", "to": "wheezing"}, {"from": "diaphoresis", "title": "associated", "to": "reactive airway disease"}, {"from": "chest pain", "title": "associated", "to": "diarrhea"}, {"from": "chest pain", "title": "associated", "to": "constipation"}, {"from": "chest pain", "title": "associated", "to": "dysuria"}, {"from": "chest pain", "title": "associated", "to": "l  leg tingling"}, {"from": "chest pain", "title": "associated", "to": "pulmonary edema"}, {"from": "chest pain", "title": "associated", "to": "dyspnea"}, {"from": "chest pain", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "chest pain", "title": "associated", "to": "reactive airway disease"}, {"from": "diarrhea", "title": "associated", "to": "constipation"}, {"from": "diarrhea", "title": "associated", "to": "dysuria"}, {"from": "diarrhea", "title": "associated", "to": "l  leg tingling"}, {"from": "diarrhea", "title": "associated", "to": "pulmonary edema"}, {"from": "diarrhea", "title": "associated", "to": "lasix"}, {"from": "diarrhea", "title": "associated", "to": "dyspnea"}, {"from": "diarrhea", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "diarrhea", "title": "associated", "to": "wheezing"}, {"from": "diarrhea", "title": "associated", "to": "copdasthma"}, {"from": "diarrhea", "title": "associated", "to": "reactive airway disease"}, {"from": "constipation", "title": "associated", "to": "dysuria"}, {"from": "constipation", "title": "associated", "to": "l  leg tingling"}, {"from": "constipation", "title": "associated", "to": "pulmonary edema"}, {"from": "constipation", "title": "associated", "to": "dyspnea"}, {"from": "constipation", "title": "associated", "to": "chf"}, {"from": "constipation", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "constipation", "title": "associated", "to": "wheezing"}, {"from": "constipation", "title": "associated", "to": "copdasthma"}, {"from": "constipation", "title": "associated", "to": "reactive airway disease"}, {"from": "dysuria", "title": "associated", "to": "focal weaknessnumbness"}, {"from": "dysuria", "title": "associated", "to": "l  leg tingling"}, {"from": "dysuria", "title": "associated", "to": "pulmonary edema"}, {"from": "dysuria", "title": "associated", "to": "cardiomegaly"}, {"from": "dysuria", "title": "associated", "to": "dyspnea"}, {"from": "dysuria", "title": "associated", "to": "chf"}, {"from": "dysuria", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "dysuria", "title": "associated", "to": "copdasthma"}, {"from": "dysuria", "title": "associated", "to": "reactive airway disease"}, {"from": "focal weaknessnumbness", "title": "associated", "to": "l  leg tingling"}, {"from": "focal weaknessnumbness", "title": "associated", "to": "cardiomegaly"}, {"from": "focal weaknessnumbness", "title": "associated", "to": "dyspnea"}, {"from": "focal weaknessnumbness", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "l  leg tingling", "title": "associated", "to": "dyspnea"}, {"from": "l  leg tingling", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "pulmonary edema", "title": "associated", "to": "pleural  effusions"}, {"from": "pulmonary edema", "title": "associated", "to": "consolidation"}, {"from": "pulmonary edema", "title": "associated", "to": "cardiomegaly"}, {"from": "pulmonary edema", "title": "associated", "to": "dyspnea"}, {"from": "pulmonary edema", "title": "associated", "to": "reactive airway disease"}, {"from": "pleural  effusions", "title": "associated", "to": "consolidation"}, {"from": "pleural  effusions", "title": "associated", "to": "cardiomegaly"}, {"from": "pleural  effusions", "title": "associated", "to": "reactive airway disease"}, {"from": "cardiomegaly", "title": "associated", "to": "reactive airway disease"}, {"from": "carvedilol", "title": "associated", "to": "lasix"}, {"from": "dyspnea", "title": "associated", "to": "dyspneachest  tightness"}, {"from": "dyspnea", "title": "associated", "to": "wheezing"}, {"from": "dyspnea", "title": "associated", "to": "copdasthma"}, {"from": "dyspnea", "title": "associated", "to": "reactive airway disease"}, {"from": "chf", "title": "associated", "to": "copdasthma"}, {"from": "chf", "title": "associated", "to": "reactive airway disease"}, {"from": "dyspneachest  tightness", "title": "associated", "to": "wheezing"}, {"from": "copdasthma", "title": "associated", "to": "reactive airway disease"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

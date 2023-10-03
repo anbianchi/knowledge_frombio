@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#E6E6FA", "font": {"color": "black"}, "id": "chronic  persistent atrial fibrillation", "label": "chronic  persistent atrial fibrillation", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "essential  hypertension", "label": "essential  hypertension", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "obesity", "label": "obesity", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "multiple myeloma", "label": "multiple myeloma", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lenalidomide", "label": "lenalidomide", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hematuria", "label": "hematuria", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "vitamin k", "label": "vitamin k", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "coumadin", "label": "coumadin", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "neck pain", "label": "neck pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "weakness numbness", "label": "weakness numbness", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "tramadol", "label": "tramadol", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "dizziness", "label": "dizziness", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lightheadedness", "label": "lightheadedness", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lower extremity weakness", "label": "lower extremity weakness", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "paresthesias", "label": "paresthesias", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "chest  pain", "label": "chest  pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "nausea emesis", "label": "nausea emesis", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "abdominal pain", "label": "abdominal pain", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "headaches", "label": "headaches", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "syncope", "label": "syncope", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "vertiginous symptoms", "label": "vertiginous symptoms", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "tinnitus", "label": "tinnitus", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "hearing  loss", "label": "hearing  loss", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "plt", "label": "plt", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "creatinine", "label": "creatinine", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "troponin", "label": "troponin", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lactate", "label": "lactate", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "rbcs", "label": "rbcs", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "a.", "label": "a.", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "ceftriaxone", "label": "ceftriaxone", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "lopressor", "label": "lopressor", "shape": "dot"}, {"color": "#E6E6FA", "font": {"color": "black"}, "id": "metoprolol tartrate", "label": "metoprolol tartrate", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "chronic  persistent atrial fibrillation", "title": "associated", "to": "essential  hypertension"}, {"from": "chronic  persistent atrial fibrillation", "title": "associated", "to": "multiple myeloma"}, {"from": "chronic  persistent atrial fibrillation", "title": "associated", "to": "hematuria"}, {"from": "chronic  persistent atrial fibrillation", "title": "associated", "to": "coumadin"}, {"from": "chronic  persistent atrial fibrillation", "title": "associated", "to": "chest  pain"}, {"from": "chronic  persistent atrial fibrillation", "title": "associated", "to": "syncope"}, {"from": "chronic  persistent atrial fibrillation", "title": "associated", "to": "vertiginous symptoms"}, {"from": "chronic  persistent atrial fibrillation", "title": "associated", "to": "hearing  loss"}, {"from": "essential  hypertension", "title": "associated", "to": "obesity"}, {"from": "essential  hypertension", "title": "associated", "to": "multiple myeloma"}, {"from": "essential  hypertension", "title": "associated", "to": "hematuria"}, {"from": "essential  hypertension", "title": "associated", "to": "coumadin"}, {"from": "essential  hypertension", "title": "associated", "to": "neck pain"}, {"from": "essential  hypertension", "title": "associated", "to": "syncope"}, {"from": "essential  hypertension", "title": "associated", "to": "vertiginous symptoms"}, {"from": "essential  hypertension", "title": "associated", "to": "tinnitus"}, {"from": "essential  hypertension", "title": "associated", "to": "hearing  loss"}, {"from": "obesity", "title": "associated", "to": "multiple myeloma"}, {"from": "obesity", "title": "associated", "to": "coumadin"}, {"from": "obesity", "title": "associated", "to": "neck pain"}, {"from": "obesity", "title": "associated", "to": "syncope"}, {"from": "obesity", "title": "associated", "to": "tinnitus"}, {"from": "obesity", "title": "associated", "to": "hearing  loss"}, {"from": "multiple myeloma", "title": "associated", "to": "hematuria"}, {"from": "multiple myeloma", "title": "associated", "to": "coumadin"}, {"from": "multiple myeloma", "title": "associated", "to": "lower extremity weakness"}, {"from": "multiple myeloma", "title": "associated", "to": "syncope"}, {"from": "multiple myeloma", "title": "associated", "to": "vertiginous symptoms"}, {"from": "multiple myeloma", "title": "associated", "to": "tinnitus"}, {"from": "multiple myeloma", "title": "associated", "to": "hearing  loss"}, {"from": "lenalidomide", "title": "associated", "to": "tramadol"}, {"from": "lenalidomide", "title": "associated", "to": "ceftriaxone"}, {"from": "lenalidomide", "title": "associated", "to": "lopressor"}, {"from": "lenalidomide", "title": "associated", "to": "metoprolol tartrate"}, {"from": "hematuria", "title": "associated", "to": "coumadin"}, {"from": "hematuria", "title": "associated", "to": "neck pain"}, {"from": "hematuria", "title": "associated", "to": "weakness numbness"}, {"from": "hematuria", "title": "associated", "to": "dizziness"}, {"from": "hematuria", "title": "associated", "to": "lightheadedness"}, {"from": "hematuria", "title": "associated", "to": "lower extremity weakness"}, {"from": "hematuria", "title": "associated", "to": "paresthesias"}, {"from": "hematuria", "title": "associated", "to": "chest  pain"}, {"from": "hematuria", "title": "associated", "to": "nausea emesis"}, {"from": "hematuria", "title": "associated", "to": "abdominal pain"}, {"from": "hematuria", "title": "associated", "to": "headaches"}, {"from": "hematuria", "title": "associated", "to": "syncope"}, {"from": "hematuria", "title": "associated", "to": "vertiginous symptoms"}, {"from": "hematuria", "title": "associated", "to": "tinnitus"}, {"from": "hematuria", "title": "associated", "to": "hearing  loss"}, {"from": "hematuria", "title": "associated", "to": "rbcs"}, {"from": "hematuria", "title": "associated", "to": "ceftriaxone"}, {"from": "hematuria", "title": "associated", "to": "lopressor"}, {"from": "vitamin k", "title": "associated", "to": "coumadin"}, {"from": "vitamin k", "title": "associated", "to": "tramadol"}, {"from": "vitamin k", "title": "associated", "to": "ceftriaxone"}, {"from": "vitamin k", "title": "associated", "to": "lopressor"}, {"from": "vitamin k", "title": "associated", "to": "metoprolol tartrate"}, {"from": "coumadin", "title": "associated", "to": "tramadol"}, {"from": "coumadin", "title": "associated", "to": "syncope"}, {"from": "coumadin", "title": "associated", "to": "vertiginous symptoms"}, {"from": "coumadin", "title": "associated", "to": "rbcs"}, {"from": "coumadin", "title": "associated", "to": "ceftriaxone"}, {"from": "coumadin", "title": "associated", "to": "lopressor"}, {"from": "neck pain", "title": "associated", "to": "weakness numbness"}, {"from": "neck pain", "title": "associated", "to": "dizziness"}, {"from": "neck pain", "title": "associated", "to": "lightheadedness"}, {"from": "neck pain", "title": "associated", "to": "lower extremity weakness"}, {"from": "neck pain", "title": "associated", "to": "paresthesias"}, {"from": "neck pain", "title": "associated", "to": "chest  pain"}, {"from": "neck pain", "title": "associated", "to": "nausea emesis"}, {"from": "neck pain", "title": "associated", "to": "abdominal pain"}, {"from": "neck pain", "title": "associated", "to": "headaches"}, {"from": "neck pain", "title": "associated", "to": "syncope"}, {"from": "neck pain", "title": "associated", "to": "vertiginous symptoms"}, {"from": "neck pain", "title": "associated", "to": "tinnitus"}, {"from": "neck pain", "title": "associated", "to": "hearing  loss"}, {"from": "weakness numbness", "title": "associated", "to": "dizziness"}, {"from": "weakness numbness", "title": "associated", "to": "lightheadedness"}, {"from": "weakness numbness", "title": "associated", "to": "lower extremity weakness"}, {"from": "weakness numbness", "title": "associated", "to": "chest  pain"}, {"from": "weakness numbness", "title": "associated", "to": "nausea emesis"}, {"from": "weakness numbness", "title": "associated", "to": "abdominal pain"}, {"from": "weakness numbness", "title": "associated", "to": "headaches"}, {"from": "weakness numbness", "title": "associated", "to": "syncope"}, {"from": "weakness numbness", "title": "associated", "to": "tinnitus"}, {"from": "weakness numbness", "title": "associated", "to": "hearing  loss"}, {"from": "tramadol", "title": "associated", "to": "ceftriaxone"}, {"from": "tramadol", "title": "associated", "to": "lopressor"}, {"from": "tramadol", "title": "associated", "to": "metoprolol tartrate"}, {"from": "dizziness", "title": "associated", "to": "lightheadedness"}, {"from": "dizziness", "title": "associated", "to": "lower extremity weakness"}, {"from": "dizziness", "title": "associated", "to": "paresthesias"}, {"from": "dizziness", "title": "associated", "to": "chest  pain"}, {"from": "dizziness", "title": "associated", "to": "nausea emesis"}, {"from": "dizziness", "title": "associated", "to": "abdominal pain"}, {"from": "dizziness", "title": "associated", "to": "headaches"}, {"from": "dizziness", "title": "associated", "to": "syncope"}, {"from": "lightheadedness", "title": "associated", "to": "chest  pain"}, {"from": "lightheadedness", "title": "associated", "to": "nausea emesis"}, {"from": "lightheadedness", "title": "associated", "to": "abdominal pain"}, {"from": "lightheadedness", "title": "associated", "to": "headaches"}, {"from": "lightheadedness", "title": "associated", "to": "vertiginous symptoms"}, {"from": "lower extremity weakness", "title": "associated", "to": "paresthesias"}, {"from": "lower extremity weakness", "title": "associated", "to": "chest  pain"}, {"from": "lower extremity weakness", "title": "associated", "to": "abdominal pain"}, {"from": "lower extremity weakness", "title": "associated", "to": "syncope"}, {"from": "lower extremity weakness", "title": "associated", "to": "vertiginous symptoms"}, {"from": "lower extremity weakness", "title": "associated", "to": "hearing  loss"}, {"from": "paresthesias", "title": "associated", "to": "chest  pain"}, {"from": "paresthesias", "title": "associated", "to": "abdominal pain"}, {"from": "paresthesias", "title": "associated", "to": "syncope"}, {"from": "paresthesias", "title": "associated", "to": "vertiginous symptoms"}, {"from": "chest  pain", "title": "associated", "to": "nausea emesis"}, {"from": "chest  pain", "title": "associated", "to": "abdominal pain"}, {"from": "chest  pain", "title": "associated", "to": "headaches"}, {"from": "chest  pain", "title": "associated", "to": "syncope"}, {"from": "chest  pain", "title": "associated", "to": "vertiginous symptoms"}, {"from": "chest  pain", "title": "associated", "to": "hearing  loss"}, {"from": "nausea emesis", "title": "associated", "to": "abdominal pain"}, {"from": "nausea emesis", "title": "associated", "to": "headaches"}, {"from": "abdominal pain", "title": "associated", "to": "headaches"}, {"from": "abdominal pain", "title": "associated", "to": "syncope"}, {"from": "abdominal pain", "title": "associated", "to": "vertiginous symptoms"}, {"from": "headaches", "title": "associated", "to": "syncope"}, {"from": "headaches", "title": "associated", "to": "tinnitus"}, {"from": "syncope", "title": "associated", "to": "vertiginous symptoms"}, {"from": "syncope", "title": "associated", "to": "tinnitus"}, {"from": "syncope", "title": "associated", "to": "hearing  loss"}, {"from": "vertiginous symptoms", "title": "associated", "to": "hearing  loss"}, {"from": "vertiginous symptoms", "title": "associated", "to": "rbcs"}, {"from": "vertiginous symptoms", "title": "associated", "to": "ceftriaxone"}, {"from": "vertiginous symptoms", "title": "associated", "to": "lopressor"}, {"from": "tinnitus", "title": "associated", "to": "hearing  loss"}, {"from": "creatinine", "title": "associated", "to": "troponin"}, {"from": "creatinine", "title": "associated", "to": "lactate"}, {"from": "troponin", "title": "associated", "to": "lactate"}, {"from": "rbcs", "title": "associated", "to": "ceftriaxone"}, {"from": "rbcs", "title": "associated", "to": "lopressor"}, {"from": "ceftriaxone", "title": "associated", "to": "lopressor"}, {"from": "ceftriaxone", "title": "associated", "to": "metoprolol tartrate"}, {"from": "lopressor", "title": "associated", "to": "metoprolol tartrate"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

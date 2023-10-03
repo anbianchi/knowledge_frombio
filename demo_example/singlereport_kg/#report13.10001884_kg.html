@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#F4A460", "font": {"color": "black"}, "id": "copd", "label": "copd", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "dyspnea", "label": "dyspnea", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "atrial fibrillation", "label": "atrial fibrillation", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "apixaban", "label": "apixaban", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "shortness of breath", "label": "shortness of breath", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "prednisone", "label": "prednisone", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "fever chills nausea vomiting diarrhea", "label": "fever chills nausea vomiting diarrhea", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "loss of sensation numbness  weakness", "label": "loss of sensation numbness  weakness", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "urinary or fecal incontinence", "label": "urinary or fecal incontinence", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "difficulty urinating", "label": "difficulty urinating", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "ronchi", "label": "ronchi", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "lactate", "label": "lactate", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "pneumonia", "label": "pneumonia", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "patient", "label": "patient", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "vancomycin", "label": "vancomycin", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "cefepime", "label": "cefepime", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "azithromycin", "label": "azithromycin", "shape": "dot"}, {"color": "#F4A460", "font": {"color": "black"}, "id": "shortness of  breath", "label": "shortness of  breath", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "copd", "title": "associated", "to": "apixaban"}, {"from": "copd", "title": "associated", "to": "ronchi"}, {"from": "copd", "title": "associated", "to": "pneumonia"}, {"from": "copd", "title": "associated", "to": "cefepime"}, {"from": "dyspnea", "title": "associated", "to": "shortness of breath"}, {"from": "dyspnea", "title": "associated", "to": "fever chills nausea vomiting diarrhea"}, {"from": "dyspnea", "title": "associated", "to": "loss of sensation numbness  weakness"}, {"from": "dyspnea", "title": "associated", "to": "urinary or fecal incontinence"}, {"from": "dyspnea", "title": "associated", "to": "difficulty urinating"}, {"from": "dyspnea", "title": "associated", "to": "shortness of  breath"}, {"from": "atrial fibrillation", "title": "associated", "to": "prednisone"}, {"from": "atrial fibrillation", "title": "associated", "to": "urinary or fecal incontinence"}, {"from": "apixaban", "title": "associated", "to": "prednisone"}, {"from": "apixaban", "title": "associated", "to": "vancomycin"}, {"from": "apixaban", "title": "associated", "to": "cefepime"}, {"from": "apixaban", "title": "associated", "to": "azithromycin"}, {"from": "shortness of breath", "title": "associated", "to": "difficulty urinating"}, {"from": "shortness of breath", "title": "associated", "to": "shortness of  breath"}, {"from": "prednisone", "title": "associated", "to": "vancomycin"}, {"from": "prednisone", "title": "associated", "to": "cefepime"}, {"from": "prednisone", "title": "associated", "to": "azithromycin"}, {"from": "fever chills nausea vomiting diarrhea", "title": "associated", "to": "loss of sensation numbness  weakness"}, {"from": "fever chills nausea vomiting diarrhea", "title": "associated", "to": "difficulty urinating"}, {"from": "loss of sensation numbness  weakness", "title": "associated", "to": "difficulty urinating"}, {"from": "urinary or fecal incontinence", "title": "associated", "to": "difficulty urinating"}, {"from": "difficulty urinating", "title": "associated", "to": "shortness of  breath"}, {"from": "ronchi", "title": "associated", "to": "pneumonia"}, {"from": "vancomycin", "title": "associated", "to": "cefepime"}, {"from": "vancomycin", "title": "associated", "to": "azithromycin"}, {"from": "cefepime", "title": "associated", "to": "azithromycin"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
