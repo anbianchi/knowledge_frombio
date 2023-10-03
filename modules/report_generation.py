@@ -35,7 +35,7 @@ def generate_reports(input_file, num_patients=None):
         # Clear the reports folder for the next patient
         clear_reports_folder()
         
-        time.sleep(1)
+        time.sleep(3)
         
 
     print(f"Reports processing completed.")

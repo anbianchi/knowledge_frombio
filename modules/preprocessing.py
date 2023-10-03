@@ -38,14 +38,22 @@ def process_reports(preprocessed_reports, filename):
     entity_lists_bern2 = []
 
     #print("Length of preprocessed reports: ", len(preprocessed_reports))
+    #print("\n\n")
+    entity_lists_bern2 = []
     for report in preprocessed_reports:
-        entity_lists_bern2.append(extract_entities_bern2(report))
-    #print("Length of entity_lists_bern2: ", len(entity_lists_bern2))   
+        extracted_entities = extract_entities_bern2(report)
+        if extracted_entities is None:
+            continue
+        if extracted_entities[0].get("entities"):
+            entity_lists_bern2.append(extracted_entities)
+    #print("Length of entity_lists_bern2: ", len(entity_lists_bern2))
+    #print("\n\n")   
 
     # Extract relations between entities in each report in entity_lists_bern2
     predicted_rels = []
     for entity_list in entity_lists_bern2:
         for report in entity_list:
+            #print("Report: ", report)
             relations = extract_relations(report, re_model, re_tokenizer)
             predicted_rels.append(relations)
     #print("Length of predicted_rels: ", len(predicted_rels))
