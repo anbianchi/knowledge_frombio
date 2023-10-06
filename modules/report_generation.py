@@ -52,5 +52,5 @@ def process_reports_from_folder():
     """
     Process reports that are manually inserted into the 'diagnostic_reports' folder.
     """
-    preprocessed_reports = preprocess_medical_knowledge()
-    process_reports(preprocessed_reports)
+    preprocessed_reports, filename = preprocess_medical_knowledge()
+    process_reports(preprocessed_reports, filename=filename)

@@ -42,6 +42,7 @@ def process_reports(preprocessed_reports, filename):
     entity_lists_bern2 = []
     for report in preprocessed_reports:
         extracted_entities = extract_entities_bern2(report)
+        print("Extracted entities: ", extracted_entities)
         if extracted_entities is None:
             continue
         if extracted_entities[0].get("entities"):
@@ -69,8 +70,9 @@ def process_reports(preprocessed_reports, filename):
             G = construct_knowledge_graph(entity_list, rel_list, colors[i % len(colors)])
             filename_i = f"report{i}.{filename}"
             kg = visualize_knowledge_graph(G, filename_i, False)
-            all_graphs.append(G)
-            # Add common nodes to set
+            # check if G is None or empty
+            if (G is not None) or (len(G) > 0) or (nx.is_empty(G)) == False:
+                all_graphs.append(G)
             
      
     # Merge all the knowledge graphs into a single graph, preserving the colors in the original graphs

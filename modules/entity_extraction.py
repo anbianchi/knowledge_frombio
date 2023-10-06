@@ -14,6 +14,7 @@ def load_bern2_model(preprocessed_reports):
 
 def extract_entities_bern2(preprocessed_reports):
     entity_list = load_bern2_model(preprocessed_reports)
+    print("preprocessed reports: ", preprocessed_reports, "\n\n")
     if entity_list is None:
         parsed_entities = None
         return parsed_entities
