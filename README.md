@@ -1,4 +1,4 @@
-# Medical Knowledge Consolidation: A Graph-based Approach to Multi-source Diagnoses
+# Medical Knowledge Harmonization: A Graph-based, Entity-Selective Approach to Multi-source Diagnoses
 
 ## Description
 
@@ -15,8 +15,8 @@ This project is engineered to formulate an integrated knowledge graph by synthes
 
 1. **Clone the repository:**
    ```bash
-   git clone [Your Repo Link]
-   cd [Repo Name]
+   git clone https://github.com/anbianchi/knowledge_frombio
+   cd knowledge_frombio
 2. **Create a Conda environment**:
    ```bash
    conda env create -f environment.yml
